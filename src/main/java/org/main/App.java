@@ -1,13 +1,26 @@
 package org.main;
 
+import org.main.filechooser.ImageFileView;
+import org.main.filechooser.ImageFilter;
+import org.main.filechooser.ImagePreview;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
-public class App extends JPanel {
+public class App extends JPanel implements ActionListener {
     JPanel rightJpanel;
     JPanel leftJPanel;
     private int maxX;
     private int maxY;
+    private JFileChooser fc;
+
+    private JTextArea filePath;
+
+
+
 
     public App() {
 
@@ -77,8 +90,45 @@ public class App extends JPanel {
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createCompoundBorder(
                                 BorderFactory.createTitledBorder("Add Rules "),
+
                                 BorderFactory.createEmptyBorder(5, 5, 5, 5)),
                         editScrollPane.getBorder()));
+
+        JPanel fileUpload = new JPanel(new BorderLayout());
+        JPanel fields = new JPanel();
+        JPanel bottomBtnG = new JPanel();
+
+        leftJPanel.add(fileUpload,BorderLayout.PAGE_START);
+        leftJPanel.add(fields,BorderLayout.CENTER);
+        leftJPanel.add(bottomBtnG,BorderLayout.PAGE_END);
+
+        fileUpload.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createTitledBorder("Upload Excel:"),
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        fields.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createTitledBorder("Enter fields "),
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        bottomBtnG.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createTitledBorder("Buttons"),
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+
+
+        filePath = new JTextArea();
+        fileUpload.add(filePath , BorderLayout.CENTER);
+
+        JButton uploadButton = new JButton("Upload Excel");
+        uploadButton.addActionListener(this);
+        fileUpload.add(uploadButton, BorderLayout.EAST);
+
+        //Create the combo box, select item at index 4.
+        String[] availableRulesStrings = {"Bird", "Cat", "Dog", "Rabbit", "Pig"};
+        JComboBox ruleDrpList = new JComboBox(availableRulesStrings);
+        ruleDrpList.setSelectedIndex(4);
+        ruleDrpList.addActionListener(this);
+        fileUpload.add(ruleDrpList,BorderLayout.PAGE_END);
 
 
 
@@ -123,7 +173,6 @@ public class App extends JPanel {
 
         /* Use an appropriate Look and Feel */
         try {
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
         } catch (UnsupportedLookAndFeelException ex) {
             ex.printStackTrace();
@@ -136,7 +185,7 @@ public class App extends JPanel {
         }
         /* Turn off metal's use bold fonts */
         UIManager.put("swing.boldMetal", Boolean.FALSE);
-
+        UIManager.put("FileChooser.readOnly", Boolean.TRUE);
         //Schedule a job for the event dispatch thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -144,6 +193,46 @@ public class App extends JPanel {
                 createAndShowGUI();
             }
         });
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        //Set up the file chooser.
+        if (fc == null) {
+            fc = new JFileChooser();
+            //show hidden files if false then make it true to disable
+            fc.setFileHidingEnabled(false);
+            //Add a custom file filter and disable the default
+            //(Accept All) file filter.
+            fc.addChoosableFileFilter(new ImageFilter());
+            fc.setAcceptAllFileFilterUsed(false);
+
+            //Add custom icons for file types.
+            fc.setFileView(new ImageFileView());
+
+            //Add the preview pane.
+            fc.setAccessory(new ImagePreview(fc));
+        }
+
+        //Show it.
+        int returnVal = fc.showDialog(App.this,
+                "Attach");
+
+        //Process the results.
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            filePath.append(file.getAbsolutePath());
+        } else {
+            filePath.append("Attachment cancelled by user.");
+        }
+        filePath.setCaretPosition(filePath.getDocument().getLength());
+
+        //Reset the file chooser for the next time it's shown.
+        fc.setSelectedFile(null);
+
+
     }
 
 
