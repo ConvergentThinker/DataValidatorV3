@@ -18,7 +18,7 @@ public class App extends JPanel implements ActionListener {
     private JFileChooser fc;
 
     private JTextArea filePath;
-
+    JButton uploadButton;
 
 
 
@@ -119,7 +119,7 @@ public class App extends JPanel implements ActionListener {
         filePath = new JTextArea();
         fileUpload.add(filePath , BorderLayout.CENTER);
 
-        JButton uploadButton = new JButton("Upload Excel");
+        uploadButton = new JButton("Upload Excel");
         uploadButton.addActionListener(this);
         fileUpload.add(uploadButton, BorderLayout.EAST);
 
@@ -129,6 +129,15 @@ public class App extends JPanel implements ActionListener {
         ruleDrpList.setSelectedIndex(4);
         ruleDrpList.addActionListener(this);
         fileUpload.add(ruleDrpList,BorderLayout.PAGE_END);
+
+        // enter fields
+
+
+
+
+
+
+
 
 
 
@@ -199,41 +208,55 @@ public class App extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        //Set up the file chooser.
-        if (fc == null) {
-            fc = new JFileChooser();
-            //show hidden files if false then make it true to disable
-            fc.setFileHidingEnabled(false);
-            //Add a custom file filter and disable the default
-            //(Accept All) file filter.
-            fc.addChoosableFileFilter(new ImageFilter());
-            fc.setAcceptAllFileFilterUsed(false);
+        if (e.getSource() == uploadButton ) {
+            //Set up the file chooser.
+            if (fc == null) {
 
-            //Add custom icons for file types.
-            fc.setFileView(new ImageFileView());
+                fc = new JFileChooser();
+                //show hidden files if false then make it true to disable
+                fc.setFileHidingEnabled(false);
+                //Add a custom file filter and disable the default
+                //(Accept All) file filter.
+                fc.addChoosableFileFilter(new ImageFilter());
+                fc.setAcceptAllFileFilterUsed(false);
 
-            //Add the preview pane.
-            fc.setAccessory(new ImagePreview(fc));
+                //Add custom icons for file types.
+                fc.setFileView(new ImageFileView());
+
+                //Add the preview pane.
+                fc.setAccessory(new ImagePreview(fc));
+            }
+
+            //Show it.
+            int returnVal = fc.showDialog(App.this,
+                    "Attach");
+
+            //Process the results.
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                filePath.append(file.getAbsolutePath());
+            } else {
+                filePath.append("Attachment cancelled by user.");
+            }
+            filePath.setCaretPosition(filePath.getDocument().getLength());
+
+            //Reset the file chooser for the next time it's shown.
+            fc.setSelectedFile(null);
         }
 
-        //Show it.
-        int returnVal = fc.showDialog(App.this,
-                "Attach");
 
-        //Process the results.
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
-            filePath.append(file.getAbsolutePath());
-        } else {
-            filePath.append("Attachment cancelled by user.");
-        }
-        filePath.setCaretPosition(filePath.getDocument().getLength());
 
-        //Reset the file chooser for the next time it's shown.
-        fc.setSelectedFile(null);
+
+
+
+
 
 
     }
+
+
+
+
 
 
 }
