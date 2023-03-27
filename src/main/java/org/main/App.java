@@ -3,12 +3,14 @@ package org.main;
 import org.main.filechooser.ImageFileView;
 import org.main.filechooser.ImageFilter;
 import org.main.filechooser.ImagePreview;
-import org.main.jTable.Rule4.Item;
-import org.main.jTable.Rule4.ItemTableModel;
-import org.main.jTable.Rule4.NewRowPanel;
+import org.main.jTable.Rule1.Rule1Model;
+import org.main.jTable.Rule1.Rule1TableModel;
+import org.main.jTable.Rule1.Rule1FieldsWindow;
+import org.main.jTable.Rule2.Rule2FieldsWindow;
+import org.main.jTable.Rule2.Rule2Model;
+import org.main.jTable.Rule2.Rule2TableModel;
 
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,25 +28,21 @@ public class App extends JPanel implements ActionListener {
     JButton uploadButton;
 
     // Table1 creation variables
-    private static final Item[] ITEMS = {
-            new Item("Light Bulb", 2.00),
-            new Item("Toilet Paper", 3.00),
-            new Item("Toothpaste", 1.50),
-            new Item("Aspirin", 3.75) };
-    private ItemTableModel tableModel = new ItemTableModel();
+    JButton remove1;
+    private Rule1TableModel tableModel = new Rule1TableModel();
     private JTable table = new JTable(tableModel);
     private AddRowAction addRowAction = new AddRowAction("Add Row", KeyEvent.VK_A);
 
     // Table2  creation variables
-
-    private ItemTableModel tableModel2 = new ItemTableModel();
+    JButton remove2;
+    private Rule2TableModel tableModel2 = new Rule2TableModel();
     private JTable table2 = new JTable(tableModel2);
 
     private AddRowAction2 addRowAction2 = new AddRowAction2("Add Row", KeyEvent.VK_A);
 
 // Table3  creation variables
 
-    private ItemTableModel tableModel3 = new ItemTableModel();
+    private Rule1TableModel tableModel3 = new Rule1TableModel();
     private JTable table3 = new JTable(tableModel3);
 
     private AddRowAction3 addRowAction3 = new AddRowAction3("Add Row", KeyEvent.VK_A);
@@ -144,7 +142,10 @@ public class App extends JPanel implements ActionListener {
         rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER); // rule descripion
         JPanel rule1HeaderBtnPanel = new JPanel(new FlowLayout());
         rule1HeaderBtnPanel.add(new JButton(addRowAction));
-        rule1HeaderBtnPanel.add(new JButton("Remove"));
+        remove1 = new JButton("Remove");
+        rule1HeaderBtnPanel.add(remove1);
+        remove1.addActionListener(this);
+
         rule1HeaderPanel.add(rule1HeaderBtnPanel,BorderLayout.EAST); // btns
 
         // Table creation starts - rule1TablePanel
@@ -155,8 +156,6 @@ public class App extends JPanel implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 1;
         JPanel rule2Panel = new JPanel(new BorderLayout());
-        rule2Panel.setOpaque(false);
-        rule2Panel.setBackground(new Color(200,200,0));
         rightJpanel.add(rule2Panel, gbc);
 
 //  add element to rule2Panel
@@ -183,7 +182,9 @@ public class App extends JPanel implements ActionListener {
         rule2HeaderPanel.add(rule2HeaderDesPanel,  BorderLayout.CENTER); // rule descripion
         JPanel rule2HeaderBtnPanel = new JPanel(new FlowLayout());
         rule2HeaderBtnPanel.add(new JButton(addRowAction2));
-        rule2HeaderBtnPanel.add(new JButton("Remove"));
+         remove2 = new JButton("Remove");
+        rule2HeaderBtnPanel.add(remove2);
+        remove2.addActionListener(this);
         rule2HeaderPanel.add(rule2HeaderBtnPanel,BorderLayout.EAST); // btns
 
         // Table creation starts - rule2TablePanel
@@ -295,7 +296,7 @@ public class App extends JPanel implements ActionListener {
     }
 
     class AddRowAction extends AbstractAction {
-        private NewRowPanel newRowPanel = new NewRowPanel(ITEMS);
+        private Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
 
         public AddRowAction(String name, int mnemonic) {
             super(name);
@@ -304,21 +305,22 @@ public class App extends JPanel implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            newRowPanel.reset();
             int reply = JOptionPane.showConfirmDialog(table,
                     newRowPanel.getMainPanel(),
-                    "Select Item and Quantity",
+                    "Rule 1 fields ",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE);
             if (reply == JOptionPane.OK_OPTION) {
-                Item item = newRowPanel.getSelectedItem();
-                int quantity = newRowPanel.getQuantity();
-                tableModel.addRow(item, quantity);
+                Rule1Model item = newRowPanel.getSelectedItem();
+                tableModel.addRow(item);
+
+
+
             }
         }
     }
     class AddRowAction3 extends AbstractAction {
-        private NewRowPanel newRowPanel = new NewRowPanel(ITEMS);
+        private Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
 
         public AddRowAction3(String name, int mnemonic) {
             super(name);
@@ -327,21 +329,19 @@ public class App extends JPanel implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            newRowPanel.reset();
-            int reply = JOptionPane.showConfirmDialog(table,
+            int reply = JOptionPane.showConfirmDialog(table2,
                     newRowPanel.getMainPanel(),
-                    "Select Item and Quantity",
+                    "Rule 3 fields ",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE);
             if (reply == JOptionPane.OK_OPTION) {
-                Item item = newRowPanel.getSelectedItem();
-                int quantity = newRowPanel.getQuantity();
-                tableModel3.addRow(item, quantity);
+                Rule1Model item = newRowPanel.getSelectedItem();
+                tableModel3.addRow(item);
             }
         }
     }
     class AddRowAction2 extends AbstractAction {
-        private NewRowPanel newRowPanel = new NewRowPanel(ITEMS);
+        private Rule2FieldsWindow newRowPanel = new Rule2FieldsWindow();
 
         public AddRowAction2(String name, int mnemonic) {
             super(name);
@@ -350,16 +350,14 @@ public class App extends JPanel implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            newRowPanel.reset();
-            int reply = JOptionPane.showConfirmDialog(table,
+            int reply = JOptionPane.showConfirmDialog(table2,
                     newRowPanel.getMainPanel(),
-                    "Select Item and Quantity",
+                    "Rule 2 fields ",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE);
             if (reply == JOptionPane.OK_OPTION) {
-                Item item = newRowPanel.getSelectedItem();
-                int quantity = newRowPanel.getQuantity();
-                tableModel2.addRow(item, quantity);
+                Rule2Model item = newRowPanel.getSelectedItem();
+                tableModel2.addRow(item);
             }
         }
     }
@@ -447,7 +445,25 @@ public class App extends JPanel implements ActionListener {
 
             //Reset the file chooser for the next time it's shown.
             fc.setSelectedFile(null);
+        } else if (e.getSource() == remove1) {
+
+                int[] rows = table.getSelectedRows();
+                Rule1TableModel tm = (Rule1TableModel) table.getModel();
+                for (int i = rows.length-1; i >= 0; i--) {
+                    System.out.println("I "+ i);
+                    tm.deleteRow(rows[i]);
+                }
+        }else if (e.getSource() == remove2) {
+
+            int[] rows = table2.getSelectedRows();
+            Rule2TableModel tm = (Rule2TableModel) table2.getModel();
+            for (int i = rows.length-1; i >= 0; i--) {
+                System.out.println("I "+ i);
+                tm.deleteRow(rows[i]);
+            }
         }
+
+
 
     }
 
