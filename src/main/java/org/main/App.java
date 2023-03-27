@@ -3,11 +3,17 @@ package org.main;
 import org.main.filechooser.ImageFileView;
 import org.main.filechooser.ImageFilter;
 import org.main.filechooser.ImagePreview;
+import org.main.jTable.Rule4.Item;
+import org.main.jTable.Rule4.ItemTableModel;
+import org.main.jTable.Rule4.NewRowPanel;
 
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class App extends JPanel implements ActionListener {
@@ -16,9 +22,33 @@ public class App extends JPanel implements ActionListener {
     private int maxX;
     private int maxY;
     private JFileChooser fc;
-
     private JTextArea filePath;
     JButton uploadButton;
+
+    // Table1 creation variables
+    private static final Item[] ITEMS = {
+            new Item("Light Bulb", 2.00),
+            new Item("Toilet Paper", 3.00),
+            new Item("Toothpaste", 1.50),
+            new Item("Aspirin", 3.75) };
+    private ItemTableModel tableModel = new ItemTableModel();
+    private JTable table = new JTable(tableModel);
+    private AddRowAction addRowAction = new AddRowAction("Add Row", KeyEvent.VK_A);
+
+    // Table2  creation variables
+
+    private ItemTableModel tableModel2 = new ItemTableModel();
+    private JTable table2 = new JTable(tableModel2);
+
+    private AddRowAction2 addRowAction2 = new AddRowAction2("Add Row", KeyEvent.VK_A);
+
+// Table3  creation variables
+
+    private ItemTableModel tableModel3 = new ItemTableModel();
+    private JTable table3 = new JTable(tableModel3);
+
+    private AddRowAction3 addRowAction3 = new AddRowAction3("Add Row", KeyEvent.VK_A);
+
 
 
 
@@ -63,9 +93,8 @@ public class App extends JPanel implements ActionListener {
         }, BorderLayout.PAGE_END);
 
 
-        // ----------------------
-        rightJpanel = new JPanel(new BorderLayout());
-
+        // ---------------------- right side
+        rightJpanel = new JPanel();
         JScrollPane ruleScrollPane = new JScrollPane(rightJpanel);
         ruleScrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -77,8 +106,129 @@ public class App extends JPanel implements ActionListener {
                                 BorderFactory.createEmptyBorder(5, 5, 5, 5)),
                         ruleScrollPane.getBorder()));
 
+//  layout right side parent container
+        GridBagLayout layout = new GridBagLayout();
+        rightJpanel.setLayout(layout);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
 
-        //--------------------------
+        // ============================== Rule 1 starts ====================
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        JPanel rule1Panel = new JPanel();
+        rightJpanel.add(rule1Panel, gbc);
+
+        //  add element to rule1Panel
+        GridBagLayout gridBagLayoutRule1 = new GridBagLayout();
+        rule1Panel.setLayout(gridBagLayoutRule1);
+        GridBagConstraints gbcRule1 = new GridBagConstraints();
+        gbcRule1.fill = GridBagConstraints.HORIZONTAL;
+        gbcRule1.gridwidth = GridBagConstraints.REMAINDER;
+        gbcRule1.weightx = 1;
+
+        gbcRule1.gridx = 0;
+        gbcRule1.gridy = 0;
+        JPanel rule1HeaderPanel = new JPanel(new BorderLayout());
+        rule1Panel.add(rule1HeaderPanel,gbcRule1);
+
+        gbcRule1.gridx = 0;
+        gbcRule1.gridy = 1;
+        JPanel rule1TablePanel = new JPanel(new BorderLayout());
+        rule1Panel.add(rule1TablePanel,gbcRule1);
+
+        JPanel rule1HeaderDesPanel = new JPanel(new BorderLayout());
+        rule1HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
+        rule1HeaderDesPanel.add(new JLabel("explain rule "),BorderLayout.CENTER);
+        rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER); // rule descripion
+        JPanel rule1HeaderBtnPanel = new JPanel(new FlowLayout());
+        rule1HeaderBtnPanel.add(new JButton(addRowAction));
+        rule1HeaderBtnPanel.add(new JButton("Remove"));
+        rule1HeaderPanel.add(rule1HeaderBtnPanel,BorderLayout.EAST); // btns
+
+        // Table creation starts - rule1TablePanel
+        rule1TablePanel.add(new JScrollPane(table));
+
+// ============================== Rule 2  ====================
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        JPanel rule2Panel = new JPanel(new BorderLayout());
+        rule2Panel.setOpaque(false);
+        rule2Panel.setBackground(new Color(200,200,0));
+        rightJpanel.add(rule2Panel, gbc);
+
+//  add element to rule2Panel
+        GridBagLayout gridBagLayoutRule2 = new GridBagLayout();
+        rule2Panel.setLayout(gridBagLayoutRule2);
+        GridBagConstraints gbcRule2 = new GridBagConstraints();
+        gbcRule2.fill = GridBagConstraints.HORIZONTAL;
+        gbcRule2.gridwidth = GridBagConstraints.REMAINDER;
+        gbcRule2.weightx = 1;
+
+        gbcRule2.gridx = 0;
+        gbcRule2.gridy = 0;
+        JPanel rule2HeaderPanel = new JPanel(new BorderLayout());
+        rule2Panel.add(rule2HeaderPanel,gbcRule2);
+
+        gbcRule2.gridx = 0;
+        gbcRule2.gridy = 1;
+        JPanel rule2TablePanel = new JPanel(new BorderLayout());
+        rule2Panel.add(rule2TablePanel,gbcRule2);
+
+        JPanel rule2HeaderDesPanel = new JPanel(new BorderLayout());
+        rule2HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
+        rule2HeaderDesPanel.add(new JLabel("explain rule "),BorderLayout.CENTER);
+        rule2HeaderPanel.add(rule2HeaderDesPanel,  BorderLayout.CENTER); // rule descripion
+        JPanel rule2HeaderBtnPanel = new JPanel(new FlowLayout());
+        rule2HeaderBtnPanel.add(new JButton(addRowAction2));
+        rule2HeaderBtnPanel.add(new JButton("Remove"));
+        rule2HeaderPanel.add(rule2HeaderBtnPanel,BorderLayout.EAST); // btns
+
+        // Table creation starts - rule2TablePanel
+        rule2TablePanel.add(new JScrollPane(table2));
+
+// ============================== Rule 3  ====================
+
+        //Rule2 Table
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        JPanel rule3Panel = new JPanel(new BorderLayout());
+        rightJpanel.add(rule3Panel, gbc);
+
+//  add element to rule3Panel
+        GridBagLayout gridBagLayoutRule3 = new GridBagLayout();
+        rule3Panel.setLayout(gridBagLayoutRule3);
+        GridBagConstraints gbcRule3 = new GridBagConstraints();
+        gbcRule3.fill = GridBagConstraints.HORIZONTAL;
+        gbcRule3.gridwidth = GridBagConstraints.REMAINDER;
+        gbcRule3.weightx = 1;
+
+        gbcRule3.gridx = 0;
+        gbcRule3.gridy = 0;
+        JPanel rule3HeaderPanel = new JPanel(new BorderLayout());
+        rule3Panel.add(rule3HeaderPanel,gbcRule3);
+
+        gbcRule3.gridx = 0;
+        gbcRule3.gridy = 1;
+        JPanel rule3TablePanel = new JPanel(new BorderLayout());
+        rule3Panel.add(rule3TablePanel,gbcRule3);
+
+        JPanel rule3HeaderDesPanel = new JPanel(new BorderLayout());
+        rule3HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
+        rule3HeaderDesPanel.add(new JLabel("explain rule "),BorderLayout.CENTER);
+        rule3HeaderPanel.add(rule3HeaderDesPanel,  BorderLayout.CENTER); // rule descripion
+        JPanel rule3HeaderBtnPanel = new JPanel(new FlowLayout());
+        rule3HeaderBtnPanel.add(new JButton(addRowAction3));
+        rule3HeaderBtnPanel.add(new JButton("Remove"));
+        rule3HeaderPanel.add(rule3HeaderBtnPanel,BorderLayout.EAST); // btns
+
+        // Table creation starts - rule3TablePanel
+        rule3TablePanel.add(new JScrollPane(table3));
+
+
+        //----------------------
 
         leftJPanel = new JPanel(new BorderLayout());
 
@@ -99,8 +249,8 @@ public class App extends JPanel implements ActionListener {
         JPanel bottomBtnG = new JPanel();
 
         leftJPanel.add(fileUpload,BorderLayout.PAGE_START);
-        leftJPanel.add(fields,BorderLayout.CENTER);
-        leftJPanel.add(bottomBtnG,BorderLayout.PAGE_END);
+        leftJPanel.add(fields,BorderLayout.PAGE_END);
+        leftJPanel.add(bottomBtnG,BorderLayout.CENTER);
 
         fileUpload.setBorder(
                 BorderFactory.createCompoundBorder(
@@ -108,11 +258,11 @@ public class App extends JPanel implements ActionListener {
                         BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         fields.setBorder(
                 BorderFactory.createCompoundBorder(
-                        BorderFactory.createTitledBorder("Enter fields "),
+                        BorderFactory.createTitledBorder("Reports"),
                         BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         bottomBtnG.setBorder(
                 BorderFactory.createCompoundBorder(
-                        BorderFactory.createTitledBorder("Buttons"),
+                        BorderFactory.createTitledBorder("Action Buttons"),
                         BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
 
@@ -122,21 +272,6 @@ public class App extends JPanel implements ActionListener {
         uploadButton = new JButton("Upload Excel");
         uploadButton.addActionListener(this);
         fileUpload.add(uploadButton, BorderLayout.EAST);
-
-        //Create the combo box, select item at index 4.
-        String[] availableRulesStrings = {"Bird", "Cat", "Dog", "Rabbit", "Pig"};
-        JComboBox ruleDrpList = new JComboBox(availableRulesStrings);
-        ruleDrpList.setSelectedIndex(4);
-        ruleDrpList.addActionListener(this);
-        fileUpload.add(ruleDrpList,BorderLayout.PAGE_END);
-
-        // enter fields
-
-
-
-
-
-
 
 
 
@@ -159,6 +294,75 @@ public class App extends JPanel implements ActionListener {
 
     }
 
+    class AddRowAction extends AbstractAction {
+        private NewRowPanel newRowPanel = new NewRowPanel(ITEMS);
+
+        public AddRowAction(String name, int mnemonic) {
+            super(name);
+            putValue(MNEMONIC_KEY, mnemonic);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            newRowPanel.reset();
+            int reply = JOptionPane.showConfirmDialog(table,
+                    newRowPanel.getMainPanel(),
+                    "Select Item and Quantity",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE);
+            if (reply == JOptionPane.OK_OPTION) {
+                Item item = newRowPanel.getSelectedItem();
+                int quantity = newRowPanel.getQuantity();
+                tableModel.addRow(item, quantity);
+            }
+        }
+    }
+    class AddRowAction3 extends AbstractAction {
+        private NewRowPanel newRowPanel = new NewRowPanel(ITEMS);
+
+        public AddRowAction3(String name, int mnemonic) {
+            super(name);
+            putValue(MNEMONIC_KEY, mnemonic);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            newRowPanel.reset();
+            int reply = JOptionPane.showConfirmDialog(table,
+                    newRowPanel.getMainPanel(),
+                    "Select Item and Quantity",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE);
+            if (reply == JOptionPane.OK_OPTION) {
+                Item item = newRowPanel.getSelectedItem();
+                int quantity = newRowPanel.getQuantity();
+                tableModel3.addRow(item, quantity);
+            }
+        }
+    }
+    class AddRowAction2 extends AbstractAction {
+        private NewRowPanel newRowPanel = new NewRowPanel(ITEMS);
+
+        public AddRowAction2(String name, int mnemonic) {
+            super(name);
+            putValue(MNEMONIC_KEY, mnemonic);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            newRowPanel.reset();
+            int reply = JOptionPane.showConfirmDialog(table,
+                    newRowPanel.getMainPanel(),
+                    "Select Item and Quantity",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE);
+            if (reply == JOptionPane.OK_OPTION) {
+                Item item = newRowPanel.getSelectedItem();
+                int quantity = newRowPanel.getQuantity();
+                tableModel2.addRow(item, quantity);
+            }
+        }
+    }
 
     /**
      * Create the GUI and show it.  For thread safety,
@@ -183,6 +387,7 @@ public class App extends JPanel implements ActionListener {
         /* Use an appropriate Look and Feel */
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            UIManager.put("Table.gridColor", new ColorUIResource(Color.blue));
         } catch (UnsupportedLookAndFeelException ex) {
             ex.printStackTrace();
         } catch (IllegalAccessException ex) {
@@ -243,14 +448,6 @@ public class App extends JPanel implements ActionListener {
             //Reset the file chooser for the next time it's shown.
             fc.setSelectedFile(null);
         }
-
-
-
-
-
-
-
-
 
     }
 

@@ -87,6 +87,9 @@ public class CreateRowGui extends JPanel {
     }
 }
 
+
+//=======================================================
+
 class NewRowPanel {
     private JPanel mainPanel = new JPanel();
     private JComboBox<Item> itemsCombo;
@@ -131,7 +134,7 @@ class NewRowPanel {
         return (int) quantitySpinner.getValue();
     }
 }
-
+// ======================================================================
 class ItemTableModel extends AbstractTableModel {
     private static final String[] COL_NAMES = { "Item Name", "Quantity", "Unit Price", "Total" };
     private static final long serialVersionUID = 1L;
@@ -232,6 +235,8 @@ class ItemTableModel extends AbstractTableModel {
     }
 }
 
+//// ==================================
+
 class Item {
     private String name;
     private double unitPrice;
@@ -259,3 +264,5 @@ class Item {
     }
 
 }
+
+//================================
