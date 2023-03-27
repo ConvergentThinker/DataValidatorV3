@@ -15,6 +15,8 @@ public class Rule1FieldsWindow {
     JTextField textFieldTo ;
 
 
+
+
     @SuppressWarnings("serial")
     public Rule1FieldsWindow() {
 
@@ -83,12 +85,21 @@ public class Rule1FieldsWindow {
     }
 
     public Rule1Model getSelectedItem() {
-
         return new Rule1Model(toRunDrp.getSelectedItem().toString(),noOfRowsToRunDrp.getSelectedItem().toString(),
                 textFieldFrom.getText(),textFieldTo.getText(),sheetDrp.getSelectedItem().toString(),targetColumnDrp.getSelectedItem().toString()) ;
 
-
     }
+
+    public void pushDataIntoForm(Rule1Model model){
+        toRunDrp.setSelectedItem(model.getIsToRun());
+        noOfRowsToRunDrp.setSelectedItem(model.getRuleExecutionType());
+        sheetDrp.setSelectedItem(model.getSheet());
+        targetColumnDrp.setSelectedItem(model.getTargetHeader());
+        textFieldFrom.setText(model.getFromRow());
+        textFieldTo.setText(model.getToRow());
+    }
+
+
 
 
 

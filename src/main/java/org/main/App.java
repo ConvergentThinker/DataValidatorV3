@@ -29,24 +29,25 @@ public class App extends JPanel implements ActionListener {
 
     // Table1 creation variables
     JButton remove1;
+    JButton edit1;
     private Rule1TableModel tableModel = new Rule1TableModel();
     private JTable table = new JTable(tableModel);
-    private AddRowAction addRowAction = new AddRowAction("Add Row", KeyEvent.VK_A);
+    private AddRowAction addRowAction = new AddRowAction("Add +", KeyEvent.VK_A);
 
     // Table2  creation variables
     JButton remove2;
+    JButton edit2;
     private Rule2TableModel tableModel2 = new Rule2TableModel();
     private JTable table2 = new JTable(tableModel2);
 
-    private AddRowAction2 addRowAction2 = new AddRowAction2("Add Row", KeyEvent.VK_A);
+    private AddRowAction2 addRowAction2 = new AddRowAction2("Add +", KeyEvent.VK_A);
 
 // Table3  creation variables
 
     private Rule1TableModel tableModel3 = new Rule1TableModel();
     private JTable table3 = new JTable(tableModel3);
 
-    private AddRowAction3 addRowAction3 = new AddRowAction3("Add Row", KeyEvent.VK_A);
-
+    private AddRowAction3 addRowAction3 = new AddRowAction3("Add +", KeyEvent.VK_A);
 
 
 
@@ -142,10 +143,12 @@ public class App extends JPanel implements ActionListener {
         rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER); // rule descripion
         JPanel rule1HeaderBtnPanel = new JPanel(new FlowLayout());
         rule1HeaderBtnPanel.add(new JButton(addRowAction));
+        edit1 = new JButton("Edit");
+        rule1HeaderBtnPanel.add(edit1);
+        edit1.addActionListener(this);
         remove1 = new JButton("Remove");
         rule1HeaderBtnPanel.add(remove1);
         remove1.addActionListener(this);
-
         rule1HeaderPanel.add(rule1HeaderBtnPanel,BorderLayout.EAST); // btns
 
         // Table creation starts - rule1TablePanel
@@ -182,7 +185,10 @@ public class App extends JPanel implements ActionListener {
         rule2HeaderPanel.add(rule2HeaderDesPanel,  BorderLayout.CENTER); // rule descripion
         JPanel rule2HeaderBtnPanel = new JPanel(new FlowLayout());
         rule2HeaderBtnPanel.add(new JButton(addRowAction2));
-         remove2 = new JButton("Remove");
+        edit2 = new JButton("Edit");
+        rule2HeaderBtnPanel.add(edit2);
+        edit2.addActionListener(this);
+        remove2 = new JButton("Remove");
         rule2HeaderBtnPanel.add(remove2);
         remove2.addActionListener(this);
         rule2HeaderPanel.add(rule2HeaderBtnPanel,BorderLayout.EAST); // btns
@@ -461,8 +467,50 @@ public class App extends JPanel implements ActionListener {
                 System.out.println("I "+ i);
                 tm.deleteRow(rows[i]);
             }
-        }
+        } else if (e.getSource() == edit1) {
 
+            Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
+            int row = table.getSelectedRow();
+            Rule1TableModel tm = (Rule1TableModel) table.getModel();
+            Rule1Model model = tm.getTableRow(row);
+            // push selected row into newRowPanel
+            newRowPanel.pushDataIntoForm(model);
+
+            int reply = JOptionPane.showConfirmDialog(table,
+                    newRowPanel.getMainPanel(),
+                    "Edit Rule 1",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE);
+
+            if (reply == JOptionPane.OK_OPTION) {
+
+                Rule1Model item = newRowPanel.getSelectedItem(); // edited data
+                tableModel.updateTableRow(item,row);
+
+            }
+        }
+        else if (e.getSource() == edit2) {
+
+            Rule2FieldsWindow newRowPanel = new Rule2FieldsWindow();
+            int row = table2.getSelectedRow();
+            Rule2TableModel tm = (Rule2TableModel) table2.getModel();
+            Rule2Model model = tm.getTableRow(row);
+            // push selected row into newRowPanel
+            newRowPanel.pushDataIntoForm(model);
+
+            int reply = JOptionPane.showConfirmDialog(table2,
+                    newRowPanel.getMainPanel(),
+                    "Edit Rule 1",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE);
+
+            if (reply == JOptionPane.OK_OPTION) {
+
+                Rule2Model item = newRowPanel.getSelectedItem(); // edited data
+                tableModel2.updateTableRow(item,row);
+
+            }
+        }
 
 
     }

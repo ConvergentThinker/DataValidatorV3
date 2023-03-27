@@ -130,4 +130,28 @@ public class Rule2TableModel extends AbstractTableModel {
 
     }
 
+
+    public Rule2Model getTableRow(int rowIndex){
+        return rule2ModelArrayList.get(rowIndex);
+    }
+
+    public void updateTableRow(Rule2Model item,int rowIndex){
+        Rule2Model updateModel =  rule2ModelArrayList.get(rowIndex);
+        updateModel.setIsToRun(item.getIsToRun());
+        updateModel.setSheet(item.getSheet());
+        updateModel.setTargetHeader(item.getTargetHeader());
+        updateModel.setFormat(item.getFormat());
+        updateModel.setRuleExecutionType(item.getRuleExecutionType());
+        updateModel.setFromRow(item.getFromRow());
+        updateModel.setToRow(item.getToRow());
+        fireTableDataChanged();
+    }
+
+
+
+
+
+
+
+
 }

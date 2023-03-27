@@ -118,6 +118,15 @@ public class Rule2FieldsWindow {
 
     }
 
+    public void pushDataIntoForm(Rule2Model model){
+        toRunDrp.setSelectedItem(model.getIsToRun());
+        noOfRowsToRunDrp.setSelectedItem(model.getRuleExecutionType());
+        sheetDrp.setSelectedItem(model.getSheet());
+        formats.setSelectedItem(model.getFormat());
+        targetColumnDrp.setSelectedItem(model.getTargetHeader());
+        textFieldFrom.setText(model.getFromRow());
+        textFieldTo.setText(model.getToRow());
+    }
 
 
 

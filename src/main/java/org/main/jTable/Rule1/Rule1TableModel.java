@@ -90,9 +90,6 @@ public class Rule1TableModel extends AbstractTableModel {
     }
 
 
-
-
-
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         //return columnIndex == 0 || columnIndex == 1;
@@ -109,11 +106,30 @@ public class Rule1TableModel extends AbstractTableModel {
 
 
     public void deleteRow(int rowIndex){
-
         rule1ModelArrayList.remove(rowIndex);
+        fireTableDataChanged();
+    }
+
+    public Rule1Model getTableRow(int rowIndex){
+        return rule1ModelArrayList.get(rowIndex);
+    }
+
+    public void updateTableRow(Rule1Model item,int rowIndex){
+        Rule1Model updateModel =  rule1ModelArrayList.get(rowIndex);
+        updateModel.setIsToRun(item.getIsToRun());
+        updateModel.setSheet(item.getSheet());
+        updateModel.setTargetHeader(item.getTargetHeader());
+        updateModel.setRuleExecutionType(item.getRuleExecutionType());
+        updateModel.setFromRow(item.getFromRow());
+        updateModel.setToRow(item.getToRow());
         fireTableDataChanged();
 
     }
+
+
+
+
+
 
 
 
