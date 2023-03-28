@@ -11,7 +11,6 @@ import org.main.jTable.Rule2.Rule2Model;
 import org.main.jTable.Rule2.Rule2TableModel;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
@@ -21,6 +20,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class App extends JPanel implements ActionListener {
     JPanel rightJpanel;
@@ -30,6 +32,9 @@ public class App extends JPanel implements ActionListener {
     private JFileChooser fc;
     private JTextField filePath;
     JButton uploadButton;
+
+    JButton downloadRule;
+    JButton uploadRule;
 
     // Table1 creation variables
     JButton remove1;
@@ -101,7 +106,8 @@ public class App extends JPanel implements ActionListener {
         JScrollPane ruleScrollPane = new JScrollPane(rightJpanel);
         ruleScrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        ruleScrollPane.setPreferredSize(new Dimension(maxX / 2 - 20, maxY - 150));
+        ruleScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        ruleScrollPane.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
         ruleScrollPane.setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createCompoundBorder(
@@ -281,8 +287,13 @@ public class App extends JPanel implements ActionListener {
 // bottom button
 
         JPanel jPanelBtn = new JPanel(new FlowLayout());
-        jPanelBtn.add(new JButton("Download"));
-        jPanelBtn.add(new JButton("Upload Rule"));
+        downloadRule = new JButton("Download Rule");
+        jPanelBtn.add(downloadRule);
+        downloadRule.addActionListener(this);
+
+        uploadRule = new JButton("Upload Rule");
+        jPanelBtn.add(uploadRule);
+        uploadRule.addActionListener(this);
         bottomBtnG.add(jPanelBtn,BorderLayout.WEST);
 
         JPanel jPanelBtnRun = new JPanel(new FlowLayout());
@@ -564,12 +575,83 @@ public class App extends JPanel implements ActionListener {
                 tableModel2.updateTableRow(item,row);
 
             }
+        } else if (e.getSource() == downloadRule) {
+            System.out.println(">>>>>> Download Rule");
+
+         /*   for (Rule1Model model : tableModel.getRule1ModelArrayList()) {
+                System.out.println("model:" + model);
+            }*/
+
+            try {
+
+                FileWriter writer = new FileWriter(documentsDirectory("file.txt"));
+                int size = tableModel.getRule1ModelArrayList().size();
+                for (int i = 0; i < size; i++) {
+                    String str = tableModel.getRule1ModelArrayList().get(i).toString();
+                        writer.write(str);
+                    if (i < size - 1)
+                       writer.write("\n");
+                }
+
+                writer.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+
+
+            System.out.println(">>>>>> Download Rule >>> ends ");
+
+        }else if (e.getSource() == uploadRule) {
+            System.out.println(">>>>>> upload Rule");
+
+
+
+
+
         }
 
 
     }
 
 
+    public void CreateFile(String fileName) {
+
+            try {
+                File myObj = new File(fileName);
+                if (myObj.createNewFile()) {
+                    System.out.println("File created: " + myObj.getName());
+                } else {
+                    System.out.println("File already exists.");
+                }
+            } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+
+    }
+
+
+     public String documentsDirectory(String fileName) {
+        // From CarbonCore/Folders.h
+        final String kDocumentsDirectory = "docs";
+        String filePath = "";
+
+        try {
+            if(System.getProperty("os.name").contains("Mac")){
+                filePath = com.apple.eio.FileManager.findFolder(
+                        com.apple.eio.FileManager.kUserDomain,
+                        com.apple.eio.FileManager.OSTypeToInt(kDocumentsDirectory));
+            }else{
+                filePath = "C:/Users/" + System.getProperty("user.name") + "/Documents/";
+            }
+        } catch (FileNotFoundException ex) {
+
+        }
+
+        CreateFile(filePath+"/" +fileName);
+        return  filePath+"/" +fileName;
+    }
 
 
 

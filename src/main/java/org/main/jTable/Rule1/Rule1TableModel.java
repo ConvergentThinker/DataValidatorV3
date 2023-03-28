@@ -21,21 +21,10 @@ public class Rule1TableModel extends AbstractTableModel {
         return rule1ModelArrayList.size();
     }
 
-/*
-    @Override
-    public Class<?> getColumnClass(int columnIndex) {
-        switch (columnIndex) {
-            case 0:
-                return super.getColumnClass(columnIndex);
-            case 1:
-                return Integer.class;
-            case 2:
-            case 3:
-                return Double.class;
-        }
-        return super.getColumnClass(columnIndex);
+    public List<Rule1Model> getRule1ModelArrayList(){
+        return rule1ModelArrayList;
     }
-*/
+
 
 
 

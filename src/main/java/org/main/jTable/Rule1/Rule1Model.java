@@ -50,6 +50,19 @@ public class Rule1Model {
         return targetHeader;
     }
     private String isToRun = "";
+
+    @Override
+    public String toString() {
+        return "Rule1Model{" +
+                "isToRun='" + isToRun + '\'' +
+                ", ruleExecutionType='" + ruleExecutionType + '\'' +
+                ", fromRow='" + fromRow + '\'' +
+                ", toRow='" + toRow + '\'' +
+                ", sheet='" + sheet + '\'' +
+                ", targetHeader='" + targetHeader + '\'' +
+                '}';
+    }
+
     private String  ruleExecutionType = ""; // Row[All/Custom]
     private String  fromRow = "";
     private String  toRow = "";

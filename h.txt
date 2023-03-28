@@ -1,0 +1,1 @@
+Rule1Model{isToRun='Yes', ruleExecutionType='All Rows', fromRow='', toRow='', sheet='Sheet1', targetHeader='DOB'}
