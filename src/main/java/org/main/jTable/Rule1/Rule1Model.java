@@ -49,20 +49,19 @@ public class Rule1Model {
     public String getTargetHeader() {
         return targetHeader;
     }
-    private String isToRun = "";
 
     @Override
     public String toString() {
-        return "Rule1Model{" +
-                "isToRun='" + isToRun + '\'' +
-                ", ruleExecutionType='" + ruleExecutionType + '\'' +
-                ", fromRow='" + fromRow + '\'' +
-                ", toRow='" + toRow + '\'' +
-                ", sheet='" + sheet + '\'' +
-                ", targetHeader='" + targetHeader + '\'' +
-                '}';
-    }
+        return
+                       "Rule1Row" + isToRun + "::" +
+                        sheet + "::" +
+                        targetHeader + "::" +
+                        ruleExecutionType + "::" +
+                        fromRow + "::" +
+                        toRow;
 
+    }
+    private String isToRun = "";
     private String  ruleExecutionType = ""; // Row[All/Custom]
     private String  fromRow = "";
     private String  toRow = "";
@@ -71,13 +70,21 @@ public class Rule1Model {
 
 
 
-    public Rule1Model(String isToRun, String ruleExecutionType, String fromRow, String toRow, String sheet, String targetHeader) {
+    public Rule1Model(String isToRun, String sheet, String targetHeader,String ruleExecutionType, String fromRow, String toRow) {
         this.isToRun = isToRun;
+        this.sheet = sheet;
+        this.targetHeader = targetHeader;
         this.ruleExecutionType = ruleExecutionType;
         this.fromRow = fromRow;
         this.toRow = toRow;
+    }
+
+
+    public Rule1Model(String isToRun, String sheet, String targetHeader,String ruleExecutionType) {
+        this.isToRun = isToRun;
         this.sheet = sheet;
         this.targetHeader = targetHeader;
+        this.ruleExecutionType = ruleExecutionType;
     }
 
 

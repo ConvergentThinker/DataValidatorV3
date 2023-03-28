@@ -23,23 +23,17 @@ public class Rule2TableModel extends AbstractTableModel {
         return rule2ModelArrayList.size();
     }
 
-/*
-    @Override
-    public Class<?> getColumnClass(int columnIndex) {
-        switch (columnIndex) {
-            case 0:
-                return super.getColumnClass(columnIndex);
-            case 1:
-                return Integer.class;
-            case 2:
-            case 3:
-                return Double.class;
+
+
+    public void loadTableRows(List<Rule2Model> list){
+        for (Rule2Model item:list) {
+            addRow(item);
         }
-        return super.getColumnClass(columnIndex);
     }
-*/
 
-
+    public List<Rule2Model> getRule2ModelArrayList(){
+        return rule2ModelArrayList;
+    }
 
 
     @Override

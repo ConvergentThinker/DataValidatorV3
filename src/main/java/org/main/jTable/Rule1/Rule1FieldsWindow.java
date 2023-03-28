@@ -1,6 +1,6 @@
 package org.main.jTable.Rule1;
 
-import org.main.SpringUtilities;
+import org.main.UtilsClass.SpringUtilities;
 
 import javax.swing.*;
 
@@ -85,9 +85,13 @@ public class Rule1FieldsWindow {
     }
 
     public Rule1Model getSelectedItem() {
-        return new Rule1Model(toRunDrp.getSelectedItem().toString(),noOfRowsToRunDrp.getSelectedItem().toString(),
-                textFieldFrom.getText(),textFieldTo.getText(),sheetDrp.getSelectedItem().toString(),targetColumnDrp.getSelectedItem().toString()) ;
 
+            return new Rule1Model(toRunDrp.getSelectedItem().toString(),
+                    sheetDrp.getSelectedItem().toString(),
+                    targetColumnDrp.getSelectedItem().toString(),
+                    noOfRowsToRunDrp.getSelectedItem().toString(),
+                    textFieldFrom.getText().toString().trim(),textFieldTo.getText().toString().trim()
+                        );
     }
 
     public void pushDataIntoForm(Rule1Model model){

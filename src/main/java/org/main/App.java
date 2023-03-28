@@ -9,6 +9,9 @@ import org.main.jTable.Rule1.Rule1FieldsWindow;
 import org.main.jTable.Rule2.Rule2FieldsWindow;
 import org.main.jTable.Rule2.Rule2Model;
 import org.main.jTable.Rule2.Rule2TableModel;
+import org.main.loadRuleFC.RuleFileView;
+import org.main.loadRuleFC.RuleFilter;
+import org.main.loadRuleFC.RulePreview;
 
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
@@ -19,10 +22,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class App extends JPanel implements ActionListener {
     JPanel rightJpanel;
@@ -30,7 +32,10 @@ public class App extends JPanel implements ActionListener {
     private int maxX;
     private int maxY;
     private JFileChooser fc;
+    private JFileChooser fcLoadRule;
     private JTextField filePath;
+    private JTextField loadRulefilePath;
+
     JButton uploadButton;
 
     JButton downloadRule;
@@ -296,12 +301,31 @@ public class App extends JPanel implements ActionListener {
         uploadRule.addActionListener(this);
         bottomBtnG.add(jPanelBtn,BorderLayout.WEST);
 
-        JPanel jPanelBtnRun = new JPanel(new FlowLayout());
-        jPanelBtnRun.add(new JButton("Run"));
 
+        JPanel jPanelBtnRun = new JPanel(new BorderLayout());
+        jPanelBtnRun.add(new JButton("Run"),BorderLayout.EAST);
+
+        loadRulefilePath = new JTextField();
+        jPanelBtnRun.add(loadRulefilePath,BorderLayout.CENTER);
+        // copy paste
+        JPopupMenu menu1 = new JPopupMenu();
+        Action cut1 = new DefaultEditorKit.CutAction();
+        cut1.putValue(Action.NAME, "Cut");
+        cut1.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control X"));
+        menu1.add(cut1);
+        Action copy1 = new DefaultEditorKit.CopyAction();
+        copy1.putValue(Action.NAME, "Copy");
+        copy1.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
+        menu1.add(copy1);
+        Action paste1 = new DefaultEditorKit.PasteAction();
+        paste1.putValue(Action.NAME, "Paste");
+        paste1.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
+        menu1.add(paste1);
+        Action selectAll1 = new SelectAll();
+        menu1.add(selectAll1);
+        loadRulefilePath.setComponentPopupMenu(menu1);
+        //      run
         bottomBtnG.add(jPanelBtnRun,BorderLayout.CENTER);
-        //bottomBtnG.add(new JProgressBar());
-
 
 
         filePath = new JTextField();
@@ -314,11 +338,11 @@ public class App extends JPanel implements ActionListener {
         menu.add(cut);
         Action copy = new DefaultEditorKit.CopyAction();
         copy.putValue(Action.NAME, "Copy");
-        cut.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
+        copy.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
         menu.add(copy);
         Action paste = new DefaultEditorKit.PasteAction();
         paste.putValue(Action.NAME, "Paste");
-        cut.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
+        paste.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
         menu.add(paste);
         Action selectAll = new SelectAll();
         menu.add(selectAll);
@@ -383,9 +407,6 @@ public class App extends JPanel implements ActionListener {
             if (reply == JOptionPane.OK_OPTION) {
                 Rule1Model item = newRowPanel.getSelectedItem();
                 tableModel.addRow(item);
-
-
-
             }
         }
     }
@@ -576,15 +597,12 @@ public class App extends JPanel implements ActionListener {
 
             }
         } else if (e.getSource() == downloadRule) {
-            System.out.println(">>>>>> Download Rule");
 
-         /*   for (Rule1Model model : tableModel.getRule1ModelArrayList()) {
-                System.out.println("model:" + model);
-            }*/
+            String path = documentsDirectory("file.rule");
 
             try {
-
-                FileWriter writer = new FileWriter(documentsDirectory("file.txt"));
+                FileWriter writer = new FileWriter(path);
+                // rule 1
                 int size = tableModel.getRule1ModelArrayList().size();
                 for (int i = 0; i < size; i++) {
                     String str = tableModel.getRule1ModelArrayList().get(i).toString();
@@ -593,17 +611,122 @@ public class App extends JPanel implements ActionListener {
                        writer.write("\n");
                 }
 
+                // rule 2
+                writer.write("\n");
+                int size2 = tableModel2.getRule2ModelArrayList().size();
+                for (int i = 0; i < size2; i++) {
+                    String str = tableModel2.getRule2ModelArrayList().get(i).toString();
+                    writer.write(str);
+                    if (i < size - 1)
+                        writer.write("\n");
+                }
+
                 writer.close();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
 
 
-
             System.out.println(">>>>>> Download Rule >>> ends ");
+            loadRulefilePath.setText("");
+            loadRulefilePath.setText("Rules file downloaded at: "+ path);
+
+
 
         }else if (e.getSource() == uploadRule) {
-            System.out.println(">>>>>> upload Rule");
+
+            //Set up the file chooser.
+            if (fcLoadRule == null) {
+                fcLoadRule = new JFileChooser();
+                //show hidden files if false then make it true to disable
+                fcLoadRule.setFileHidingEnabled(false);
+                //Add a custom file filter and disable the default
+                //(Accept All) file filter.
+                fcLoadRule.addChoosableFileFilter(new RuleFilter());
+                fcLoadRule.setAcceptAllFileFilterUsed(false);
+                //Add custom icons for file types.
+                fcLoadRule.setFileView(new RuleFileView());
+                //Add the preview pane.
+                fcLoadRule.setAccessory(new RulePreview(fcLoadRule));
+            }
+
+            //Show it.
+            int returnVal = fcLoadRule.showDialog(App.this,
+                    "Attach");
+
+            //Process the results.
+            loadRulefilePath.setText("");
+            File file = fcLoadRule.getSelectedFile();
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                loadRulefilePath.setText(file.getAbsolutePath());
+            } else {
+                loadRulefilePath.setText("Attachment cancelled by user.");
+            }
+            loadRulefilePath.setCaretPosition(loadRulefilePath.getDocument().getLength());
+
+            //Reset the file chooser for the next time it's shown.
+            fcLoadRule.setSelectedFile(null);
+
+
+
+            // Rule1 file upload
+            List<Rule1Model> rule1ModelArrayList = new ArrayList<>();
+            String fileName;
+            FileReader fileReader = null;
+            try {
+                fileName = file.getAbsolutePath();
+                fileReader = new FileReader(fileName);
+            } catch (FileNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+            try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                String line;
+                while((line = bufferedReader.readLine()) != null) {
+
+                    if(line.contains("Rule1Row")){
+
+                        String[] modelArr = line.split("::");
+                        if(modelArr.length>4){
+                            rule1ModelArrayList.add(new Rule1Model(modelArr[0],modelArr[1],modelArr[2],modelArr[3],modelArr[4],modelArr[5]));
+                        }else {
+                            rule1ModelArrayList.add(new Rule1Model(modelArr[0],modelArr[1],modelArr[2],modelArr[3]));
+                        }
+
+                    }
+
+                }
+            } catch (IOException ex) {
+            }
+            tableModel.loadTableRows(rule1ModelArrayList);
+// Rule2 file upload
+
+            // Rule1 file upload
+            List<Rule2Model> rule2ModelArrayList = new ArrayList<>();
+            String fileName2;
+            FileReader fileReader2 = null;
+            try {
+                fileName2 = file.getAbsolutePath();
+                fileReader2 = new FileReader(fileName2);
+            } catch (FileNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+            try (BufferedReader bufferedReader = new BufferedReader(fileReader2)) {
+                String line;
+                while((line = bufferedReader.readLine()) != null) {
+
+                    if(line.contains("Rule2Row")) {
+                        String[] modelArr = line.split("::");
+                        if (modelArr.length > 5) {
+                            rule2ModelArrayList.add(new Rule2Model(modelArr[0], modelArr[1], modelArr[2], modelArr[3], modelArr[4], modelArr[5], modelArr[6]));
+                        } else {
+                            rule2ModelArrayList.add(new Rule2Model(modelArr[0], modelArr[1], modelArr[2], modelArr[3], modelArr[4]));
+                        }
+                    }
+
+                }
+            } catch (IOException ex) {
+            }
+            tableModel2.loadTableRows(rule2ModelArrayList);
 
 
 
@@ -611,12 +734,10 @@ public class App extends JPanel implements ActionListener {
 
         }
 
-
     }
 
 
     public void CreateFile(String fileName) {
-
             try {
                 File myObj = new File(fileName);
                 if (myObj.createNewFile()) {
@@ -628,7 +749,6 @@ public class App extends JPanel implements ActionListener {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
             }
-
     }
 
 
@@ -639,14 +759,12 @@ public class App extends JPanel implements ActionListener {
 
          if(System.getProperty("os.name").contains("Mac")){
 
-             filePath = "/Users/" + System.getProperty("user.name") + "/Documents/";
+             filePath = "/Users/" + System.getProperty("user.name") + "/Documents";
 
          }else{
-             filePath = "C:/Users/" + System.getProperty("user.name") + "/Documents/";
+             filePath = "C:/Users/" + System.getProperty("user.name") + "/Documents";
          }
-         System.out.println("filePath : "+ filePath);
-
-        System.out.println( System.getProperty("user.name")  );
+         System.out.println(filePath+"/" +fileName );
 
         CreateFile(filePath+"/" +fileName);
         return  filePath+"/" +fileName;

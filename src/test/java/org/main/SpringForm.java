@@ -38,8 +38,9 @@ package org.main;
  * Other files required: SpringUtilities.java.
  */
 
+import org.main.UtilsClass.SpringUtilities;
+
 import javax.swing.*;
-import java.awt.*;
 
 public class SpringForm {
     /**

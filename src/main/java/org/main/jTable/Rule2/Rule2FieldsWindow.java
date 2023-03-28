@@ -1,7 +1,6 @@
 package org.main.jTable.Rule2;
 
-import org.main.SpringUtilities;
-import org.main.jTable.Rule1.Rule1Model;
+import org.main.UtilsClass.SpringUtilities;
 
 import javax.swing.*;
 

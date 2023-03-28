@@ -43,13 +43,14 @@ public class Rule1TableModel extends AbstractTableModel {
             case 1:
                 return rule1Model.getSheet();
             case 2:
-                return rule1Model.getRuleExecutionType();
-            case 3:
-                return rule1Model.getFromRow();
-            case 4:
-                return rule1Model.getToRow();
-            case 5:
                 return rule1Model.getTargetHeader();
+            case 3:
+                return rule1Model.getRuleExecutionType();
+            case 4:
+                return rule1Model.getFromRow();
+            case 5:
+                return rule1Model.getToRow();
+
         }
         return null;
     }
@@ -65,13 +66,14 @@ public class Rule1TableModel extends AbstractTableModel {
             case 1:
                  rule1Model.setSheet(aValue.toString());
             case 2:
-                 rule1Model.setRuleExecutionType(aValue.toString());
+                rule1Model.setTargetHeader(aValue.toString());
             case 3:
-                 rule1Model.setFromRow(aValue.toString());
+                 rule1Model.setRuleExecutionType(aValue.toString());
             case 4:
-                 rule1Model.setToRow(aValue.toString());
+                 rule1Model.setFromRow(aValue.toString());
             case 5:
-                 rule1Model.setTargetHeader(aValue.toString());
+                 rule1Model.setToRow(aValue.toString());
+
         }
 
         fireTableRowsUpdated(rowIndex, rowIndex);
@@ -86,11 +88,18 @@ public class Rule1TableModel extends AbstractTableModel {
     }
 
     public void addRow(Rule1Model item) {
-        Rule1Model itemWithCount = new Rule1Model(item.getIsToRun(),item.getRuleExecutionType(),
-                item.getFromRow(), item.getToRow(), item.getSheet(),item.getTargetHeader());
+        Rule1Model itemWithCount = new Rule1Model(item.getIsToRun(), item.getSheet(),item.getTargetHeader(),item.getRuleExecutionType(),
+                item.getFromRow(), item.getToRow());
         rule1ModelArrayList.add(itemWithCount);
         int row = rule1ModelArrayList.size() - 1;
         fireTableRowsInserted(row, row);
+    }
+
+    public void loadTableRows(List<Rule1Model> list){
+        for (Rule1Model item:list) {
+
+            addRow(item);
+        }
     }
 
 

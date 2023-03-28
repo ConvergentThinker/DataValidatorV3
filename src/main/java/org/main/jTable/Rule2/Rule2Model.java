@@ -15,6 +15,15 @@ public class Rule2Model {
         this.format = format;
     }
 
+    public Rule2Model(String isToRun, String sheet, String targetHeader,String format,String ruleExecutionType ) {
+        this.isToRun = isToRun;
+        this.ruleExecutionType = ruleExecutionType;
+        this.sheet = sheet;
+        this.targetHeader = targetHeader;
+        this.format = format;
+    }
+
+
     private String  sheet = "";
 
     public String getIsToRun() {
@@ -78,7 +87,18 @@ public class Rule2Model {
     private String  toRow = "";
     private String format = "";
 
+    @Override
+    public String toString() {
+        return
+                "Rule2Row" + isToRun + "::" +
+                        sheet + "::" +
+                        targetHeader + "::" +
+                        format + "::"+
+                        ruleExecutionType + "::" +
+                        fromRow + "::" +
+                        toRow;
 
+    }
 
 
 
