@@ -11,7 +11,11 @@ import org.main.jTable.Rule2.Rule2Model;
 import org.main.jTable.Rule2.Rule2TableModel;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ColorUIResource;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.TextAction;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,7 +28,7 @@ public class App extends JPanel implements ActionListener {
     private int maxX;
     private int maxY;
     private JFileChooser fc;
-    private JTextArea filePath;
+    private JTextField filePath;
     JButton uploadButton;
 
     // Table1 creation variables
@@ -242,22 +246,25 @@ public class App extends JPanel implements ActionListener {
         JScrollPane editScrollPane = new JScrollPane(leftJPanel);
         editScrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        editScrollPane.setPreferredSize(new Dimension(maxX / 2 - 20, maxY - 150));
+        //size
+        editScrollPane.setPreferredSize(new Dimension(maxX / 2 - 100, maxY - 150));
         editScrollPane.setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createCompoundBorder(
-                                BorderFactory.createTitledBorder("Add Rules "),
+                                BorderFactory.createTitledBorder("Dashboard"),
 
                                 BorderFactory.createEmptyBorder(5, 5, 5, 5)),
                         editScrollPane.getBorder()));
 
         JPanel fileUpload = new JPanel(new BorderLayout());
-        JPanel fields = new JPanel();
-        JPanel bottomBtnG = new JPanel();
+        JPanel fields = new JPanel(new BorderLayout()); // do
+        JPanel bottomBtnG = new JPanel(new BorderLayout());
+
+        fields.add(new JScrollPane(new TextArea()),BorderLayout.CENTER);
 
         leftJPanel.add(fileUpload,BorderLayout.PAGE_START);
-        leftJPanel.add(fields,BorderLayout.PAGE_END);
-        leftJPanel.add(bottomBtnG,BorderLayout.CENTER);
+        leftJPanel.add(fields,BorderLayout.CENTER);
+        leftJPanel.add(bottomBtnG,BorderLayout.PAGE_END);
 
         fileUpload.setBorder(
                 BorderFactory.createCompoundBorder(
@@ -271,11 +278,41 @@ public class App extends JPanel implements ActionListener {
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Action Buttons"),
                         BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+// bottom button
+
+        JPanel jPanelBtn = new JPanel(new FlowLayout());
+        jPanelBtn.add(new JButton("Download"));
+        jPanelBtn.add(new JButton("Upload Rule"));
+        bottomBtnG.add(jPanelBtn,BorderLayout.WEST);
+
+        JPanel jPanelBtnRun = new JPanel(new FlowLayout());
+        jPanelBtnRun.add(new JButton("Run"));
+
+        bottomBtnG.add(jPanelBtnRun,BorderLayout.CENTER);
+        //bottomBtnG.add(new JProgressBar());
 
 
-        filePath = new JTextArea();
-        fileUpload.add(filePath , BorderLayout.CENTER);
 
+        filePath = new JTextField();
+        fileUpload.add(filePath, BorderLayout.CENTER);
+        // copy paste
+        JPopupMenu menu = new JPopupMenu();
+        Action cut = new DefaultEditorKit.CutAction();
+        cut.putValue(Action.NAME, "Cut");
+        cut.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control X"));
+        menu.add(cut);
+        Action copy = new DefaultEditorKit.CopyAction();
+        copy.putValue(Action.NAME, "Copy");
+        cut.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
+        menu.add(copy);
+        Action paste = new DefaultEditorKit.PasteAction();
+        paste.putValue(Action.NAME, "Paste");
+        cut.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
+        menu.add(paste);
+        Action selectAll = new SelectAll();
+        menu.add(selectAll);
+        filePath.setComponentPopupMenu(menu);
+        //
         uploadButton = new JButton("Upload Excel");
         uploadButton.addActionListener(this);
         fileUpload.add(uploadButton, BorderLayout.EAST);
@@ -300,6 +337,22 @@ public class App extends JPanel implements ActionListener {
 
 
     }
+    static class SelectAll extends TextAction
+    {
+        public SelectAll()
+        {
+            super("Select All");
+            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control S"));
+        }
+
+        public void actionPerformed(ActionEvent e)
+        {
+            JTextComponent component = getFocusedComponent();
+            component.selectAll();
+            component.requestFocusInWindow();
+        }
+    }
+
 
     class AddRowAction extends AbstractAction {
         private Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
@@ -441,11 +494,12 @@ public class App extends JPanel implements ActionListener {
                     "Attach");
 
             //Process the results.
+            filePath.setText("");
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                filePath.append(file.getAbsolutePath());
+                filePath.setText(file.getAbsolutePath());
             } else {
-                filePath.append("Attachment cancelled by user.");
+                filePath.setText("Attachment cancelled by user.");
             }
             filePath.setCaretPosition(filePath.getDocument().getLength());
 
