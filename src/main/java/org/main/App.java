@@ -637,17 +637,16 @@ public class App extends JPanel implements ActionListener {
         final String kDocumentsDirectory = "docs";
         String filePath = "";
 
-        try {
-            if(System.getProperty("os.name").contains("Mac")){
-                filePath = com.apple.eio.FileManager.findFolder(
-                        com.apple.eio.FileManager.kUserDomain,
-                        com.apple.eio.FileManager.OSTypeToInt(kDocumentsDirectory));
-            }else{
-                filePath = "C:/Users/" + System.getProperty("user.name") + "/Documents/";
-            }
-        } catch (FileNotFoundException ex) {
+         if(System.getProperty("os.name").contains("Mac")){
 
-        }
+             filePath = "/Users/" + System.getProperty("user.name") + "/Documents/";
+
+         }else{
+             filePath = "C:/Users/" + System.getProperty("user.name") + "/Documents/";
+         }
+         System.out.println("filePath : "+ filePath);
+
+        System.out.println( System.getProperty("user.name")  );
 
         CreateFile(filePath+"/" +fileName);
         return  filePath+"/" +fileName;
