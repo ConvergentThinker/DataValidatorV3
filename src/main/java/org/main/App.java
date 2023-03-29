@@ -271,7 +271,7 @@ public class App extends JPanel implements ActionListener {
         JPanel fields = new JPanel(new BorderLayout()); // do
         JPanel bottomBtnG = new JPanel(new BorderLayout());
 
-        fields.add(new JScrollPane(new TextArea()),BorderLayout.CENTER);
+        fields.add(new JScrollPane(new JTextArea()),BorderLayout.CENTER);
 
         leftJPanel.add(fileUpload,BorderLayout.PAGE_START);
         leftJPanel.add(fields,BorderLayout.CENTER);
@@ -301,12 +301,11 @@ public class App extends JPanel implements ActionListener {
         uploadRule.addActionListener(this);
         bottomBtnG.add(jPanelBtn,BorderLayout.WEST);
 
-
         JPanel jPanelBtnRun = new JPanel(new BorderLayout());
-        jPanelBtnRun.add(new JButton("Run"),BorderLayout.EAST);
-
+        jPanelBtnRun.add(new JButton("Run"),BorderLayout.CENTER);
         loadRulefilePath = new JTextField();
-        jPanelBtnRun.add(loadRulefilePath,BorderLayout.CENTER);
+        bottomBtnG.add(loadRulefilePath,BorderLayout.PAGE_END);
+
         // copy paste
         JPopupMenu menu1 = new JPopupMenu();
         Action cut1 = new DefaultEditorKit.CutAction();
