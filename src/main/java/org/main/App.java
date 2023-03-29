@@ -1,5 +1,6 @@
 package org.main;
 
+import org.main.engine.ReaderEngine;
 import org.main.filechooser.ImageFileView;
 import org.main.filechooser.ImageFilter;
 import org.main.filechooser.ImagePreview;
@@ -25,6 +26,7 @@ import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class App extends JPanel implements ActionListener {
     JPanel rightJpanel;
@@ -40,6 +42,13 @@ public class App extends JPanel implements ActionListener {
 
     JButton downloadRule;
     JButton uploadRule;
+
+    // Engine variables
+    Map<String, Map<String, Map<Integer, String>>> inputExcelData;
+    final ReaderEngine readerEngine = new ReaderEngine();
+
+
+
 
     // Table1 creation variables
     JButton remove1;
@@ -399,7 +408,7 @@ public class App extends JPanel implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             int reply = JOptionPane.showConfirmDialog(table,
-                    newRowPanel.getMainPanel(),
+                    newRowPanel.getMainPanel(inputExcelData),
                     "Rule 1 fields ",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE);
@@ -420,7 +429,7 @@ public class App extends JPanel implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             int reply = JOptionPane.showConfirmDialog(table2,
-                    newRowPanel.getMainPanel(),
+                    newRowPanel.getMainPanel(inputExcelData),
                     "Rule 3 fields ",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE);
@@ -441,7 +450,7 @@ public class App extends JPanel implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             int reply = JOptionPane.showConfirmDialog(table2,
-                    newRowPanel.getMainPanel(),
+                    newRowPanel.getMainPanel(inputExcelData),
                     "Rule 2 fields ",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE);
@@ -523,11 +532,10 @@ public class App extends JPanel implements ActionListener {
             //Show it.
             int returnVal = fc.showDialog(App.this,
                     "Attach");
-
+            File file = fc.getSelectedFile();
             //Process the results.
             filePath.setText("");
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
                 filePath.setText(file.getAbsolutePath());
             } else {
                 filePath.setText("Attachment cancelled by user.");
@@ -536,6 +544,20 @@ public class App extends JPanel implements ActionListener {
 
             //Reset the file chooser for the next time it's shown.
             fc.setSelectedFile(null);
+
+
+            // Read input excel file
+            try {
+                inputExcelData = readerEngine.readCompleteExcel(file.getAbsolutePath());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+             System.out.println("inputExcelData  "+ inputExcelData);
+
+            loadRulefilePath.setText("");
+            loadRulefilePath.setText("Input data source loaded ");
+
+
         } else if (e.getSource() == remove1) {
 
                 int[] rows = table.getSelectedRows();
@@ -559,7 +581,7 @@ public class App extends JPanel implements ActionListener {
             Rule1TableModel tm = (Rule1TableModel) table.getModel();
             Rule1Model model = tm.getTableRow(row);
             // push selected row into newRowPanel
-            newRowPanel.pushDataIntoForm(model);
+            newRowPanel.pushDataIntoForm(model,inputExcelData);
 
             int reply = JOptionPane.showConfirmDialog(table,
                     newRowPanel.getMainPanel(),
@@ -581,7 +603,7 @@ public class App extends JPanel implements ActionListener {
             Rule2TableModel tm = (Rule2TableModel) table2.getModel();
             Rule2Model model = tm.getTableRow(row);
             // push selected row into newRowPanel
-            newRowPanel.pushDataIntoForm(model);
+            newRowPanel.pushDataIntoForm(model,inputExcelData);
 
             int reply = JOptionPane.showConfirmDialog(table2,
                     newRowPanel.getMainPanel(),
@@ -666,8 +688,6 @@ public class App extends JPanel implements ActionListener {
             //Reset the file chooser for the next time it's shown.
             fcLoadRule.setSelectedFile(null);
 
-
-
             // Rule1 file upload
             List<Rule1Model> rule1ModelArrayList = new ArrayList<>();
             String fileName;
@@ -726,10 +746,6 @@ public class App extends JPanel implements ActionListener {
             } catch (IOException ex) {
             }
             tableModel2.loadTableRows(rule2ModelArrayList);
-
-
-
-
 
         }
 

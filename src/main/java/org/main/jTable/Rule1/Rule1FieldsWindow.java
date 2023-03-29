@@ -3,8 +3,12 @@ package org.main.jTable.Rule1;
 import org.main.UtilsClass.SpringUtilities;
 
 import javax.swing.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Map;
+import java.util.Set;
 
-public class Rule1FieldsWindow {
+public class Rule1FieldsWindow implements ItemListener {
 
     private JPanel mainPanel = new JPanel();
     JComboBox toRunDrp;
@@ -12,47 +16,44 @@ public class Rule1FieldsWindow {
     JComboBox targetColumnDrp;
     JComboBox noOfRowsToRunDrp;
     JTextField textFieldFrom;
-    JTextField textFieldTo ;
-
-
-
+    JTextField textFieldTo;
+    Map<String, Map<String, Map<Integer, String>>> workbook;
 
     @SuppressWarnings("serial")
     public Rule1FieldsWindow() {
-
         mainPanel.setLayout(new SpringLayout());
 
         String[] COL_NAMES = {"Validate?:", "Sheet:", "All rows/Custom]:", "Row From:", "Row To:", "Target Column:"};
         int numPairs = COL_NAMES.length;
 
         // 1
-        String[] toRun = { "Yes","No" };
+        String[] toRun = {"Yes", "No"};
         JLabel l = new JLabel(COL_NAMES[0], JLabel.TRAILING);
         mainPanel.add(l);
         toRunDrp = new JComboBox(toRun);
         toRunDrp.setEditable(false);
         l.setLabelFor(toRunDrp);
         mainPanel.add(toRunDrp);
-
         JLabel l2 = new JLabel(COL_NAMES[1], JLabel.TRAILING);
         mainPanel.add(l2);
-        String[] sheets = {"Sheet1","Sheet2"};
+
+        String[] sheets = {};
         sheetDrp = new JComboBox(sheets);
         sheetDrp.setEditable(false);
+        sheetDrp.addItemListener(this);
         l2.setLabelFor(sheetDrp);
         mainPanel.add(sheetDrp);
 
         JLabel l3 = new JLabel(COL_NAMES[5], JLabel.TRAILING);
         mainPanel.add(l3);
-        String[] columns = {"DOB","Age"};
-        targetColumnDrp = new JComboBox(columns);
+        targetColumnDrp = new JComboBox();
         targetColumnDrp.setEditable(false);
         l2.setLabelFor(targetColumnDrp);
         mainPanel.add(targetColumnDrp);
 
         JLabel l4 = new JLabel(COL_NAMES[2], JLabel.TRAILING);
         mainPanel.add(l4);
-        String[] noOfRowsToRun = {"All Rows","Custom"};
+        String[] noOfRowsToRun = {"All Rows", "Custom"};
         noOfRowsToRunDrp = new JComboBox(noOfRowsToRun);
         noOfRowsToRunDrp.setEditable(false);
         l4.setLabelFor(noOfRowsToRunDrp);
@@ -66,7 +67,7 @@ public class Rule1FieldsWindow {
 
         JLabel l6 = new JLabel(COL_NAMES[4], JLabel.TRAILING);
         mainPanel.add(l6);
-         textFieldTo = new JTextField(10);
+        textFieldTo = new JTextField(10);
         l6.setLabelFor(textFieldTo);
         mainPanel.add(textFieldTo);
 
@@ -78,23 +79,32 @@ public class Rule1FieldsWindow {
 
 
     }
-
-
     public JPanel getMainPanel() {
         return mainPanel;
     }
 
-    public Rule1Model getSelectedItem() {
 
-            return new Rule1Model(toRunDrp.getSelectedItem().toString(),
-                    sheetDrp.getSelectedItem().toString(),
-                    targetColumnDrp.getSelectedItem().toString(),
-                    noOfRowsToRunDrp.getSelectedItem().toString(),
-                    textFieldFrom.getText().toString().trim(),textFieldTo.getText().toString().trim()
-                        );
+    public JPanel getMainPanel(Map<String, Map<String, Map<Integer, String>>> workbook) {
+        this.workbook = workbook;
+        sheetDrp.setModel(new DefaultComboBoxModel(convert(workbook.keySet())));
+        sheetDrp.setSelectedIndex(-1);
+        targetColumnDrp.setSelectedIndex(-1);
+        return mainPanel;
+    }
+    public Rule1Model getSelectedItem() {
+        return new Rule1Model(toRunDrp.getSelectedItem().toString(),
+                sheetDrp.getSelectedItem().toString(),
+                targetColumnDrp.getSelectedItem().toString(),
+                noOfRowsToRunDrp.getSelectedItem().toString(),
+                textFieldFrom.getText().toString().trim(), textFieldTo.getText().toString().trim()
+        );
     }
 
-    public void pushDataIntoForm(Rule1Model model){
+    public void pushDataIntoForm(Rule1Model model,Map<String, Map<String, Map<Integer, String>>> workbook) {
+
+        this.workbook = workbook;
+        sheetDrp.setModel(new DefaultComboBoxModel(convert(workbook.keySet())));
+
         toRunDrp.setSelectedItem(model.getIsToRun());
         noOfRowsToRunDrp.setSelectedItem(model.getRuleExecutionType());
         sheetDrp.setSelectedItem(model.getSheet());
@@ -104,6 +114,33 @@ public class Rule1FieldsWindow {
     }
 
 
+    // Function to convert Set<String> to String[]
+    public static String[] convert(Set<String> setOfString) {
+
+        // Create String[] of size of setOfString
+        String[] arrayOfString = new String[setOfString.size()];
+
+        // Copy elements from set to string array
+        // using advanced for loop
+        int index = 0;
+        for (String str : setOfString)
+            arrayOfString[index++] = str;
+
+        // return the formed String[]
+        return arrayOfString;
+    }
+
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+
+        if ((e.getStateChange() == ItemEvent.SELECTED)) {
+             String selection = sheetDrp.getSelectedItem().toString();
+            targetColumnDrp.setModel(new DefaultComboBoxModel(convert(workbook.get(selection).keySet())));
+
+        }
+
+    }
 
 
 

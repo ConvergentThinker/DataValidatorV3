@@ -3,8 +3,12 @@ package org.main.jTable.Rule2;
 import org.main.UtilsClass.SpringUtilities;
 
 import javax.swing.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Map;
+import java.util.Set;
 
-public class Rule2FieldsWindow {
+public class Rule2FieldsWindow implements ItemListener {
 
 
     private JPanel mainPanel = new JPanel();
@@ -17,7 +21,7 @@ public class Rule2FieldsWindow {
     JComboBox noOfRowsToRunDrp;
     JTextField textFieldFrom;
     JTextField textFieldTo ;
-
+    Map<String, Map<String, Map<Integer, String>>> workbook;
 
     @SuppressWarnings("serial")
     public Rule2FieldsWindow() {
@@ -38,16 +42,15 @@ public class Rule2FieldsWindow {
 
         JLabel l2 = new JLabel(COL_NAMES[1], JLabel.TRAILING);
         mainPanel.add(l2);
-        String[] sheets = {"Sheet1","Sheet2"};
-        sheetDrp = new JComboBox(sheets);
+        sheetDrp = new JComboBox();
+        sheetDrp.addItemListener(this);
         sheetDrp.setEditable(false);
         l2.setLabelFor(sheetDrp);
         mainPanel.add(sheetDrp);
 
         JLabel l3 = new JLabel(COL_NAMES[5], JLabel.TRAILING);
         mainPanel.add(l3);
-        String[] columns = {"DOB","Age"};
-        targetColumnDrp = new JComboBox(columns);
+        targetColumnDrp = new JComboBox();
         targetColumnDrp.setEditable(false);
         l2.setLabelFor(targetColumnDrp);
         mainPanel.add(targetColumnDrp);
@@ -99,9 +102,19 @@ public class Rule2FieldsWindow {
     }
 
 
+    public JPanel getMainPanel(Map<String, Map<String, Map<Integer, String>>> workbook) {
+
+        this.workbook = workbook;
+        sheetDrp.setModel(new DefaultComboBoxModel(convert(workbook.keySet())));
+        sheetDrp.setSelectedIndex(-1);
+        targetColumnDrp.setSelectedIndex(-1);
+        return mainPanel;
+    }
+
     public JPanel getMainPanel() {
         return mainPanel;
     }
+
 
     public Rule2Model getSelectedItem() {
 
@@ -117,7 +130,12 @@ public class Rule2FieldsWindow {
 
     }
 
-    public void pushDataIntoForm(Rule2Model model){
+    public void pushDataIntoForm(Rule2Model model,Map<String, Map<String, Map<Integer, String>>> workbook){
+
+        this.workbook = workbook;
+        sheetDrp.setModel(new DefaultComboBoxModel(convert(workbook.keySet())));
+
+
         toRunDrp.setSelectedItem(model.getIsToRun());
         noOfRowsToRunDrp.setSelectedItem(model.getRuleExecutionType());
         sheetDrp.setSelectedItem(model.getSheet());
@@ -127,6 +145,31 @@ public class Rule2FieldsWindow {
         textFieldTo.setText(model.getToRow());
     }
 
+    // Function to convert Set<String> to String[]
+    public static String[] convert(Set<String> setOfString) {
+
+        // Create String[] of size of setOfString
+        String[] arrayOfString = new String[setOfString.size()];
+
+        // Copy elements from set to string array
+        // using advanced for loop
+        int index = 0;
+        for (String str : setOfString)
+            arrayOfString[index++] = str;
+
+        // return the formed String[]
+        return arrayOfString;
+    }
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+
+        if ((e.getStateChange() == ItemEvent.SELECTED)) {
+            String selection = sheetDrp.getSelectedItem().toString();
+            targetColumnDrp.setModel(new DefaultComboBoxModel(convert(workbook.get(selection).keySet())));
+
+        }
+
+    }
 
 
 
