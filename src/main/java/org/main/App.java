@@ -803,14 +803,15 @@ public class App extends JPanel implements ActionListener {
 
                         String[] infoArr = future.get().split("&");
                         System.out.println("===============INFO===============");
-
                         for (String arr : infoArr) {
                             String[] item = arr.split(",");
                             System.out.println("For " + item[0] + ",in sheet: " + item[1] + " , Row No:" + item[2] + " in column " + item[3] + " >>> INFO: " + item[4]);
                             reportList.add("For " + item[0] + ",in sheet " + item[1] + " , Row No:" + item[2] + " in column " + item[3] + " >>> INFO: " + item[4]);
                         }
-
                         System.out.println("===================================");
+                    }else{
+                        reportList.add(future.get().toString());
+
                     }
 
                 } catch (ExecutionException e1) {

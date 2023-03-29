@@ -24,17 +24,27 @@ public class Rule1ValidatorEngine {
     }
 
     public String getErrorsList(){
-        System.out.println("errors size in Rule 1:: "+ errors.size());
+        System.out.println("errors size in Rule 1 :: "+ errors.size());
+
         String data="";
-        for (int i = 0; i < errors.size(); i++) {
-            ErrorModel rule = errors.get(i);
-            String x = "";
-            x = x.concat(rule.getRule()).concat(",").concat(rule.getSheetName()).concat(",").concat(String.valueOf(rule.getRowNo())).concat(",")
-                    .concat(rule.getColumnHeader()).concat(",").concat( rule.getInfo());
-            data = data.concat(x).concat("&");
+
+        if(errors.size()>0){
+            for (int i = 0; i < errors.size(); i++) {
+                ErrorModel rule = errors.get(i);
+                String x = "";
+                x = x.concat(rule.getRule()).concat(",").concat(rule.getSheetName()).concat(",").concat(String.valueOf(rule.getRowNo())).concat(",")
+                        .concat(rule.getColumnHeader()).concat(",").concat( rule.getInfo());
+                data = data.concat(x).concat("&");
+            }
+        }else{
+            data = "Rule 1 Processed successfully. No issues found. ";
         }
+
+
         return data;
     }
+
+
 
 
     // Rule4: Define Mandatory Columns.

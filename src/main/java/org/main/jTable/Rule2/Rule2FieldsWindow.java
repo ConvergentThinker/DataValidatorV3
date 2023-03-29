@@ -57,7 +57,11 @@ public class Rule2FieldsWindow implements ItemListener {
 
         JLabel l7 = new JLabel(COL_NAMES[6], JLabel.TRAILING);
         mainPanel.add(l7);
-        String[] formatsArr = {"dd:mm:yyyy","mm:dd:yyyy","H:M:S","Number","Text",};
+        String[] formatsArr = {"Number","Text",
+                "D/MM/YY","DD/MM/YYYY","D/M/YY","DD/MM/YY","DD/M/YYYY","DD.M.YYYY","DD-M-YYYY","DD/M/YY",
+                "MM/DD/YYYY","MM/DD/YY","MM.DD.YYYY","M.DD.YYYY","MM-DD-YY","MM-DD-YYYY",
+                "MM\\DD\\YYYY", "M\\DD\\YYYY","MM/DD/YYYY",""
+        };
         formats = new JComboBox(formatsArr);
         formats.setEditable(false);
         l7.setLabelFor(formats);

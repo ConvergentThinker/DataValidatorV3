@@ -8,6 +8,16 @@ public class TestRegex {
     public static void main(String[] args) {
 
 
+        String[] formatsArr = {"Number","Text",
+        "D/MM/YY","DD/MM/YYYY","D/M/YY","DD/MM/YY","DD/M/YYYY","DD.M.YYYY","DD-M-YYYY","DD/M/YY",
+                "MM/DD/YYYY","MM/DD/YY","MM.DD.YYYY","M.DD.YYYY","MM-DD-YY","MM-DD-YYYY",
+                "MM\'DD\'YYYY", "M\'DD\'YYYY","MM/DD/YYYY",""
+        };
+
+
+
+
+
 
 
 
