@@ -1,5 +1,7 @@
 package org.main;
 
+import org.main.datavalidator.Rule1ValidatorEngine;
+import org.main.datavalidator.Rule2ValidatorEngine;
 import org.main.engine.ReaderEngine;
 import org.main.filechooser.ImageFileView;
 import org.main.filechooser.ImageFilter;
@@ -24,9 +26,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.*;
 
 public class App extends JPanel implements ActionListener {
     JPanel rightJpanel;
@@ -42,6 +44,8 @@ public class App extends JPanel implements ActionListener {
 
     JButton downloadRule;
     JButton uploadRule;
+    JButton run;
+    JTextArea output;
 
     // Engine variables
     Map<String, Map<String, Map<Integer, String>>> inputExcelData;
@@ -280,7 +284,8 @@ public class App extends JPanel implements ActionListener {
         JPanel fields = new JPanel(new BorderLayout()); // do
         JPanel bottomBtnG = new JPanel(new BorderLayout());
 
-        fields.add(new JScrollPane(new JTextArea()),BorderLayout.CENTER);
+        output  = new JTextArea();
+        fields.add(new JScrollPane(output),BorderLayout.CENTER);
 
         leftJPanel.add(fileUpload,BorderLayout.PAGE_START);
         leftJPanel.add(fields,BorderLayout.CENTER);
@@ -311,7 +316,9 @@ public class App extends JPanel implements ActionListener {
         bottomBtnG.add(jPanelBtn,BorderLayout.WEST);
 
         JPanel jPanelBtnRun = new JPanel(new BorderLayout());
-        jPanelBtnRun.add(new JButton("Run"),BorderLayout.CENTER);
+        run = new JButton("Run");
+        run.addActionListener(this);
+        jPanelBtnRun.add(run,BorderLayout.CENTER);
         loadRulefilePath = new JTextField();
         bottomBtnG.add(loadRulefilePath,BorderLayout.PAGE_END);
 
@@ -356,9 +363,13 @@ public class App extends JPanel implements ActionListener {
         menu.add(selectAll);
         filePath.setComponentPopupMenu(menu);
         //
+
         uploadButton = new JButton("Upload Excel");
         uploadButton.addActionListener(this);
+        // add load button to fetch updated data
+
         fileUpload.add(uploadButton, BorderLayout.EAST);
+
 
 
 
@@ -556,7 +567,7 @@ public class App extends JPanel implements ActionListener {
 
             loadRulefilePath.setText("");
             loadRulefilePath.setText("Input data source loaded ");
-
+//
 
         } else if (e.getSource() == remove1) {
 
@@ -705,10 +716,10 @@ public class App extends JPanel implements ActionListener {
                     if(line.contains("Rule1Row")){
 
                         String[] modelArr = line.split("::");
-                        if(modelArr.length>4){
-                            rule1ModelArrayList.add(new Rule1Model(modelArr[0],modelArr[1],modelArr[2],modelArr[3],modelArr[4],modelArr[5]));
+                        if(modelArr.length>5){
+                            rule1ModelArrayList.add(new Rule1Model(modelArr[1],modelArr[2],modelArr[3],modelArr[4],modelArr[5],modelArr[6]));
                         }else {
-                            rule1ModelArrayList.add(new Rule1Model(modelArr[0],modelArr[1],modelArr[2],modelArr[3]));
+                            rule1ModelArrayList.add(new Rule1Model(modelArr[1],modelArr[2],modelArr[3],modelArr[4]));
                         }
 
                     }
@@ -735,10 +746,10 @@ public class App extends JPanel implements ActionListener {
 
                     if(line.contains("Rule2Row")) {
                         String[] modelArr = line.split("::");
-                        if (modelArr.length > 5) {
-                            rule2ModelArrayList.add(new Rule2Model(modelArr[0], modelArr[1], modelArr[2], modelArr[3], modelArr[4], modelArr[5], modelArr[6]));
+                        if (modelArr.length > 6) {
+                            rule2ModelArrayList.add(new Rule2Model(modelArr[1], modelArr[2], modelArr[3], modelArr[4], modelArr[5], modelArr[6], modelArr[7]));
                         } else {
-                            rule2ModelArrayList.add(new Rule2Model(modelArr[0], modelArr[1], modelArr[2], modelArr[3], modelArr[4]));
+                            rule2ModelArrayList.add(new Rule2Model(modelArr[1], modelArr[2], modelArr[3], modelArr[4], modelArr[5]));
                         }
                     }
 
@@ -747,9 +758,142 @@ public class App extends JPanel implements ActionListener {
             }
             tableModel2.loadTableRows(rule2ModelArrayList);
 
+        } else if (e.getSource() == run) {
+
+
+            String[] rulesArr = {"R1","R2"};
+
+            List<Object> masterList = new ArrayList<>();
+            masterList.add(0,tableModel.getRule1ModelArrayList());
+            masterList.add(1,tableModel2.getRule2ModelArrayList());
+
+
+            int noOfThreads = 2;
+            final App runner = new App();
+            ExecutorService executorService = Executors.newFixedThreadPool(noOfThreads);
+            Set<Callable<String>> callables = new HashSet<>();
+
+            for (int i = 0; i < noOfThreads; i++) {
+                int finalI = i;
+
+                callables.add(new Callable<String>() {
+                    public String call() {
+                        System.out.println(" Thread name: " + Thread.currentThread().getName());
+                        return runner.executeRule(rulesArr[finalI], inputExcelData,masterList);
+                    }
+                });
+            }
+
+            // Run all rules
+            List<Future<String>> futures = null;
+            try {
+                futures = executorService.invokeAll(callables);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            List<String> reportList = new ArrayList<>();
+
+            // print results
+            for (Future<String> future : futures) {
+                //System.out.println("future.get = " + future.isDone());
+                try {
+                    // this is to return anything after that particular thread completed.
+                    // In our case, we are returning errors list,  just print them on the console.
+
+                    if (future.get().contains("&")) {
+
+                        String[] infoArr = future.get().split("&");
+                        System.out.println("===============INFO===============");
+
+                        for (String arr : infoArr) {
+                            String[] item = arr.split(",");
+                            System.out.println("For " + item[0] + ",in sheet: " + item[1] + " , Row No:" + item[2] + " in column " + item[3] + " >>> INFO: " + item[4]);
+                            reportList.add("For " + item[0] + ",in sheet " + item[1] + " , Row No:" + item[2] + " in column " + item[3] + " >>> INFO: " + item[4]);
+                        }
+
+                        System.out.println("===================================");
+                    }
+
+                } catch (ExecutionException e1) {
+                    // this is best place to see program failure reason, why?
+                    e1.printStackTrace();
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+
+            output.setText(join(reportList,"\n"));
+
+            executorService.shutdown();
+
+
+
+
+
         }
 
+
     }
+    public static String join(List<String> list, String delim) {
+
+        StringBuilder sb = new StringBuilder();
+
+        String loopDelim = "";
+
+        for(String s : list) {
+
+            sb.append(loopDelim);
+            sb.append(s);
+
+            loopDelim = delim;
+        }
+
+        return sb.toString();
+    }
+
+
+
+    public String executeRule(String value, Map<String, Map<String, Map<Integer, String>>> inputExcelData,List<Object> masterList) {
+
+        String getErrorListSTR = "";
+
+        switch (value) {
+
+           /* case "R1":
+                Rule1ValidatorEngine rule1ValidatorEngine = new Rule1ValidatorEngine();
+                rule1ValidatorEngine.validateRule1(inputExcelData);
+                getErrorListSTR = rule1ValidatorEngine.getErrorsList();
+                break;
+
+            case "R3":
+                Rule3ValidatorEngine rule3ValidatorEngine = new Rule3ValidatorEngine();
+                rule3ValidatorEngine.validateRule3(inputExcelData);
+                getErrorListSTR = rule3ValidatorEngine.getErrorsList();
+                break;*/
+            case "R1":
+                Rule1ValidatorEngine rule1ValidatorEngine = new Rule1ValidatorEngine();
+                rule1ValidatorEngine.validateRule4(inputExcelData, (List<Rule1Model>) masterList.get(0));
+                getErrorListSTR = rule1ValidatorEngine.getErrorsList();
+                break;
+            case "R2":
+                Rule2ValidatorEngine rule2ValidatorEngine = new Rule2ValidatorEngine();
+                rule2ValidatorEngine.validateRule2(inputExcelData,(List<Rule2Model>) masterList.get(1));
+                getErrorListSTR = rule2ValidatorEngine.getErrorsList();
+                break;
+
+            default:
+                System.out.println("input Rule not present to proceed validation. please input available Rules ");
+
+        }
+
+        return getErrorListSTR;
+
+    }
+
+
+
+
 
 
     public void CreateFile(String fileName) {

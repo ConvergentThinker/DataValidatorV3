@@ -90,7 +90,7 @@ public class Rule2Model {
     @Override
     public String toString() {
         return
-                "Rule2Row" + isToRun + "::" +
+                "Rule2Row: " + "::" + isToRun + "::" +
                         sheet + "::" +
                         targetHeader + "::" +
                         format + "::"+

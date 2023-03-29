@@ -53,7 +53,7 @@ public class Rule1Model {
     @Override
     public String toString() {
         return
-                       "Rule1Row" + isToRun + "::" +
+                       "Rule1Row" +"::" + isToRun + "::" +
                         sheet + "::" +
                         targetHeader + "::" +
                         ruleExecutionType + "::" +

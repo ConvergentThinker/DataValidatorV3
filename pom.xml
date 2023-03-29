@@ -12,6 +12,11 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+          <maven.compiler.source>8</maven.compiler.source>
+          <maven.compiler.target>8</maven.compiler.target>
+          <poiji.version>3.1.1</poiji.version>
+          <lombok.version>1.18.20</lombok.version>
+
   </properties>
 
   <dependencies>
@@ -28,7 +33,13 @@
           <version>5.2.3</version>
       </dependency>
 
-
+      <!-- HELPER DEPENDENCIES -->
+      <dependency>
+          <groupId>org.projectlombok</groupId>
+          <artifactId>lombok</artifactId>
+          <version>${lombok.version}</version>
+          <scope>provided</scope>
+      </dependency>
 
 
 
