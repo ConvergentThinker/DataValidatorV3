@@ -52,8 +52,6 @@ public class App extends JPanel implements ActionListener {
     final ReaderEngine readerEngine = new ReaderEngine();
 
 
-
-
     // Table1 creation variables
     JButton remove1;
     JButton edit1;

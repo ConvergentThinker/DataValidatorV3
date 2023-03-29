@@ -74,7 +74,6 @@ public class Rule1ValidatorEngine {
                             int dataLength = entry.getValue().trim().length();
 
                             if(dataLength==0){
-                                System.out.println("dataLength: " + dataLength);
                                 errors.add(new ErrorModel("Rule1",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Cell value is Empty."));
                             }
                         }
@@ -97,7 +96,7 @@ public class Rule1ValidatorEngine {
                                     int dataLength = entry.getValue().trim().length();
 
                                     if(dataLength==0){
-                                        System.out.println("dataLength: " + dataLength);
+
                                         errors.add(new ErrorModel("Rule1",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Cell value is Empty."));
                                     }
                                     if(entry.getKey() == toNo){
