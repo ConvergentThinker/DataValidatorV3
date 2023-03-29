@@ -22,6 +22,8 @@ public class Rule1FieldsWindow implements ItemListener {
     JComboBox noOfRowsToRunDrp;
     JTextField textFieldFrom;
     JTextField textFieldTo;
+    JLabel l5;
+    JLabel l6;
     Map<String, Map<String, Map<Integer, String>>> workbook;
 
     @SuppressWarnings("serial")
@@ -61,19 +63,42 @@ public class Rule1FieldsWindow implements ItemListener {
         String[] noOfRowsToRun = {"All Rows", "Custom"};
         noOfRowsToRunDrp = new JComboBox(noOfRowsToRun);
         noOfRowsToRunDrp.setEditable(false);
+        noOfRowsToRunDrp.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if(e.getItem().toString().equals("Custom")){
+                    textFieldFrom.setVisible(true);
+                    textFieldTo.setVisible(true);
+                    l5.setVisible(true);
+                    l6.setVisible(true);
+
+                } else if (e.getItem().toString().equals("All Rows")) {
+                    textFieldFrom.setVisible(false);
+                    textFieldTo.setVisible(false);
+
+                    l5.setVisible(false);
+                    l6.setVisible(false);
+
+                }
+            }
+        });
         l4.setLabelFor(noOfRowsToRunDrp);
         mainPanel.add(noOfRowsToRunDrp);
 
-        JLabel l5 = new JLabel(COL_NAMES[3], JLabel.TRAILING);
+         l5 = new JLabel(COL_NAMES[3], JLabel.TRAILING);
         mainPanel.add(l5);
         textFieldFrom = new JTextField(10);
         l5.setLabelFor(textFieldFrom);
+        textFieldFrom.setVisible(false);
+        l5.setVisible(false);
         mainPanel.add(textFieldFrom);
 
-        JLabel l6 = new JLabel(COL_NAMES[4], JLabel.TRAILING);
+         l6 = new JLabel(COL_NAMES[4], JLabel.TRAILING);
         mainPanel.add(l6);
         textFieldTo = new JTextField(10);
         l6.setLabelFor(textFieldTo);
+        textFieldTo.setVisible(false);
+        l6.setVisible(false);
         mainPanel.add(textFieldTo);
 
         //Lay out the panel.
@@ -94,26 +119,35 @@ public class Rule1FieldsWindow implements ItemListener {
         sheetDrp.setModel(new DefaultComboBoxModel(convert(workbook.keySet())));
         sheetDrp.setSelectedIndex(-1);
         targetColumnDrp.setSelectedIndex(-1);
+        noOfRowsToRunDrp.setSelectedIndex(-1);
         return mainPanel;
     }
     public Rule1Model getSelectedItem() {
-        return new Rule1Model(toRunDrp.getSelectedItem().toString(),
-                sheetDrp.getSelectedItem().toString(),
-                targetColumnDrp.getSelectedItem().toString(),
-                noOfRowsToRunDrp.getSelectedItem().toString(),
-                textFieldFrom.getText().toString().trim(), textFieldTo.getText().toString().trim()
-        );
+
+        if(noOfRowsToRunDrp.getSelectedItem().toString().equals("Custom")){
+            return new Rule1Model(toRunDrp.getSelectedItem().toString(),
+                    sheetDrp.getSelectedItem().toString(),
+                    targetColumnDrp.getSelectedItem().toString(),
+                    noOfRowsToRunDrp.getSelectedItem().toString(),
+                    textFieldFrom.getText().toString().trim(), textFieldTo.getText().toString().trim()
+            );
+        }else {
+            return new Rule1Model(toRunDrp.getSelectedItem().toString(),
+                    sheetDrp.getSelectedItem().toString(),
+                    targetColumnDrp.getSelectedItem().toString(),
+                    noOfRowsToRunDrp.getSelectedItem().toString()
+            );
+        }
+
     }
 
     public void pushDataIntoForm(Rule1Model model,Map<String, Map<String, Map<Integer, String>>> workbook) {
-
         this.workbook = workbook;
         sheetDrp.setModel(new DefaultComboBoxModel(convert(workbook.keySet())));
-
         toRunDrp.setSelectedItem(model.getIsToRun());
-        noOfRowsToRunDrp.setSelectedItem(model.getRuleExecutionType());
         sheetDrp.setSelectedItem(model.getSheet());
         targetColumnDrp.setSelectedItem(model.getTargetHeader());
+        noOfRowsToRunDrp.setSelectedItem(model.getRuleExecutionType());
         textFieldFrom.setText(model.getFromRow());
         textFieldTo.setText(model.getToRow());
     }
@@ -144,7 +178,6 @@ public class Rule1FieldsWindow implements ItemListener {
             targetColumnDrp.setModel(new DefaultComboBoxModel(convert(workbook.get(selection).keySet())));
 
         }
-
     }
 
 

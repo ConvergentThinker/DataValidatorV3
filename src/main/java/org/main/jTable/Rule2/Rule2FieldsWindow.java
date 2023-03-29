@@ -21,6 +21,9 @@ public class Rule2FieldsWindow implements ItemListener {
     JComboBox noOfRowsToRunDrp;
     JTextField textFieldFrom;
     JTextField textFieldTo ;
+
+    JLabel l5;
+    JLabel l6;
     Map<String, Map<String, Map<Integer, String>>> workbook;
 
     @SuppressWarnings("serial")
@@ -67,34 +70,48 @@ public class Rule2FieldsWindow implements ItemListener {
         l7.setLabelFor(formats);
         mainPanel.add(formats);
 
-
         JLabel l4 = new JLabel(COL_NAMES[2], JLabel.TRAILING);
         mainPanel.add(l4);
         String[] noOfRowsToRun = {"All Rows","Custom"};
         noOfRowsToRunDrp = new JComboBox(noOfRowsToRun);
         noOfRowsToRunDrp.setEditable(false);
+        noOfRowsToRunDrp.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if(e.getItem().toString().equals("Custom")){
+                    textFieldFrom.setVisible(true);
+                    textFieldTo.setVisible(true);
+                    l5.setVisible(true);
+                    l6.setVisible(true);
+
+                } else if (e.getItem().toString().equals("All Rows")) {
+                    textFieldFrom.setVisible(false);
+                    textFieldTo.setVisible(false);
+
+                    l5.setVisible(false);
+                    l6.setVisible(false);
+
+                }
+            }
+        });
         l4.setLabelFor(noOfRowsToRunDrp);
         mainPanel.add(noOfRowsToRunDrp);
 
-        JLabel l5 = new JLabel(COL_NAMES[3], JLabel.TRAILING);
+        l5 = new JLabel(COL_NAMES[3], JLabel.TRAILING);
         mainPanel.add(l5);
         textFieldFrom = new JTextField(10);
+        textFieldFrom.setVisible(false);
+        l5.setVisible(false);
         l5.setLabelFor(textFieldFrom);
         mainPanel.add(textFieldFrom);
 
-        JLabel l6 = new JLabel(COL_NAMES[4], JLabel.TRAILING);
+        l6 = new JLabel(COL_NAMES[4], JLabel.TRAILING);
         mainPanel.add(l6);
         textFieldTo = new JTextField(10);
+        textFieldTo.setVisible(false);
+        l6.setVisible(false);
         l6.setLabelFor(textFieldTo);
         mainPanel.add(textFieldTo);
-
-
-
-
-
-
-
-
 
         //Lay out the panel.
         SpringUtilities.makeCompactGrid(mainPanel,
@@ -112,6 +129,7 @@ public class Rule2FieldsWindow implements ItemListener {
         sheetDrp.setModel(new DefaultComboBoxModel(convert(workbook.keySet())));
         sheetDrp.setSelectedIndex(-1);
         targetColumnDrp.setSelectedIndex(-1);
+        noOfRowsToRunDrp.setSelectedIndex(-1);
         return mainPanel;
     }
 
@@ -122,29 +140,37 @@ public class Rule2FieldsWindow implements ItemListener {
 
     public Rule2Model getSelectedItem() {
 
-        return new Rule2Model(
-                toRunDrp.getSelectedItem().toString(),
-                sheetDrp.getSelectedItem().toString(),
-                targetColumnDrp.getSelectedItem().toString(),
-                formats.getSelectedItem().toString(),
-                noOfRowsToRunDrp.getSelectedItem().toString(),
-                textFieldFrom.getText(),
-                textFieldTo.getText()
-                ) ;
+        if(noOfRowsToRunDrp.getSelectedItem().toString().equals("Custom")){
+            return new Rule2Model(
+                    toRunDrp.getSelectedItem().toString(),
+                    sheetDrp.getSelectedItem().toString(),
+                    targetColumnDrp.getSelectedItem().toString(),
+                    formats.getSelectedItem().toString(),
+                    noOfRowsToRunDrp.getSelectedItem().toString(),
+                    textFieldFrom.getText(),
+                    textFieldTo.getText()
+            ) ;
+        }else{
+            return new Rule2Model(
+                    toRunDrp.getSelectedItem().toString(),
+                    sheetDrp.getSelectedItem().toString(),
+                    targetColumnDrp.getSelectedItem().toString(),
+                    formats.getSelectedItem().toString(),
+                    noOfRowsToRunDrp.getSelectedItem().toString()
+            ) ;
+        }
 
     }
 
     public void pushDataIntoForm(Rule2Model model,Map<String, Map<String, Map<Integer, String>>> workbook){
-
         this.workbook = workbook;
         sheetDrp.setModel(new DefaultComboBoxModel(convert(workbook.keySet())));
-
-
         toRunDrp.setSelectedItem(model.getIsToRun());
         noOfRowsToRunDrp.setSelectedItem(model.getRuleExecutionType());
         sheetDrp.setSelectedItem(model.getSheet());
         formats.setSelectedItem(model.getFormat());
         targetColumnDrp.setSelectedItem(model.getTargetHeader());
+        noOfRowsToRunDrp.setSelectedItem(model.getRuleExecutionType());
         textFieldFrom.setText(model.getFromRow());
         textFieldTo.setText(model.getToRow());
     }

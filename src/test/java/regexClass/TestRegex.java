@@ -2,7 +2,16 @@ package regexClass;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.awt.Color;
+import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 public class TestRegex {
 
     public static void main(String[] args) {
@@ -14,7 +23,24 @@ public class TestRegex {
                 "MM\'DD\'YYYY", "M\'DD\'YYYY","MM/DD/YYYY",""
         };
 
+        JFrame frame = new JFrame("Borders");
 
+        int center = SwingConstants.CENTER;
+
+        JLabel labelFour = new JLabel("TitledBorder", center);
+        Border etch = BorderFactory.createEtchedBorder();
+        labelFour.setBorder(BorderFactory.createTitledBorder(etch, "Title"));
+
+
+
+
+        frame.setLayout(new GridLayout(3, 2));
+
+        frame.add(labelFour);
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
 
 
 

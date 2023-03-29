@@ -1,5 +1,6 @@
 package org.main;
 
+import org.main.UtilsClass.SoundUtils;
 import org.main.datavalidator.Rule1ValidatorEngine;
 import org.main.datavalidator.Rule2ValidatorEngine;
 import org.main.engine.ReaderEngine;
@@ -16,7 +17,11 @@ import org.main.loadRuleFC.RuleFileView;
 import org.main.loadRuleFC.RuleFilter;
 import org.main.loadRuleFC.RulePreview;
 
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
@@ -38,15 +43,13 @@ public class App extends JPanel implements ActionListener {
     private JFileChooser fc;
     private JFileChooser fcLoadRule;
     private JTextField filePath;
-    private JTextField loadRulefilePath;
-
     JButton uploadButton;
 
     JButton downloadRule;
     JButton uploadRule;
     JButton run;
     JTextArea output;
-
+    public static Font fontTitle = new Font("Comic Sans Ms", Font.BOLD, 12);
     // Engine variables
     Map<String, Map<String, Map<Integer, String>>> inputExcelData;
     final ReaderEngine readerEngine = new ReaderEngine();
@@ -125,11 +128,14 @@ public class App extends JPanel implements ActionListener {
         ruleScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         ruleScrollPane.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
         ruleScrollPane.setBorder(
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createCompoundBorder(
-                                BorderFactory.createTitledBorder("Rule Tables "),
-                                BorderFactory.createEmptyBorder(5, 5, 5, 5)),
-                        ruleScrollPane.getBorder()));
+                BorderFactory.createTitledBorder(
+                        BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
+                        " Available Rules ", TitledBorder.CENTER, TitledBorder.TOP,
+                        fontTitle, Color.blue)
+        );
+
+
+
 
 //  layout right side parent container
         GridBagLayout layout = new GridBagLayout();
@@ -164,8 +170,8 @@ public class App extends JPanel implements ActionListener {
         rule1Panel.add(rule1TablePanel,gbcRule1);
 
         JPanel rule1HeaderDesPanel = new JPanel(new BorderLayout());
-        rule1HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
-        rule1HeaderDesPanel.add(new JLabel("explain rule "),BorderLayout.CENTER);
+        //rule1HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
+        rule1HeaderDesPanel.add(new JLabel("  Rule 1 :- Find and print empty Cells in particular Column"),BorderLayout.CENTER);
         rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER); // rule descripion
         JPanel rule1HeaderBtnPanel = new JPanel(new FlowLayout());
         rule1HeaderBtnPanel.add(new JButton(addRowAction));
@@ -206,8 +212,9 @@ public class App extends JPanel implements ActionListener {
         rule2Panel.add(rule2TablePanel,gbcRule2);
 
         JPanel rule2HeaderDesPanel = new JPanel(new BorderLayout());
-        rule2HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
-        rule2HeaderDesPanel.add(new JLabel("explain rule "),BorderLayout.CENTER);
+       // rule2HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
+        rule2HeaderDesPanel.add(new JLabel("  Rule 2 :- Verify and validate cell Data format"),BorderLayout.CENTER);
+
         rule2HeaderPanel.add(rule2HeaderDesPanel,  BorderLayout.CENTER); // rule descripion
         JPanel rule2HeaderBtnPanel = new JPanel(new FlowLayout());
         rule2HeaderBtnPanel.add(new JButton(addRowAction2));
@@ -270,13 +277,14 @@ public class App extends JPanel implements ActionListener {
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         //size
         editScrollPane.setPreferredSize(new Dimension(maxX / 2 - 100, maxY - 150));
-        editScrollPane.setBorder(
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createCompoundBorder(
-                                BorderFactory.createTitledBorder("Dashboard"),
 
-                                BorderFactory.createEmptyBorder(5, 5, 5, 5)),
-                        editScrollPane.getBorder()));
+        editScrollPane.setBorder(
+        BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
+                " DashBoard ", TitledBorder.CENTER, TitledBorder.TOP,
+                fontTitle, Color.blue)
+        );
+
 
         JPanel fileUpload = new JPanel(new BorderLayout());
         JPanel fields = new JPanel(new BorderLayout()); // do
@@ -289,18 +297,10 @@ public class App extends JPanel implements ActionListener {
         leftJPanel.add(fields,BorderLayout.CENTER);
         leftJPanel.add(bottomBtnG,BorderLayout.PAGE_END);
 
-        fileUpload.setBorder(
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createTitledBorder("Upload Excel:"),
-                        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        fields.setBorder(
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createTitledBorder("Reports"),
-                        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        bottomBtnG.setBorder(
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createTitledBorder("Action Buttons"),
-                        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        fileUpload.setBorder(createTitleBorder("Upload Excel:(only .xlsx file)"));
+        fields.setBorder(createTitleBorder("Console Output :-"));
+        //bottomBtnG.setBorder(createTitleBorder("Action Buttons "));
+
 // bottom button
 
         JPanel jPanelBtn = new JPanel(new FlowLayout());
@@ -314,32 +314,12 @@ public class App extends JPanel implements ActionListener {
         bottomBtnG.add(jPanelBtn,BorderLayout.WEST);
 
         JPanel jPanelBtnRun = new JPanel(new BorderLayout());
-        run = new JButton("Run");
+        run = new JButton(" <<< Run  >> ");
         run.addActionListener(this);
-        jPanelBtnRun.add(run,BorderLayout.CENTER);
-        loadRulefilePath = new JTextField();
-        bottomBtnG.add(loadRulefilePath,BorderLayout.PAGE_END);
+        jPanelBtnRun.add(run,BorderLayout.EAST);
 
-        // copy paste
-        JPopupMenu menu1 = new JPopupMenu();
-        Action cut1 = new DefaultEditorKit.CutAction();
-        cut1.putValue(Action.NAME, "Cut");
-        cut1.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control X"));
-        menu1.add(cut1);
-        Action copy1 = new DefaultEditorKit.CopyAction();
-        copy1.putValue(Action.NAME, "Copy");
-        copy1.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
-        menu1.add(copy1);
-        Action paste1 = new DefaultEditorKit.PasteAction();
-        paste1.putValue(Action.NAME, "Paste");
-        paste1.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
-        menu1.add(paste1);
-        Action selectAll1 = new SelectAll();
-        menu1.add(selectAll1);
-        loadRulefilePath.setComponentPopupMenu(menu1);
         //      run
         bottomBtnG.add(jPanelBtnRun,BorderLayout.CENTER);
-
 
         filePath = new JTextField();
         fileUpload.add(filePath, BorderLayout.CENTER);
@@ -362,7 +342,7 @@ public class App extends JPanel implements ActionListener {
         filePath.setComponentPopupMenu(menu);
         //
 
-        uploadButton = new JButton("Upload Excel");
+        uploadButton = new JButton(" Select ");
         uploadButton.addActionListener(this);
         // add load button to fetch updated data
 
@@ -389,6 +369,24 @@ public class App extends JPanel implements ActionListener {
 
 
     }
+
+   /* public TitledBorder createTitleBorder(String title){
+     return    BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
+             title, TitledBorder.LEFT, TitledBorder.TOP,
+                fontTitle, Color.gray);
+
+    }*/
+    public TitledBorder createTitleBorder(String title){
+        return    BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
+                title, TitledBorder.LEFT, TitledBorder.TOP
+                );
+
+    }
+
+
+
     static class SelectAll extends TextAction
     {
         public SelectAll()
@@ -416,6 +414,7 @@ public class App extends JPanel implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            Toolkit.getDefaultToolkit().beep();
             int reply = JOptionPane.showConfirmDialog(table,
                     newRowPanel.getMainPanel(inputExcelData),
                     "Rule 1 fields ",
@@ -437,6 +436,7 @@ public class App extends JPanel implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            Toolkit.getDefaultToolkit().beep();
             int reply = JOptionPane.showConfirmDialog(table2,
                     newRowPanel.getMainPanel(inputExcelData),
                     "Rule 3 fields ",
@@ -458,6 +458,7 @@ public class App extends JPanel implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            Toolkit.getDefaultToolkit().beep();
             int reply = JOptionPane.showConfirmDialog(table2,
                     newRowPanel.getMainPanel(inputExcelData),
                     "Rule 2 fields ",
@@ -493,7 +494,10 @@ public class App extends JPanel implements ActionListener {
         /* Use an appropriate Look and Feel */
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-            UIManager.put("Table.gridColor", new ColorUIResource(Color.blue));
+            //UIManager.put("Table.gridColor", new ColorUIResource(Color.blue));
+
+           // UIManager.put("Label.font", fontTitle);
+
         } catch (UnsupportedLookAndFeelException ex) {
             ex.printStackTrace();
         } catch (IllegalAccessException ex) {
@@ -520,6 +524,9 @@ public class App extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == uploadButton ) {
+
+            Toolkit.getDefaultToolkit().beep();
+
             //Set up the file chooser.
             if (fc == null) {
 
@@ -543,13 +550,14 @@ public class App extends JPanel implements ActionListener {
                     "Attach");
             File file = fc.getSelectedFile();
             //Process the results.
-            filePath.setText("");
+            output.setText("");
             if (returnVal == JFileChooser.APPROVE_OPTION) {
+
                 filePath.setText(file.getAbsolutePath());
             } else {
-                filePath.setText("Attachment cancelled by user.");
+                output.setText("Attachment cancelled by user.");
             }
-            filePath.setCaretPosition(filePath.getDocument().getLength());
+            output.setCaretPosition(output.getDocument().getLength());
 
             //Reset the file chooser for the next time it's shown.
             fc.setSelectedFile(null);
@@ -563,12 +571,12 @@ public class App extends JPanel implements ActionListener {
             }
              System.out.println("inputExcelData  "+ inputExcelData);
 
-            loadRulefilePath.setText("");
-            loadRulefilePath.setText("Input data source loaded ");
+            output.setText("");
+            output.setText("Input data source loaded ");
 //
 
         } else if (e.getSource() == remove1) {
-
+            Toolkit.getDefaultToolkit().beep();
                 int[] rows = table.getSelectedRows();
                 Rule1TableModel tm = (Rule1TableModel) table.getModel();
                 for (int i = rows.length-1; i >= 0; i--) {
@@ -576,7 +584,7 @@ public class App extends JPanel implements ActionListener {
                     tm.deleteRow(rows[i]);
                 }
         }else if (e.getSource() == remove2) {
-
+            Toolkit.getDefaultToolkit().beep();
             int[] rows = table2.getSelectedRows();
             Rule2TableModel tm = (Rule2TableModel) table2.getModel();
             for (int i = rows.length-1; i >= 0; i--) {
@@ -584,7 +592,7 @@ public class App extends JPanel implements ActionListener {
                 tm.deleteRow(rows[i]);
             }
         } else if (e.getSource() == edit1) {
-
+            Toolkit.getDefaultToolkit().beep();
             Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
             int row = table.getSelectedRow();
             Rule1TableModel tm = (Rule1TableModel) table.getModel();
@@ -606,7 +614,7 @@ public class App extends JPanel implements ActionListener {
             }
         }
         else if (e.getSource() == edit2) {
-
+            Toolkit.getDefaultToolkit().beep();
             Rule2FieldsWindow newRowPanel = new Rule2FieldsWindow();
             int row = table2.getSelectedRow();
             Rule2TableModel tm = (Rule2TableModel) table2.getModel();
@@ -627,7 +635,7 @@ public class App extends JPanel implements ActionListener {
 
             }
         } else if (e.getSource() == downloadRule) {
-
+            Toolkit.getDefaultToolkit().beep();
             String path = documentsDirectory("file.rule");
 
             try {
@@ -658,13 +666,13 @@ public class App extends JPanel implements ActionListener {
 
 
             System.out.println(">>>>>> Download Rule >>> ends ");
-            loadRulefilePath.setText("");
-            loadRulefilePath.setText("Rules file downloaded at: "+ path);
+            output.setText("");
+            output.setText("Rules file downloaded at: "+ path);
 
 
 
         }else if (e.getSource() == uploadRule) {
-
+            Toolkit.getDefaultToolkit().beep();
             //Set up the file chooser.
             if (fcLoadRule == null) {
                 fcLoadRule = new JFileChooser();
@@ -685,14 +693,14 @@ public class App extends JPanel implements ActionListener {
                     "Attach");
 
             //Process the results.
-            loadRulefilePath.setText("");
+            output.setText("");
             File file = fcLoadRule.getSelectedFile();
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                loadRulefilePath.setText(file.getAbsolutePath());
+                output.setText(file.getAbsolutePath());
             } else {
-                loadRulefilePath.setText("Attachment cancelled by user.");
+                output.setText("Attachment cancelled by user.");
             }
-            loadRulefilePath.setCaretPosition(loadRulefilePath.getDocument().getLength());
+            output.setCaretPosition(output.getDocument().getLength());
 
             //Reset the file chooser for the next time it's shown.
             fcLoadRule.setSelectedFile(null);
@@ -757,7 +765,7 @@ public class App extends JPanel implements ActionListener {
             tableModel2.loadTableRows(rule2ModelArrayList);
 
         } else if (e.getSource() == run) {
-
+            Toolkit.getDefaultToolkit().beep();
 
             String[] rulesArr = {"R1","R2"};
 
@@ -823,12 +831,13 @@ public class App extends JPanel implements ActionListener {
             }
 
             output.setText(join(reportList,"\n"));
-
             executorService.shutdown();
 
-
-
-
+            try {
+                SoundUtils.tone(5000,300, 0.3);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
 
         }
 
@@ -892,8 +901,28 @@ public class App extends JPanel implements ActionListener {
 
 
 
+    void addCompForTitledBorder(TitledBorder border,
+                                String description,
+                                int justification,
+                                int position,
+                                Container container) {
+        border.setTitleJustification(justification);
+        border.setTitlePosition(position);
+        addCompForBorder(border, description,
+                container);
+    }
 
+    void addCompForBorder(Border border,
+                          String description,
+                          Container container) {
+        JPanel comp = new JPanel(new GridLayout(1, 1), false);
+        JLabel label = new JLabel(description, JLabel.CENTER);
+        comp.add(label);
+        comp.setBorder(border);
 
+        container.add(Box.createRigidArea(new Dimension(0, 10)));
+        container.add(comp);
+    }
 
     public void CreateFile(String fileName) {
             try {
