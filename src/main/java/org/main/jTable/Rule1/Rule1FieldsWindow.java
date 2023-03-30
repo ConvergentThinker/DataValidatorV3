@@ -146,6 +146,7 @@ public class Rule1FieldsWindow implements ItemListener {
         sheetDrp.setModel(new DefaultComboBoxModel(convert(workbook.keySet())));
         toRunDrp.setSelectedItem(model.getIsToRun());
         sheetDrp.setSelectedItem(model.getSheet());
+        targetColumnDrp.setModel(new DefaultComboBoxModel(convert(workbook.get(model.getSheet()).keySet())));
         targetColumnDrp.setSelectedItem(model.getTargetHeader());
         noOfRowsToRunDrp.setSelectedItem(model.getRuleExecutionType());
         textFieldFrom.setText(model.getFromRow());

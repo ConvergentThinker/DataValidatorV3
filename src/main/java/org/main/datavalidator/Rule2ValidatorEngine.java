@@ -76,7 +76,14 @@ public class Rule2ValidatorEngine {
 
                             if (format.equals("Text")) {
 
+                                // todo:- implement
+
+
                             } else if (format.equals("Number")) {
+
+                                // todo:- implement
+
+
 
                             } else {
                                 System.out.println("isValidDate(cellData) "+ isValidDate(cellData));
