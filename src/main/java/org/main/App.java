@@ -36,6 +36,11 @@ import java.util.List;
 import java.util.concurrent.*;
 
 public class App extends JPanel implements ActionListener {
+
+    int hz = 500;
+    int msec = 200;
+    double vol = 1.0;
+
     JPanel rightJpanel;
     JPanel leftJPanel;
     private int maxX;
@@ -44,7 +49,6 @@ public class App extends JPanel implements ActionListener {
     private JFileChooser fcLoadRule;
     private JTextField filePath;
     JButton uploadButton;
-
     JButton downloadRule;
     JButton uploadRule;
     JButton run;
@@ -414,7 +418,11 @@ public class App extends JPanel implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Toolkit.getDefaultToolkit().beep();
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
             int reply = JOptionPane.showConfirmDialog(table,
                     newRowPanel.getMainPanel(inputExcelData),
                     "Rule 1 fields ",
@@ -436,7 +444,11 @@ public class App extends JPanel implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Toolkit.getDefaultToolkit().beep();
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
             int reply = JOptionPane.showConfirmDialog(table2,
                     newRowPanel.getMainPanel(inputExcelData),
                     "Rule 3 fields ",
@@ -458,7 +470,11 @@ public class App extends JPanel implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Toolkit.getDefaultToolkit().beep();
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
             int reply = JOptionPane.showConfirmDialog(table2,
                     newRowPanel.getMainPanel(inputExcelData),
                     "Rule 2 fields ",
@@ -519,14 +535,15 @@ public class App extends JPanel implements ActionListener {
         });
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == uploadButton ) {
-
-            Toolkit.getDefaultToolkit().beep();
-
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
             //Set up the file chooser.
             if (fc == null) {
 
@@ -573,18 +590,26 @@ public class App extends JPanel implements ActionListener {
 
             output.setText("");
             output.setText("Input data source loaded ");
-//
-
-        } else if (e.getSource() == remove1) {
-            Toolkit.getDefaultToolkit().beep();
-                int[] rows = table.getSelectedRows();
+        }
+        else if (e.getSource() == remove1) {
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
+            int[] rows = table.getSelectedRows();
                 Rule1TableModel tm = (Rule1TableModel) table.getModel();
                 for (int i = rows.length-1; i >= 0; i--) {
                     System.out.println("I "+ i);
                     tm.deleteRow(rows[i]);
                 }
-        }else if (e.getSource() == remove2) {
-            Toolkit.getDefaultToolkit().beep();
+        }
+        else if (e.getSource() == remove2) {
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
             int[] rows = table2.getSelectedRows();
             Rule2TableModel tm = (Rule2TableModel) table2.getModel();
             for (int i = rows.length-1; i >= 0; i--) {
@@ -592,7 +617,11 @@ public class App extends JPanel implements ActionListener {
                 tm.deleteRow(rows[i]);
             }
         } else if (e.getSource() == edit1) {
-            Toolkit.getDefaultToolkit().beep();
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
             Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
             int row = table.getSelectedRow();
             Rule1TableModel tm = (Rule1TableModel) table.getModel();
@@ -614,7 +643,11 @@ public class App extends JPanel implements ActionListener {
             }
         }
         else if (e.getSource() == edit2) {
-            Toolkit.getDefaultToolkit().beep();
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
             Rule2FieldsWindow newRowPanel = new Rule2FieldsWindow();
             int row = table2.getSelectedRow();
             Rule2TableModel tm = (Rule2TableModel) table2.getModel();
@@ -635,8 +668,41 @@ public class App extends JPanel implements ActionListener {
 
             }
         } else if (e.getSource() == downloadRule) {
-            Toolkit.getDefaultToolkit().beep();
-            String path = documentsDirectory("file.rule");
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
+            //Set up the file chooser.
+            if (fcLoadRule == null) {
+                fcLoadRule = new JFileChooser();
+                //show hidden files if false then make it true to disable
+                fcLoadRule.setFileHidingEnabled(false);
+                //Add a custom file filter and disable the default
+                //(Accept All) file filter.
+                fcLoadRule.addChoosableFileFilter(new RuleFilter());
+                fcLoadRule.setAcceptAllFileFilterUsed(false);
+                //Add custom icons for file types.
+                fcLoadRule.setFileView(new RuleFileView());
+                //Add the preview pane.
+                fcLoadRule.setAccessory(new RulePreview(fcLoadRule));
+            }
+            //Show it.
+            int returnVal = fcLoadRule.showDialog(App.this,
+                    "Attach");
+            //Process the results.
+            output.setText("");
+            File file = fcLoadRule.getSelectedFile();
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                output.setText(file.getAbsolutePath());
+            } else {
+                output.setText("Attachment cancelled by user.");
+            }
+            output.setCaretPosition(output.getDocument().getLength());
+            //Reset the file chooser for the next time it's shown.
+            fcLoadRule.setSelectedFile(null);
+
+            String path = CreateFile(file.getAbsolutePath()+".rule");
 
             try {
                 FileWriter writer = new FileWriter(path);
@@ -671,8 +737,14 @@ public class App extends JPanel implements ActionListener {
 
 
 
-        }else if (e.getSource() == uploadRule) {
-            Toolkit.getDefaultToolkit().beep();
+        }
+
+        else if (e.getSource() == uploadRule) {
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
             //Set up the file chooser.
             if (fcLoadRule == null) {
                 fcLoadRule = new JFileChooser();
@@ -765,7 +837,11 @@ public class App extends JPanel implements ActionListener {
             tableModel2.loadTableRows(rule2ModelArrayList);
 
         } else if (e.getSource() == run) {
-            Toolkit.getDefaultToolkit().beep();
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
 
             String[] rulesArr = {"R1","R2"};
 
@@ -833,11 +909,11 @@ public class App extends JPanel implements ActionListener {
             output.setText(join(reportList,"\n"));
             executorService.shutdown();
 
-            try {
+        /*    try {
                 SoundUtils.tone(5000,300, 0.3);
             } catch (LineUnavailableException ex) {
                 throw new RuntimeException(ex);
-            }
+            }*/
 
         }
 
@@ -924,18 +1000,23 @@ public class App extends JPanel implements ActionListener {
         container.add(comp);
     }
 
-    public void CreateFile(String fileName) {
+    public String CreateFile(String fileName) {
+
+        File myObj = new File(fileName);
             try {
-                File myObj = new File(fileName);
                 if (myObj.createNewFile()) {
                     System.out.println("File created: " + myObj.getName());
+
                 } else {
                     System.out.println("File already exists.");
+
                 }
             } catch (IOException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
             }
+        return myObj.getAbsolutePath();
+
     }
 
 

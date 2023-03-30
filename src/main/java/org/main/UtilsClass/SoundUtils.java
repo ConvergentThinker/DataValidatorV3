@@ -39,4 +39,15 @@ public class SoundUtils {
         sdl.close();
     }
 
+    public static void main(String[] args) throws LineUnavailableException {
+
+        tone(500,200, 1.0);
+
+
+
+    }
+
+
+
+
 }
