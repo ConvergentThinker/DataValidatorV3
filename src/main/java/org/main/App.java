@@ -135,7 +135,11 @@ public class App extends JPanel implements ActionListener {
 
 
         // ---------------------- right side
-        rightJpanel = new JPanel();
+        rightJpanel = new JPanel(new BorderLayout());
+
+        JPanel rightSideHeaderPanel = new JPanel();
+        JPanel rightSideParentTalePanel = new JPanel();
+
         JScrollPane ruleScrollPane = new JScrollPane(rightJpanel);
         ruleScrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -151,9 +155,21 @@ public class App extends JPanel implements ActionListener {
 
 
 
+
+        rightJpanel.add(rightSideHeaderPanel,BorderLayout.PAGE_START);
+        rightJpanel.add(rightSideParentTalePanel,BorderLayout.CENTER);
+
+
+
+
+
+
+
 //  layout right side parent container
         GridBagLayout layout = new GridBagLayout();
-        rightJpanel.setLayout(layout);
+        //rightJpanel.setLayout(layout);
+        rightSideParentTalePanel.setLayout(layout);
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -163,7 +179,7 @@ public class App extends JPanel implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 0;
         JPanel rule1Panel = new JPanel();
-        rightJpanel.add(rule1Panel, gbc);
+        rightSideParentTalePanel.add(rule1Panel, gbc);
 
         //  add element to rule1Panel
         GridBagLayout gridBagLayoutRule1 = new GridBagLayout();
@@ -207,7 +223,7 @@ public class App extends JPanel implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 1;
         JPanel rule2Panel = new JPanel(new BorderLayout());
-        rightJpanel.add(rule2Panel, gbc);
+        rightSideParentTalePanel.add(rule2Panel, gbc);
 
 //  add element to rule2Panel
         GridBagLayout gridBagLayoutRule2 = new GridBagLayout();
@@ -251,7 +267,7 @@ public class App extends JPanel implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 2;
         JPanel rule3Panel = new JPanel(new BorderLayout());
-        rightJpanel.add(rule3Panel, gbc);
+        rightSideParentTalePanel.add(rule3Panel, gbc);
 
 //  add element to rule3Panel
         GridBagLayout gridBagLayoutRule3 = new GridBagLayout();
@@ -289,8 +305,8 @@ public class App extends JPanel implements ActionListener {
         leftJPanel = new JPanel(new BorderLayout());
 
         JScrollPane editScrollPane = new JScrollPane(leftJPanel);
-        editScrollPane.setVerticalScrollBarPolicy(
-                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        //editScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         //size
         editScrollPane.setPreferredSize(new Dimension(maxX / 2 - 100, maxY - 150));
 
@@ -313,10 +329,6 @@ public class App extends JPanel implements ActionListener {
         leftJPanel.add(fields,BorderLayout.CENTER);
         //leftJPanel.add(bottomBtnG,BorderLayout.PAGE_END);
         fileUpload.add(bottomBtnG,BorderLayout.PAGE_END);
-
-
-
-
 
 
         fileUpload.setBorder(createTitleBorder("Upload Excel:(only .xlsx file)"));
@@ -778,69 +790,81 @@ public class App extends JPanel implements ActionListener {
             } catch (LineUnavailableException ex) {
                 throw new RuntimeException(ex);
             }
-            //Set up the file chooser.
-            if (fcLoadRule == null) {
-                fcLoadRule = new JFileChooser();
-                //show hidden files if false then make it true to disable
-                fcLoadRule.setFileHidingEnabled(false);
-                //Add a custom file filter and disable the default
-                //(Accept All) file filter.
-                fcLoadRule.addChoosableFileFilter(new RuleFilter());
-                fcLoadRule.setAcceptAllFileFilterUsed(false);
-                //Add custom icons for file types.
-                fcLoadRule.setFileView(new RuleFileView());
-                //Add the preview pane.
-                fcLoadRule.setAccessory(new RulePreview(fcLoadRule));
-            }
-            //Show it.
-            int returnVal = fcLoadRule.showDialog(App.this,
-                    "Attach");
-            //Process the results.
-            output.setText("");
-            File file = fcLoadRule.getSelectedFile();
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                output.setText(file.getAbsolutePath());
+
+            boolean run = false;
+
+            if (tableModel.getRule1ModelArrayList().size() > 0) {
+                run = true;
+            } else if (tableModel2.getRule2ModelArrayList().size() > 0) {
+                run = true;
             } else {
-                output.setText("Attachment cancelled by user.");
+                setWarningAlert("Please add at least one rule");
             }
-            output.setCaretPosition(output.getDocument().getLength());
-            //Reset the file chooser for the next time it's shown.
-            fcLoadRule.setSelectedFile(null);
 
-            String path = CreateFile(file.getAbsolutePath()+".rule");
+            if(run) {
 
-            try {
-                FileWriter writer = new FileWriter(path);
-                // rule 1
-                int size = tableModel.getRule1ModelArrayList().size();
-                for (int i = 0; i < size; i++) {
-                    String str = tableModel.getRule1ModelArrayList().get(i).toString();
+                //Set up the file chooser.
+                if (fcLoadRule == null) {
+                    fcLoadRule = new JFileChooser();
+                    //show hidden files if false then make it true to disable
+                    fcLoadRule.setFileHidingEnabled(false);
+                    //Add a custom file filter and disable the default
+                    //(Accept All) file filter.
+                    fcLoadRule.addChoosableFileFilter(new RuleFilter());
+                    fcLoadRule.setAcceptAllFileFilterUsed(false);
+                    //Add custom icons for file types.
+                    fcLoadRule.setFileView(new RuleFileView());
+                    //Add the preview pane.
+                    fcLoadRule.setAccessory(new RulePreview(fcLoadRule));
+                }
+                //Show it.
+                int returnVal = fcLoadRule.showDialog(App.this,
+                        "Attach");
+                //Process the results.
+                output.setText("");
+                File file = fcLoadRule.getSelectedFile();
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    output.setText(file.getAbsolutePath());
+                } else {
+                    output.setText("Attachment cancelled by user.");
+                }
+                output.setCaretPosition(output.getDocument().getLength());
+                //Reset the file chooser for the next time it's shown.
+                fcLoadRule.setSelectedFile(null);
+
+                String path = CreateFile(file.getAbsolutePath()+".rule");
+
+                try {
+                    FileWriter writer = new FileWriter(path);
+                    // rule 1
+                    int size = tableModel.getRule1ModelArrayList().size();
+                    for (int i = 0; i < size; i++) {
+                        String str = tableModel.getRule1ModelArrayList().get(i).toString();
                         writer.write(str);
-                    if (i < size - 1)
-                       writer.write("\n");
-                }
+                        if (i < size - 1)
+                            writer.write("\n");
+                    }
 
-                // rule 2
-                writer.write("\n");
-                int size2 = tableModel2.getRule2ModelArrayList().size();
-                for (int i = 0; i < size2; i++) {
-                    String str = tableModel2.getRule2ModelArrayList().get(i).toString();
-                    writer.write(str);
-                    if (i < size - 1)
-                        writer.write("\n");
-                }
+                    // rule 2
+                    writer.write("\n");
+                    int size2 = tableModel2.getRule2ModelArrayList().size();
+                    for (int i = 0; i < size2; i++) {
+                        String str = tableModel2.getRule2ModelArrayList().get(i).toString();
+                        writer.write(str);
+                        if (i < size - 1)
+                            writer.write("\n");
+                    }
 
-                writer.close();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                    writer.close();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                output.setText("");
+                output.setText("Rules file downloaded at: "+ path);
+                setInfoAlert("Rules file downloaded at: "+ path);
             }
 
 
-            System.out.println(">>>>>> Download Rule >>> ends ");
-            output.setText("");
-            output.setText("Rules file downloaded at: "+ path);
-
-            setInfoAlert("Rules file downloaded at: "+ path);
 
         }
 
