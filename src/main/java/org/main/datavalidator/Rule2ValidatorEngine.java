@@ -13,9 +13,15 @@ public class Rule2ValidatorEngine {
 
     private List<ErrorModel> errors;
 
+    private List<Rule2Model> lstRule2;
+
+
     public Rule2ValidatorEngine() {
-        System.out.println("Rule2ValidatorEngine Obj created...");
         errors = new ArrayList<>();
+        lstRule2 = new ArrayList<>();
+    }
+    public int getRuleListSize(){
+        return lstRule2.size();
     }
 
     public String getErrorsList(){
@@ -43,13 +49,7 @@ public class Rule2ValidatorEngine {
 
     public void validateRule2(Map<String, Map<String, Map<Integer, String>>> inputExcelData, List<Rule2Model> rule2ModelList ) {
 
-        List<Rule2Model> lstRule2 = rule2ModelList;
-
-        for(int i=0;i<lstRule2.size();i++){
-            Rule2Model rule = lstRule2.get(i);
-             System.out.println("rule 2 "+ rule);
-
-        }
+         lstRule2 = rule2ModelList;
 
         for(int i=0;i<lstRule2.size();i++){
 

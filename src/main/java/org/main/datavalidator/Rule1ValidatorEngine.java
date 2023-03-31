@@ -13,15 +13,17 @@ public class Rule1ValidatorEngine {
 
     private List<ErrorModel> errors;
 
+    private List<Rule1Model> lstRule1;
 
-
-
-    //public  Rule4ValidatorEngine(Map<String, Map<String, Map<Integer, String>>> inputExcelData) {
     public Rule1ValidatorEngine() {
-        //System.out.println("Rule4 ValidatorEngine Obj created...");
-
         errors = new ArrayList<>();
+        lstRule1 = new ArrayList<>();
     }
+
+    public int getRuleListSize(){
+        return lstRule1.size();
+    }
+
 
     public String getErrorsList(){
         System.out.println("errors size in Rule 1 :: "+ errors.size());
@@ -36,10 +38,10 @@ public class Rule1ValidatorEngine {
                         .concat(rule.getColumnHeader()).concat(",").concat( rule.getInfo());
                 data = data.concat(x).concat("&");
             }
-        }else{
+        }
+        else{
             data = "Rule 1 Processed successfully. No issues found. ";
         }
-
 
         return data;
     }
@@ -51,15 +53,7 @@ public class Rule1ValidatorEngine {
     //Ex: Columns dob,name,nric.. values are should not be empty. must fill.
     public void validateRule4(Map<String, Map<String, Map<Integer, String>>> inputExcelData, List<Rule1Model> rule1ModelList ) {
 
-
-        List<Rule1Model> lstRule1 = rule1ModelList;
-
-        for(int i=0;i<lstRule1.size();i++){
-            Rule1Model rule = lstRule1.get(i);
-           // System.out.println("rule "+ rule);
-            System.out.println(rule.getSheet());
-        }
-
+        lstRule1 = rule1ModelList;
 
         for(int i=0;i<lstRule1.size();i++){
 

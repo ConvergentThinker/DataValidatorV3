@@ -39,7 +39,7 @@ public class App extends JPanel implements ActionListener {
 
     int hz = 500;
     int msec = 200;
-    double vol = 1.0;
+    double vol = 0.3;
 
     JPanel rightJpanel;
     JPanel leftJPanel;
@@ -63,14 +63,28 @@ public class App extends JPanel implements ActionListener {
     JButton remove1;
     JButton edit1;
     private Rule1TableModel tableModel = new Rule1TableModel();
-    private JTable table = new JTable(tableModel);
+  //  private JTable table = new JTable(tableModel);
+    private JTable table = new JTable(tableModel){
+      public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend)
+      {
+          //Always toggle on single selection
+          super.changeSelection(rowIndex, columnIndex, !extend, extend);
+      }
+     };
+
     private AddRowAction addRowAction = new AddRowAction("Add +", KeyEvent.VK_A);
 
     // Table2  creation variables
     JButton remove2;
     JButton edit2;
     private Rule2TableModel tableModel2 = new Rule2TableModel();
-    private JTable table2 = new JTable(tableModel2);
+    private JTable table2 = new JTable(tableModel2){
+        public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend)
+        {
+            //Always toggle on single selection
+            super.changeSelection(rowIndex, columnIndex, !extend, extend);
+        }
+    };
 
     private AddRowAction2 addRowAction2 = new AddRowAction2("Add +", KeyEvent.VK_A);
 
@@ -95,8 +109,6 @@ public class App extends JPanel implements ActionListener {
                 String headerText = String.join("\n"
                         , "\n"
                         , "By SAKTHIVEL IYAPPAN "
-                        , " Innovative Solutions "
-                        , "email: innovativesolutionsapps@gmail.com"
                         ,
                         "\n"
                         , ""
@@ -111,8 +123,6 @@ public class App extends JPanel implements ActionListener {
                 String headerText = String.join("\n"
                         , "\n"
                         , "By SAKTHIVEL IYAPPAN "
-                        , " Innovative Solutions "
-                        , "email: innovativesolutionsapps@gmail.com"
                         ,
                         "\n"
                         , ""
@@ -189,6 +199,8 @@ public class App extends JPanel implements ActionListener {
 
         // Table creation starts - rule1TablePanel
         rule1TablePanel.add(new JScrollPane(table));
+
+
 
 // ============================== Rule 2  ====================
 
@@ -291,7 +303,7 @@ public class App extends JPanel implements ActionListener {
 
 
         JPanel fileUpload = new JPanel(new BorderLayout());
-        JPanel fields = new JPanel(new BorderLayout()); // do
+        JPanel fields = new JPanel(new BorderLayout());
         JPanel bottomBtnG = new JPanel(new BorderLayout());
 
         output  = new JTextArea();
@@ -299,7 +311,13 @@ public class App extends JPanel implements ActionListener {
 
         leftJPanel.add(fileUpload,BorderLayout.PAGE_START);
         leftJPanel.add(fields,BorderLayout.CENTER);
-        leftJPanel.add(bottomBtnG,BorderLayout.PAGE_END);
+        //leftJPanel.add(bottomBtnG,BorderLayout.PAGE_END);
+        fileUpload.add(bottomBtnG,BorderLayout.PAGE_END);
+
+
+
+
+
 
         fileUpload.setBorder(createTitleBorder("Upload Excel:(only .xlsx file)"));
         fields.setBorder(createTitleBorder("Console Output :-"));
@@ -319,11 +337,11 @@ public class App extends JPanel implements ActionListener {
 
         JPanel jPanelBtnRun = new JPanel(new BorderLayout());
         run = new JButton(" <<< Run  >> ");
+        jPanelBtn.add(run);
         run.addActionListener(this);
-        jPanelBtnRun.add(run,BorderLayout.EAST);
-
+        //jPanelBtnRun.add(run,BorderLayout.EAST);
         //      run
-        bottomBtnG.add(jPanelBtnRun,BorderLayout.CENTER);
+        //bottomBtnG.add(jPanelBtnRun,BorderLayout.CENTER);
 
         filePath = new JTextField();
         fileUpload.add(filePath, BorderLayout.CENTER);
@@ -423,17 +441,40 @@ public class App extends JPanel implements ActionListener {
             } catch (LineUnavailableException ex) {
                 throw new RuntimeException(ex);
             }
-            int reply = JOptionPane.showConfirmDialog(table,
-                    newRowPanel.getMainPanel(inputExcelData),
-                    "Rule 1 fields ",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.PLAIN_MESSAGE);
-            if (reply == JOptionPane.OK_OPTION) {
-                Rule1Model item = newRowPanel.getSelectedItem();
-                tableModel.addRow(item);
+
+            if(inputExcelData != null){
+                int reply = JOptionPane.showConfirmDialog(table,
+                        newRowPanel.getMainPanel(inputExcelData),
+                        "Rule 1 fields ",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE);
+                if (reply == JOptionPane.OK_OPTION) {
+                    Rule1Model item = newRowPanel.getSelectedItem();
+                    tableModel.addRow(item);
+                }
+            }else{
+                setWarningAlert("Please Upload Input excel file.");
             }
+
         }
     }
+
+    public void setWarningAlert(String msg){
+        JOptionPane optionPane = new JOptionPane(msg,JOptionPane.WARNING_MESSAGE);
+        JDialog dialog = optionPane.createDialog("Warning!");
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
+    }
+    public void setInfoAlert(String msg){
+        JOptionPane optionPane = new JOptionPane(msg,JOptionPane.INFORMATION_MESSAGE);
+        JDialog dialog = optionPane.createDialog("Info!");
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
+    }
+
+
+
+
     class AddRowAction3 extends AbstractAction {
         private Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
 
@@ -449,15 +490,20 @@ public class App extends JPanel implements ActionListener {
             } catch (LineUnavailableException ex) {
                 throw new RuntimeException(ex);
             }
-            int reply = JOptionPane.showConfirmDialog(table2,
-                    newRowPanel.getMainPanel(inputExcelData),
-                    "Rule 3 fields ",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.PLAIN_MESSAGE);
-            if (reply == JOptionPane.OK_OPTION) {
-                Rule1Model item = newRowPanel.getSelectedItem();
-                tableModel3.addRow(item);
+            if(inputExcelData != null){
+                int reply = JOptionPane.showConfirmDialog(table2,
+                        newRowPanel.getMainPanel(inputExcelData),
+                        "Rule 3 fields ",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE);
+                if (reply == JOptionPane.OK_OPTION) {
+                    Rule1Model item = newRowPanel.getSelectedItem();
+                    tableModel3.addRow(item);
+                }
+            }else{
+                setWarningAlert("Please Upload Input excel file.");
             }
+
         }
     }
     class AddRowAction2 extends AbstractAction {
@@ -475,14 +521,20 @@ public class App extends JPanel implements ActionListener {
             } catch (LineUnavailableException ex) {
                 throw new RuntimeException(ex);
             }
-            int reply = JOptionPane.showConfirmDialog(table2,
-                    newRowPanel.getMainPanel(inputExcelData),
-                    "Rule 2 fields ",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.PLAIN_MESSAGE);
-            if (reply == JOptionPane.OK_OPTION) {
-                Rule2Model item = newRowPanel.getSelectedItem();
-                tableModel2.addRow(item);
+
+            if (inputExcelData != null) {
+
+                int reply = JOptionPane.showConfirmDialog(table2,
+                        newRowPanel.getMainPanel(inputExcelData),
+                        "Rule 2 fields ",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE);
+                if (reply == JOptionPane.OK_OPTION) {
+                    Rule2Model item = newRowPanel.getSelectedItem();
+                    tableModel2.addRow(item);
+                }
+            } else {
+                setWarningAlert("Please Upload Input excel file.");
             }
         }
     }
@@ -592,17 +644,29 @@ public class App extends JPanel implements ActionListener {
             output.setText("Input data source loaded ");
         }
         else if (e.getSource() == remove1) {
+
             try {
                 SoundUtils.tone(hz,msec, vol);
             } catch (LineUnavailableException ex) {
                 throw new RuntimeException(ex);
             }
-            int[] rows = table.getSelectedRows();
-                Rule1TableModel tm = (Rule1TableModel) table.getModel();
-                for (int i = rows.length-1; i >= 0; i--) {
-                    System.out.println("I "+ i);
-                    tm.deleteRow(rows[i]);
+
+            if(inputExcelData != null){
+                int[] rows = table.getSelectedRows();
+                if(rows.length > 0){
+                    Rule1TableModel tm = (Rule1TableModel) table.getModel();
+                    for (int i = rows.length-1; i >= 0; i--) {
+                        System.out.println("I "+ i);
+                        tm.deleteRow(rows[i]);
+                    }
+                }else {
+                    setInfoAlert("Please select Row to Remove.");
                 }
+            }else{
+                setWarningAlert("Please Upload Input excel file.");
+            }
+
+
         }
         else if (e.getSource() == remove2) {
             try {
@@ -610,37 +674,64 @@ public class App extends JPanel implements ActionListener {
             } catch (LineUnavailableException ex) {
                 throw new RuntimeException(ex);
             }
-            int[] rows = table2.getSelectedRows();
-            Rule2TableModel tm = (Rule2TableModel) table2.getModel();
-            for (int i = rows.length-1; i >= 0; i--) {
-                System.out.println("I "+ i);
-                tm.deleteRow(rows[i]);
+            if(inputExcelData != null){
+                int[] rows = table2.getSelectedRows();
+                if(rows.length > 0){
+                    Rule2TableModel tm = (Rule2TableModel) table2.getModel();
+                    for (int i = rows.length-1; i >= 0; i--) {
+                        System.out.println("I "+ i);
+                        tm.deleteRow(rows[i]);
+                    }
+                }else {
+                    setInfoAlert("Please select Row to Remove.");
+                }
+            }else{
+                setWarningAlert("Please Upload Input excel file.");
             }
+
         } else if (e.getSource() == edit1) {
             try {
                 SoundUtils.tone(hz,msec, vol);
             } catch (LineUnavailableException ex) {
                 throw new RuntimeException(ex);
             }
-            Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
-            int row = table.getSelectedRow();
-            Rule1TableModel tm = (Rule1TableModel) table.getModel();
-            Rule1Model model = tm.getTableRow(row);
-            // push selected row into newRowPanel
-            newRowPanel.pushDataIntoForm(model,inputExcelData);
 
-            int reply = JOptionPane.showConfirmDialog(table,
-                    newRowPanel.getMainPanel(),
-                    "Edit Rule 1",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.PLAIN_MESSAGE);
+            if(inputExcelData != null){
 
-            if (reply == JOptionPane.OK_OPTION) {
+                Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
 
-                Rule1Model item = newRowPanel.getSelectedItem(); // edited data
-                tableModel.updateTableRow(item,row);
+                int row = table.getSelectedRow();
 
+                System.out.println("row "+ row);
+
+                if(row == -1){
+
+                    setInfoAlert("Please select Row to Edit.");
+
+                }else {
+                    Rule1TableModel tm = (Rule1TableModel) table.getModel();
+                    Rule1Model model = tm.getTableRow(row);
+                    // push selected row into newRowPanel
+                    newRowPanel.pushDataIntoForm(model,inputExcelData);
+
+                    int reply = JOptionPane.showConfirmDialog(table,
+                            newRowPanel.getMainPanel(),
+                            "Edit Rule 1",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.PLAIN_MESSAGE);
+
+                    if (reply == JOptionPane.OK_OPTION) {
+                        Rule1Model item = newRowPanel.getSelectedItem(); // edited data
+                        tableModel.updateTableRow(item,row);
+                    }
+
+                }
+
+
+            }else{
+                setWarningAlert("Please Upload Input excel file.");
             }
+
         }
         else if (e.getSource() == edit2) {
             try {
@@ -648,25 +739,39 @@ public class App extends JPanel implements ActionListener {
             } catch (LineUnavailableException ex) {
                 throw new RuntimeException(ex);
             }
-            Rule2FieldsWindow newRowPanel = new Rule2FieldsWindow();
-            int row = table2.getSelectedRow();
-            Rule2TableModel tm = (Rule2TableModel) table2.getModel();
-            Rule2Model model = tm.getTableRow(row);
-            // push selected row into newRowPanel
-            newRowPanel.pushDataIntoForm(model,inputExcelData);
 
-            int reply = JOptionPane.showConfirmDialog(table2,
-                    newRowPanel.getMainPanel(),
-                    "Edit Rule 1",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.PLAIN_MESSAGE);
+            if(inputExcelData != null){
 
-            if (reply == JOptionPane.OK_OPTION) {
+                Rule2FieldsWindow newRowPanel = new Rule2FieldsWindow();
+                int row = table2.getSelectedRow();
+                System.out.println("row "+ row);
+                if(row == -1){
 
-                Rule2Model item = newRowPanel.getSelectedItem(); // edited data
-                tableModel2.updateTableRow(item,row);
+                    setInfoAlert("Please select Row to Edit.");
 
+                }else {
+                    Rule2TableModel tm = (Rule2TableModel) table2.getModel();
+                    Rule2Model model = tm.getTableRow(row);
+                    // push selected row into newRowPanel
+                    newRowPanel.pushDataIntoForm(model,inputExcelData);
+
+                    int reply = JOptionPane.showConfirmDialog(table2,
+                            newRowPanel.getMainPanel(),
+                            "Edit Rule 1",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.PLAIN_MESSAGE);
+
+                    if (reply == JOptionPane.OK_OPTION) {
+
+                        Rule2Model item = newRowPanel.getSelectedItem(); // edited data
+                        tableModel2.updateTableRow(item,row);
+                    }
+                }
+
+            }else{
+                setWarningAlert("Please Upload Input excel file.");
             }
+
         } else if (e.getSource() == downloadRule) {
             try {
                 SoundUtils.tone(hz,msec, vol);
@@ -735,7 +840,7 @@ public class App extends JPanel implements ActionListener {
             output.setText("");
             output.setText("Rules file downloaded at: "+ path);
 
-
+            setInfoAlert("Rules file downloaded at: "+ path);
 
         }
 
@@ -843,77 +948,90 @@ public class App extends JPanel implements ActionListener {
                 throw new RuntimeException(ex);
             }
 
-            String[] rulesArr = {"R1","R2"};
 
-            List<Object> masterList = new ArrayList<>();
-            masterList.add(0,tableModel.getRule1ModelArrayList());
-            masterList.add(1,tableModel2.getRule2ModelArrayList());
+            boolean run = false;
 
-
-            int noOfThreads = 2;
-            final App runner = new App();
-            ExecutorService executorService = Executors.newFixedThreadPool(noOfThreads);
-            Set<Callable<String>> callables = new HashSet<>();
-
-            for (int i = 0; i < noOfThreads; i++) {
-                int finalI = i;
-
-                callables.add(new Callable<String>() {
-                    public String call() {
-                        System.out.println(" Thread name: " + Thread.currentThread().getName());
-                        return runner.executeRule(rulesArr[finalI], inputExcelData,masterList);
-                    }
-                });
+            if (tableModel.getRule1ModelArrayList().size() > 0) {
+                run = true;
+            } else if (tableModel2.getRule2ModelArrayList().size() > 0) {
+                run = true;
+            } else {
+                setWarningAlert("Please add at least one rule");
             }
 
-            // Run all rules
-            List<Future<String>> futures = null;
-            try {
-                futures = executorService.invokeAll(callables);
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
-            }
+            if(run) {
 
-            List<String> reportList = new ArrayList<>();
+                String[] rulesArr = {"R1", "R2"};
 
-            // print results
-            for (Future<String> future : futures) {
-                //System.out.println("future.get = " + future.isDone());
-                try {
-                    // this is to return anything after that particular thread completed.
-                    // In our case, we are returning errors list,  just print them on the console.
+                List<Object> masterList = new ArrayList<>();
+                masterList.add(0, tableModel.getRule1ModelArrayList());
+                masterList.add(1, tableModel2.getRule2ModelArrayList());
 
-                    if (future.get().contains("&")) {
 
-                        String[] infoArr = future.get().split("&");
-                        System.out.println("===============INFO===============");
-                        for (String arr : infoArr) {
-                            String[] item = arr.split(",");
-                            System.out.println("For " + item[0] + ",in sheet: " + item[1] + " , Row No:" + item[2] + " in column " + item[3] + " >>> INFO: " + item[4]);
-                            reportList.add("For " + item[0] + ",in sheet " + item[1] + " , Row No:" + item[2] + " in column " + item[3] + " >>> INFO: " + item[4]);
+                int noOfThreads = 2;
+                final App runner = new App();
+                ExecutorService executorService = Executors.newFixedThreadPool(noOfThreads);
+                Set<Callable<String>> callables = new HashSet<>();
+
+                for (int i = 0; i < noOfThreads; i++) {
+                    int finalI = i;
+
+                    callables.add(new Callable<String>() {
+                        public String call() {
+                            System.out.println(" Thread name: " + Thread.currentThread().getName());
+                            return runner.executeRule(rulesArr[finalI], inputExcelData, masterList);
                         }
-                        System.out.println("===================================");
-                    }else{
-                        reportList.add(future.get().toString());
+                    });
+                }
 
-                    }
-
-                } catch (ExecutionException e1) {
-                    // this is best place to see program failure reason, why?
-                    e1.printStackTrace();
+                // Run all rules
+                List<Future<String>> futures = null;
+                try {
+                    futures = executorService.invokeAll(callables);
                 } catch (InterruptedException ex) {
                     throw new RuntimeException(ex);
                 }
+
+                List<String> reportList = new ArrayList<>();
+
+                // print results
+                for (Future<String> future : futures) {
+                    //System.out.println("future.get = " + future.isDone());
+                    try {
+                        // this is to return anything after that particular thread completed.
+                        // In our case, we are returning errors list,  just print them on the console.
+
+                        if (future.get().contains("&")) {
+
+                            String[] infoArr = future.get().split("&");
+                            System.out.println("===============INFO===============");
+                            for (String arr : infoArr) {
+                                String[] item = arr.split(",");
+                                System.out.println("For " + item[0] + ",in sheet: " + item[1] + " , Row No:" + item[2] + " in column " + item[3] + " >>> INFO: " + item[4]);
+                                reportList.add("For " + item[0] + ",in sheet " + item[1] + " , Row No:" + item[2] + " in column " + item[3] + " >>> INFO: " + item[4]);
+                            }
+                            System.out.println("===================================");
+                        } else {
+                            reportList.add(future.get().toString());
+
+                        }
+
+                    } catch (ExecutionException e1) {
+                        // this is best place to see program failure reason, why?
+                        e1.printStackTrace();
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+
+                output.setText(join(reportList, "\n"));
+                executorService.shutdown();
+
+                setInfoAlert("Rules validation completed!");
+
             }
 
-            output.setText(join(reportList,"\n"));
-            executorService.shutdown();
 
-        /*    try {
-                SoundUtils.tone(5000,300, 0.3);
-            } catch (LineUnavailableException ex) {
-                throw new RuntimeException(ex);
-            }*/
 
         }
 
@@ -958,12 +1076,20 @@ public class App extends JPanel implements ActionListener {
             case "R1":
                 Rule1ValidatorEngine rule1ValidatorEngine = new Rule1ValidatorEngine();
                 rule1ValidatorEngine.validateRule4(inputExcelData, (List<Rule1Model>) masterList.get(0));
-                getErrorListSTR = rule1ValidatorEngine.getErrorsList();
+                if(rule1ValidatorEngine.getRuleListSize() > 0){
+                    getErrorListSTR = rule1ValidatorEngine.getErrorsList();
+                }else{
+                    getErrorListSTR = "";
+                }
                 break;
             case "R2":
                 Rule2ValidatorEngine rule2ValidatorEngine = new Rule2ValidatorEngine();
                 rule2ValidatorEngine.validateRule2(inputExcelData,(List<Rule2Model>) masterList.get(1));
-                getErrorListSTR = rule2ValidatorEngine.getErrorsList();
+                if(rule2ValidatorEngine.getRuleListSize() > 0){
+                    getErrorListSTR = rule2ValidatorEngine.getErrorsList();
+                }else{
+                    getErrorListSTR = "";
+                }
                 break;
 
             default:
