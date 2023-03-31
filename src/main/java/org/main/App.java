@@ -27,9 +27,7 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.TextAction;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
@@ -138,37 +136,28 @@ public class App extends JPanel implements ActionListener {
         rightJpanel = new JPanel(new BorderLayout());
 
         JPanel rightSideHeaderPanel = new JPanel();
-        JPanel rightSideParentTalePanel = new JPanel();
-
+        rightJpanel.add(rightSideHeaderPanel,BorderLayout.PAGE_START);
         JScrollPane ruleScrollPane = new JScrollPane(rightJpanel);
-        ruleScrollPane.setVerticalScrollBarPolicy(
-                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        ruleScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         ruleScrollPane.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
-        ruleScrollPane.setBorder(
+        rightJpanel.setBorder(
                 BorderFactory.createTitledBorder(
                         BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
                         " Available Rules ", TitledBorder.CENTER, TitledBorder.TOP,
                         fontTitle, Color.blue)
         );
 
-
-
-
-
-        rightJpanel.add(rightSideHeaderPanel,BorderLayout.PAGE_START);
-        rightJpanel.add(rightSideParentTalePanel,BorderLayout.CENTER);
-
-
-
-
-
+        //todo:- need to re-design this full table layout for better usability
 
 
 //  layout right side parent container
         GridBagLayout layout = new GridBagLayout();
-        //rightJpanel.setLayout(layout);
-        rightSideParentTalePanel.setLayout(layout);
+
+        JPanel rightSideParentTalePanel = new JPanel(layout);
+        JScrollPane ruleScroll = new JScrollPane(rightSideParentTalePanel);
+        ruleScroll.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        ruleScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -214,8 +203,9 @@ public class App extends JPanel implements ActionListener {
         rule1HeaderPanel.add(rule1HeaderBtnPanel,BorderLayout.EAST); // btns
 
         // Table creation starts - rule1TablePanel
-        rule1TablePanel.add(new JScrollPane(table));
 
+        JScrollPane scrollPane = new JScrollPane(table);
+        rule1TablePanel.add(scrollPane);
 
 
 // ============================== Rule 2  ====================
@@ -301,7 +291,11 @@ public class App extends JPanel implements ActionListener {
 
 
         //----------------------
+        rightJpanel.add(rightSideParentTalePanel,BorderLayout.CENTER);
 
+
+
+        // leftJPanel
         leftJPanel = new JPanel(new BorderLayout());
 
         JScrollPane editScrollPane = new JScrollPane(leftJPanel);
@@ -392,8 +386,6 @@ public class App extends JPanel implements ActionListener {
                 editScrollPane, ruleScrollPane
         );
         add(splitPaneMain, BorderLayout.CENTER);
-
-
 
 
 
