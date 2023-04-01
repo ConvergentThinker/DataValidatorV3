@@ -71,24 +71,45 @@ public class Rule2ValidatorEngine {
                             System.out.println("cellData "+ cellData);
                             System.out.println("Format: "+ rule.getFormat());
                             String format = rule.getFormat().trim();
-
+                            int dataLength = entry.getValue().trim().length();
                             // start
 
                             if (format.equals("Text")) {
 
-                                // todo:- implement
+                                String namePattern = "[^\\p{P}|^\\d+]+";
+                                //true if name contains only alphabets, false - otherwise
+                                 boolean result = cellData.matches(namePattern);
 
+                                if(dataLength==0){
+                                    errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
+                                }else{
+
+                                    if(!result){
+                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Cell value is not a Text format"));
+                                    }
+
+                                }
 
                             } else if (format.equals("Number")) {
 
-                                // todo:- implement
+                                String namePattern = "^\\d+(\\.\\d+)?";
+                                //true if name contains only alphabets, false - otherwise
+                                boolean result = cellData.matches(namePattern);
 
+                                if(dataLength==0){
+                                    errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
+                                }else{
 
+                                    if(!result){
+                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Cell value is not a Number format"));
+                                    }
+
+                                }
 
                             } else {
                                 System.out.println("isValidDate(cellData) "+ isValidDate(cellData));
 
-                                int dataLength = entry.getValue().trim().length();
+
 
                                 if(dataLength==0){
                                     errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
@@ -121,15 +142,42 @@ public class Rule2ValidatorEngine {
                                 System.out.println("cellData "+ cellData);
                                 System.out.println("Format: "+ rule.getFormat());
                                 String format = rule.getFormat().trim();
+                                int dataLength = entry.getValue().trim().length();
 
                                 if (format.equals("Text")) {
 
+                                    String namePattern = "[^\\p{P}|^\\d+]+";
+                                    //true if name contains only alphabets, false - otherwise
+                                    boolean result = cellData.matches(namePattern);
+
+                                    if(dataLength==0){
+                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
+                                    }else{
+
+                                        if(!result){
+                                            errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Cell value is not a Text format"));
+                                        }
+
+                                    }
+
                                 } else if (format.equals("Number")) {
+
+                                    String namePattern = "^\\d+(\\.\\d+)?";
+                                    //true if name contains only Number, false - otherwise
+                                    boolean result = cellData.matches(namePattern);
+
+                                    if(dataLength==0){
+                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
+                                    }else{
+
+                                        if(!result){
+                                            errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Cell value is not a Number format"));
+                                        }
+
+                                    }
 
                                 } else {
                                     System.out.println("isValidDate(cellData) "+ isValidDate(cellData));
-
-                                    int dataLength = entry.getValue().trim().length();
 
                                     if(dataLength==0){
                                         errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+" but Actual is Empty Cell"));
