@@ -649,16 +649,23 @@ public class App extends JPanel implements ActionListener {
         }
         // reload button
         else if (e.getSource() == reload ) {
-            // Read input excel file
-            inputExcelData = readerEngine.readCompleteExcel(filePath.getText().trim());
-            System.out.println("inputExcelData reloaded "+ inputExcelData);
 
-            if(inputExcelData.size() == 0){
-                output.setText("");
-                output.setText(readerEngine.getException());
+            if(inputExcelData != null){
+
+                // Read input excel file
+                inputExcelData = readerEngine.readCompleteExcel(filePath.getText().trim());
+                System.out.println("inputExcelData reloaded "+ inputExcelData);
+
+                if(inputExcelData.size() == 0){
+                    output.setText("");
+                    output.setText(readerEngine.getException());
+                }else{
+                    output.setText("");
+                    output.setText("Input data source reloaded ");
+                }
+
             }else{
-                output.setText("");
-                output.setText("Input data source reloaded ");
+                setWarningAlert("Please Upload Input excel file.");
             }
 
         }
