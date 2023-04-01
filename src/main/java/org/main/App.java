@@ -47,6 +47,7 @@ public class App extends JPanel implements ActionListener {
     private JFileChooser fcLoadRule;
     private JTextField filePath;
     JButton uploadButton;
+    JButton reload;
     JButton downloadRule;
     JButton uploadRule;
     JButton run;
@@ -345,9 +346,6 @@ public class App extends JPanel implements ActionListener {
         run = new JButton(" <<< Run  >> ");
         jPanelBtn.add(run);
         run.addActionListener(this);
-        //jPanelBtnRun.add(run,BorderLayout.EAST);
-        //      run
-        //bottomBtnG.add(jPanelBtnRun,BorderLayout.CENTER);
 
         filePath = new JTextField();
         fileUpload.add(filePath, BorderLayout.CENTER);
@@ -370,13 +368,14 @@ public class App extends JPanel implements ActionListener {
         filePath.setComponentPopupMenu(menu);
         //
 
+        JPanel jPanelFileUpload = new JPanel(new BorderLayout());
         uploadButton = new JButton(" Select ");
         uploadButton.addActionListener(this);
-        // add load button to fetch updated data
-
-        fileUpload.add(uploadButton, BorderLayout.EAST);
-
-
+        reload  = new JButton(" reload ");
+        reload.addActionListener(this);
+        jPanelFileUpload.add(uploadButton,BorderLayout.CENTER);
+        jPanelFileUpload.add(reload,BorderLayout.WEST);
+        fileUpload.add(jPanelFileUpload, BorderLayout.EAST);
 
 
 
@@ -625,7 +624,6 @@ public class App extends JPanel implements ActionListener {
             //Process the results.
             output.setText("");
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-
                 filePath.setText(file.getAbsolutePath());
             } else {
                 output.setText("Attachment cancelled by user.");
@@ -635,17 +633,34 @@ public class App extends JPanel implements ActionListener {
             //Reset the file chooser for the next time it's shown.
             fc.setSelectedFile(null);
 
-
             // Read input excel file
-            try {
-                inputExcelData = readerEngine.readCompleteExcel(file.getAbsolutePath());
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-             System.out.println("inputExcelData  "+ inputExcelData);
+            inputExcelData = readerEngine.readCompleteExcel(file.getAbsolutePath());
 
-            output.setText("");
-            output.setText("Input data source loaded ");
+            System.out.println("inputExcelData  "+ inputExcelData);
+
+            if(inputExcelData.size() == 0){
+                output.setText("");
+                output.setText(readerEngine.getException());
+            }else{
+                output.setText("");
+                output.setText("Input data source loaded ");
+            }
+
+        }
+        // reload button
+        else if (e.getSource() == reload ) {
+            // Read input excel file
+            inputExcelData = readerEngine.readCompleteExcel(filePath.getText().trim());
+            System.out.println("inputExcelData reloaded "+ inputExcelData);
+
+            if(inputExcelData.size() == 0){
+                output.setText("");
+                output.setText(readerEngine.getException());
+            }else{
+                output.setText("");
+                output.setText("Input data source reloaded ");
+            }
+
         }
         else if (e.getSource() == remove1) {
 

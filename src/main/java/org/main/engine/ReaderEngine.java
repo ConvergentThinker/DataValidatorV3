@@ -12,6 +12,8 @@ import java.util.Map;
 
 public class ReaderEngine {
 
+    String exception= "";
+
         public ReaderEngine(){
             System.out.println( "ReaderEngine Obj Created ...");
         }
@@ -118,7 +120,12 @@ public class ReaderEngine {
         return cellData;
     }
 
-    public Map<String, Map<String, Map<Integer, String>>  > readCompleteExcel(String inputFile) throws IOException {
+    public String getException(){
+     return exception;
+    }
+
+
+    public Map<String, Map<String, Map<Integer, String>>  > readCompleteExcel(String inputFile)  {
 
         Map<String, Map<String, Map<Integer, String>>  > mapOfAllSheets = new HashMap<>();
 
@@ -190,20 +197,19 @@ public class ReaderEngine {
             workbook.close();
 
         } catch (FileNotFoundException e) {
-
             System.out.println("File is not available.");
             e.printStackTrace();
+            exception = e.getMessage();
 
         } catch (IOException e) {
-
             System.out.println("Problem reading file from directory.");
             e.printStackTrace();
+            exception = e.getMessage();
 
         } catch (NullPointerException e) {
-
+            exception = e.getMessage();
             e.printStackTrace();
         }
-
 
         return mapOfAllSheets;
     }
