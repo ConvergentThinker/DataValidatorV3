@@ -64,6 +64,7 @@ public class App extends JPanel implements ActionListener {
 
 
     // Table1 creation variables
+    Button add1;
     Button remove1;
     Button edit1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -77,12 +78,11 @@ public class App extends JPanel implements ActionListener {
       }
      };
 
-    private AddRowAction addRowAction = new AddRowAction("Add +", KeyEvent.VK_A);
-
     // Table2  creation variables
     private javax.swing.JScrollPane jScrollPane2;
-    JButton remove2;
-    JButton edit2;
+    Button add2;
+    Button remove2;
+    Button edit2;
     private Rule2TableModel tableModel2 = new Rule2TableModel();
     private TableDark table2 = new TableDark(tableModel2){
         public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend)
@@ -92,7 +92,6 @@ public class App extends JPanel implements ActionListener {
         }
     };
 
-    private AddRowAction2 addRowAction2 = new AddRowAction2("Add +", KeyEvent.VK_A);
 
 // Table3  creation variables
 
@@ -236,11 +235,16 @@ public class App extends JPanel implements ActionListener {
         rule1HeaderDesPanel.add(new JLabel("  Rule 1 :- Find and print empty Cells in particular Column"),BorderLayout.CENTER);
         rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER);
         rule1HeaderDesPanel.setBackground(new Color(255,255,240));
+        rule1HeaderDesPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
+
 
         JPanel rule1HeaderBtnPanel = new JPanel(new FlowLayout());
-        rule1HeaderBtnPanel.setBackground(new Color(255,255,240));
+        rule1HeaderBtnPanel.setBackground(new Color(103, 103, 103));
 
-        rule1HeaderBtnPanel.add(new JButton(addRowAction));
+
+        add1 = new Button("Add");
+        rule1HeaderBtnPanel.add(add1);
+        add1.addActionListener(this);
         edit1 = new Button("Edit");
         rule1HeaderBtnPanel.add(edit1);
         edit1.addActionListener(this);
@@ -286,15 +290,20 @@ public class App extends JPanel implements ActionListener {
         // rule2HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
         rule2HeaderDesPanel.add(new JLabel("  Rule 2 :- Verify and validate cell Data format"),BorderLayout.CENTER);
 
+        rule2HeaderDesPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
+
+
         rule2HeaderPanel.add(rule2HeaderDesPanel,  BorderLayout.CENTER);
         JPanel rule2HeaderBtnPanel = new JPanel(new FlowLayout());
-        rule2HeaderBtnPanel.setBackground(new Color(255,255,240));
+        rule2HeaderBtnPanel.setBackground(new Color(103, 103, 103));
 
-        rule2HeaderBtnPanel.add(new JButton(addRowAction2));
-        edit2 = new JButton("Edit");
+        add2 = new Button("Add");
+        rule2HeaderBtnPanel.add(add2);
+        add2.addActionListener(this);
+        edit2 = new Button("Edit");
         rule2HeaderBtnPanel.add(edit2);
         edit2.addActionListener(this);
-        remove2 = new JButton("Remove");
+        remove2 = new Button("Remove");
         rule2HeaderBtnPanel.add(remove2);
         remove2.addActionListener(this);
         rule2HeaderPanel.add(rule2HeaderBtnPanel,BorderLayout.EAST); // btns
@@ -366,10 +375,11 @@ public class App extends JPanel implements ActionListener {
         JPanel bottomBtnG = new JPanel(new BorderLayout());
 
         fileUpload.setBackground(new Color(255,255,240));
-        fields.setBackground(new Color(255,255,255));
+        fields.setBackground(new Color(255,255,240));
         bottomBtnG.setBackground(new Color(255,255,255));
 
         output  = new JTextArea();
+        output.setBackground(new Color(255,255,240));
         fields.add(new JScrollPane(output),BorderLayout.CENTER);
 
         leftJPanel.add(fileUpload,BorderLayout.PAGE_START);
@@ -509,39 +519,6 @@ public class App extends JPanel implements ActionListener {
     }
 
 
-    class AddRowAction extends AbstractAction {
-        private Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
-
-        public AddRowAction(String name, int mnemonic) {
-            super(name);
-            putValue(MNEMONIC_KEY, mnemonic);
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                SoundUtils.tone(hz,msec, vol);
-            } catch (LineUnavailableException ex) {
-                throw new RuntimeException(ex);
-            }
-
-            if(inputExcelData != null){
-                int reply = JOptionPane.showConfirmDialog(table,
-                        newRowPanel.getMainPanel(inputExcelData),
-                        "Rule 1 fields ",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE);
-                if (reply == JOptionPane.OK_OPTION) {
-                    Rule1Model item = newRowPanel.getSelectedItem();
-                    tableModel.addRow(item);
-                }
-            }else{
-                setWarningAlert("Please Upload Input excel file.");
-            }
-
-        }
-    }
-
     public void setWarningAlert(String msg){
         JOptionPane optionPane = new JOptionPane(msg,JOptionPane.WARNING_MESSAGE);
         JDialog dialog = optionPane.createDialog("Warning!");
@@ -587,38 +564,6 @@ public class App extends JPanel implements ActionListener {
                 setWarningAlert("Please Upload Input excel file.");
             }
 
-        }
-    }
-    class AddRowAction2 extends AbstractAction {
-        private Rule2FieldsWindow newRowPanel = new Rule2FieldsWindow();
-
-        public AddRowAction2(String name, int mnemonic) {
-            super(name);
-            putValue(MNEMONIC_KEY, mnemonic);
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                SoundUtils.tone(hz,msec, vol);
-            } catch (LineUnavailableException ex) {
-                throw new RuntimeException(ex);
-            }
-
-            if (inputExcelData != null) {
-
-                int reply = JOptionPane.showConfirmDialog(table2,
-                        newRowPanel.getMainPanel(inputExcelData),
-                        "Rule 2 fields ",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE);
-                if (reply == JOptionPane.OK_OPTION) {
-                    Rule2Model item = newRowPanel.getSelectedItem();
-                    tableModel2.addRow(item);
-                }
-            } else {
-                setWarningAlert("Please Upload Input excel file.");
-            }
         }
     }
 
@@ -1174,6 +1119,55 @@ public class App extends JPanel implements ActionListener {
             }
 
 
+
+        } else if (e.getSource() == add1) {
+
+            Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
+
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            if(inputExcelData != null){
+                int reply = JOptionPane.showConfirmDialog(table,
+                        newRowPanel.getMainPanel(inputExcelData),
+                        "Rule 1 fields ",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE);
+                if (reply == JOptionPane.OK_OPTION) {
+                    Rule1Model item = newRowPanel.getSelectedItem();
+                    tableModel.addRow(item);
+                }
+            }else{
+                setWarningAlert("Please Upload Input excel file.");
+            }
+
+        } else if (e.getSource() == add2) {
+
+            Rule2FieldsWindow newRowPanel = new Rule2FieldsWindow();
+
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            if (inputExcelData != null) {
+
+                int reply = JOptionPane.showConfirmDialog(table2,
+                        newRowPanel.getMainPanel(inputExcelData),
+                        "Rule 2 fields ",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE);
+                if (reply == JOptionPane.OK_OPTION) {
+                    Rule2Model item = newRowPanel.getSelectedItem();
+                    tableModel2.addRow(item);
+                }
+            } else {
+                setWarningAlert("Please Upload Input excel file.");
+            }
 
         }
 
