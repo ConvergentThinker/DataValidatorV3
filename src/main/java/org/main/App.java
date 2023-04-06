@@ -24,6 +24,7 @@ import org.main.loadRuleFC.RuleFileView;
 import org.main.loadRuleFC.RuleFilter;
 import org.main.loadRuleFC.RulePreview;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -162,6 +163,7 @@ public class App extends JPanel implements ActionListener {
                 );
 
                 add(new JLabel(headerText));
+                setBackground(new Color(255,255,240));
             }
         }, BorderLayout.PAGE_END);
 
@@ -194,10 +196,12 @@ public class App extends JPanel implements ActionListener {
 
         JPanel rightSideParentTalePanel = new JPanel(layout);
         rightSideParentTalePanel.setBackground(new Color(255,255,240));
-        JScrollPane ruleScroll = new JScrollPane(rightSideParentTalePanel);
+
+    /*    JScrollPane ruleScroll = new JScrollPane(rightSideParentTalePanel);
         ruleScroll.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         ruleScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+*/
 
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -414,25 +418,25 @@ public class App extends JPanel implements ActionListener {
 
         JPanel jPanelBtn = new JPanel(new FlowLayout());
         jPanelBtn.setBackground(new Color(255,255,240));
-        downloadRule = new Button("Download Rule");
+        downloadRule = new Button("Download Rule .");
         jPanelBtn.add(downloadRule);
         downloadRule.setBackground(new java.awt.Color(103, 103, 103));
         downloadRule.setForeground(new java.awt.Color(255, 255, 255));
         downloadRule.addActionListener(this);
 
-        uploadRule = new Button("Upload Rule");
+        uploadRule = new Button("Upload Rule .");
         jPanelBtn.add(uploadRule);
         uploadRule.setBackground(new java.awt.Color(103, 103, 103));
         uploadRule.setForeground(new java.awt.Color(255, 255, 255));
         uploadRule.addActionListener(this);
 
-        reload  = new Button(" Re-load ");
+        reload  = new Button("   Reload     .");
         reload.setBackground(new java.awt.Color(103, 103, 103));
         reload.setForeground(new java.awt.Color(255, 255, 255));
         reload.addActionListener(this);
         jPanelBtn.add(reload);
 
-        run = new Button(" <<< Run  >> ");
+        run = new Button("    Run        .");
         jPanelBtn.add(run);
         run.setBackground(new java.awt.Color(103, 103, 103));
         run.setForeground(new java.awt.Color(255, 255, 255));
