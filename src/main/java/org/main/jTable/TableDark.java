@@ -63,6 +63,7 @@ public class TableDark extends JTable {
             com.setForeground(new Color(255,255,255));
             com.setFont(com.getFont().deriveFont(Font.BOLD, 12));
 
+
             if (alignment.containsKey(i1)) {
                 setHorizontalAlignment(alignment.get(i1));
             } else {

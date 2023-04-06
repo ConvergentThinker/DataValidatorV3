@@ -1,9 +1,10 @@
 package org.main;
 
 import com.formdev.flatlaf.FlatLightLaf;
-import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.util.SystemInfo;
+import org.main.UtilsClass.Button;
 import org.main.UtilsClass.SoundUtils;
+import org.main.UtilsClass.TextField;
 import org.main.datavalidator.Rule1ValidatorEngine;
 import org.main.datavalidator.Rule2ValidatorEngine;
 import org.main.engine.ReaderEngine;
@@ -28,7 +29,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.plaf.ColorUIResource;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.TextAction;
@@ -44,19 +44,18 @@ public class App extends JPanel implements ActionListener {
     int hz = 500;
     int msec = 200;
     double vol = 0.3;
-
     JPanel rightJpanel;
     JPanel leftJPanel;
     private int maxX;
     private int maxY;
     private JFileChooser fc;
     private JFileChooser fcLoadRule;
-    private JTextField filePath;
-    JButton uploadButton;
-    JButton reload;
-    JButton downloadRule;
-    JButton uploadRule;
-    JButton run;
+    private TextField filePath;
+    Button uploadButton;
+    Button reload;
+    Button downloadRule;
+    Button uploadRule;
+    Button run;
     JTextArea output;
     public static Font fontTitle = new Font("Comic Sans Ms", Font.BOLD, 12);
     // Engine variables
@@ -105,6 +104,8 @@ public class App extends JPanel implements ActionListener {
 
 
     public App() {
+
+
         //
         jScrollPane1 = new javax.swing.JScrollPane();
         table.fixTable(jScrollPane1);
@@ -127,15 +128,16 @@ public class App extends JPanel implements ActionListener {
 
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        maxX = screenSize.width;
+        maxX = screenSize.width -100;
         maxY = screenSize.height - 100;
         setPreferredSize(new Dimension(maxX, maxY));
         setLayout(new BorderLayout());
+
+
         add(new JPanel() {
             {
                 String headerText = String.join("\n"
                         , "\n"
-                        , "By SAKTHIVEL IYAPPAN "
                         ,
                         "\n"
                         , ""
@@ -145,6 +147,9 @@ public class App extends JPanel implements ActionListener {
                 add(new JLabel(headerText));
             }
         }, BorderLayout.PAGE_START);
+
+
+
         add(new JPanel() {
             {
                 String headerText = String.join("\n"
@@ -163,19 +168,14 @@ public class App extends JPanel implements ActionListener {
 
         // ---------------------- right side
         rightJpanel = new JPanel(new BorderLayout());
+        //rightJpanel.setBackground(new Color(255,255,255));
 
         JPanel rightSideHeaderPanel = new JPanel();
         rightJpanel.add(rightSideHeaderPanel,BorderLayout.PAGE_START);
         JScrollPane ruleScrollPane = new JScrollPane(rightJpanel);
-
+        //ruleScrollPane.setBackground(new Color(255,255,255));
         ruleScrollPane.setVerticalScrollBar(new ScrollBarCustom());
-
-
         ruleScrollPane.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
-
-
-
-
 
 
         rightJpanel.setBorder(
@@ -191,6 +191,7 @@ public class App extends JPanel implements ActionListener {
         GridBagLayout layout = new GridBagLayout();
 
         JPanel rightSideParentTalePanel = new JPanel(layout);
+        rightSideParentTalePanel.setBackground(new Color(255,255,255));
         JScrollPane ruleScroll = new JScrollPane(rightSideParentTalePanel);
         ruleScroll.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -202,11 +203,15 @@ public class App extends JPanel implements ActionListener {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.weightx = 1;
 
+        gbc.insets = new Insets(10,10,30,10);
+
         // ============================== Rule 1 starts ====================
         gbc.gridx = 0;
         gbc.gridy = 0;
         JPanel rule1Panel = new JPanel();
         rightSideParentTalePanel.add(rule1Panel, gbc);
+
+        rule1Panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.red));
 
         //  add element to rule1Panel
         GridBagLayout gridBagLayoutRule1 = new GridBagLayout();
@@ -229,7 +234,7 @@ public class App extends JPanel implements ActionListener {
         JPanel rule1HeaderDesPanel = new JPanel(new BorderLayout());
         //rule1HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
         rule1HeaderDesPanel.add(new JLabel("  Rule 1 :- Find and print empty Cells in particular Column"),BorderLayout.CENTER);
-        rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER); // rule descripion
+        rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER);
         JPanel rule1HeaderBtnPanel = new JPanel(new FlowLayout());
         rule1HeaderBtnPanel.add(new JButton(addRowAction));
         edit1 = new JButton("Edit");
@@ -241,7 +246,7 @@ public class App extends JPanel implements ActionListener {
         rule1HeaderPanel.add(rule1HeaderBtnPanel,BorderLayout.EAST); // btns
 
         // Table creation starts - rule1TablePanel
-
+        rule1TablePanel.setBorder(BorderFactory.createLineBorder(Color.black));
         JScrollPane scrollPane = new JScrollPane(table);
         rule1TablePanel.add(scrollPane);
 
@@ -252,7 +257,8 @@ public class App extends JPanel implements ActionListener {
         gbc.gridy = 1;
         JPanel rule2Panel = new JPanel(new BorderLayout());
         rightSideParentTalePanel.add(rule2Panel, gbc);
-
+       // rule2Panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        rule2Panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.red));
 //  add element to rule2Panel
         GridBagLayout gridBagLayoutRule2 = new GridBagLayout();
         rule2Panel.setLayout(gridBagLayoutRule2);
@@ -285,7 +291,7 @@ public class App extends JPanel implements ActionListener {
         rule2HeaderBtnPanel.add(remove2);
         remove2.addActionListener(this);
         rule2HeaderPanel.add(rule2HeaderBtnPanel,BorderLayout.EAST); // btns
-
+        rule2TablePanel.setBorder(BorderFactory.createLineBorder(Color.black));
         // Table creation starts - rule2TablePanel
         rule2TablePanel.add(new JScrollPane(table2));
 
@@ -335,6 +341,7 @@ public class App extends JPanel implements ActionListener {
 
         // leftJPanel
         leftJPanel = new JPanel(new BorderLayout());
+        leftJPanel.setBackground(new Color(255,255,255));
 
         JScrollPane editScrollPane = new JScrollPane(leftJPanel);
         //size
@@ -350,6 +357,10 @@ public class App extends JPanel implements ActionListener {
         JPanel fileUpload = new JPanel(new BorderLayout());
         JPanel fields = new JPanel(new BorderLayout());
         JPanel bottomBtnG = new JPanel(new BorderLayout());
+
+        //fileUpload.setBackground(new Color(255,255,255));
+        fields.setBackground(new Color(255,255,255));
+        bottomBtnG.setBackground(new Color(255,255,255));
 
         output  = new JTextArea();
         fields.add(new JScrollPane(output),BorderLayout.CENTER);
@@ -367,21 +378,26 @@ public class App extends JPanel implements ActionListener {
 // bottom button
 
         JPanel jPanelBtn = new JPanel(new FlowLayout());
-        downloadRule = new JButton("Download Rule");
+        downloadRule = new Button("Download Rule");
         jPanelBtn.add(downloadRule);
+        downloadRule.setBackground(new java.awt.Color(103, 103, 103));
+        downloadRule.setForeground(new java.awt.Color(245, 245, 245));
         downloadRule.addActionListener(this);
 
-        uploadRule = new JButton("Upload Rule");
+        uploadRule = new Button("Upload Rule");
         jPanelBtn.add(uploadRule);
+        uploadRule.setBackground(new java.awt.Color(103, 103, 103));
+        uploadRule.setForeground(new java.awt.Color(245, 245, 245));
         uploadRule.addActionListener(this);
-        bottomBtnG.add(jPanelBtn,BorderLayout.WEST);
+        bottomBtnG.add(jPanelBtn,BorderLayout.CENTER);
 
-        JPanel jPanelBtnRun = new JPanel(new BorderLayout());
-        run = new JButton(" <<< Run  >> ");
+        run = new Button(" <<< Run  >> ");
         jPanelBtn.add(run);
+        run.setBackground(new java.awt.Color(103, 103, 103));
+        run.setForeground(new java.awt.Color(245, 245, 245));
         run.addActionListener(this);
 
-        filePath = new JTextField();
+        filePath = new TextField();
         fileUpload.add(filePath, BorderLayout.CENTER);
         // copy paste
         JPopupMenu menu = new JPopupMenu();
@@ -403,9 +419,13 @@ public class App extends JPanel implements ActionListener {
         //
 
         JPanel jPanelFileUpload = new JPanel(new BorderLayout());
-        uploadButton = new JButton(" Select ");
+        uploadButton = new Button(" Select ");
+        uploadButton.setBackground(new java.awt.Color(103, 103, 103));
+        uploadButton.setForeground(new java.awt.Color(245, 245, 245));
         uploadButton.addActionListener(this);
-        reload  = new JButton(" reload ");
+        reload  = new Button(" reload ");
+        reload.setBackground(new java.awt.Color(103, 103, 103));
+        reload.setForeground(new java.awt.Color(245, 245, 245));
         reload.addActionListener(this);
         jPanelFileUpload.add(uploadButton,BorderLayout.CENTER);
         jPanelFileUpload.add(reload,BorderLayout.WEST);
@@ -443,6 +463,13 @@ public class App extends JPanel implements ActionListener {
                 );
 
     }
+
+  /*  public TitledBorder createBorder(){
+
+
+    }*/
+
+
 
 
 
@@ -590,6 +617,7 @@ public class App extends JPanel implements ActionListener {
         frame.getRootPane().putClientProperty("JRootPane.titleBarBackground", new Color(23,180,252));
         frame.getRootPane().putClientProperty("JRootPane.titleBarForeground", Color.YELLOW);
 
+        frame.setBackground(new Color(255,25,255));
 
         //Add content to the window.
         frame.add(new App());
@@ -701,6 +729,11 @@ public class App extends JPanel implements ActionListener {
         // reload button
         else if (e.getSource() == reload ) {
 
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
             if(inputExcelData != null){
 
                 // Read input excel file
@@ -718,6 +751,7 @@ public class App extends JPanel implements ActionListener {
             }else{
                 setWarningAlert("Please Upload Input excel file.");
             }
+
 
         }
         else if (e.getSource() == remove1) {
