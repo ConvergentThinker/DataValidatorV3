@@ -64,8 +64,8 @@ public class App extends JPanel implements ActionListener {
 
 
     // Table1 creation variables
-    JButton remove1;
-    JButton edit1;
+    Button remove1;
+    Button edit1;
     private javax.swing.JScrollPane jScrollPane1;
     private Rule1TableModel tableModel = new Rule1TableModel();
   //  private JTable table = new JTable(tableModel);
@@ -235,12 +235,16 @@ public class App extends JPanel implements ActionListener {
         //rule1HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
         rule1HeaderDesPanel.add(new JLabel("  Rule 1 :- Find and print empty Cells in particular Column"),BorderLayout.CENTER);
         rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER);
+        rule1HeaderDesPanel.setBackground(new Color(255,255,240));
+
         JPanel rule1HeaderBtnPanel = new JPanel(new FlowLayout());
+        rule1HeaderBtnPanel.setBackground(new Color(255,255,240));
+
         rule1HeaderBtnPanel.add(new JButton(addRowAction));
-        edit1 = new JButton("Edit");
+        edit1 = new Button("Edit");
         rule1HeaderBtnPanel.add(edit1);
         edit1.addActionListener(this);
-        remove1 = new JButton("Remove");
+        remove1 = new Button("Remove");
         rule1HeaderBtnPanel.add(remove1);
         remove1.addActionListener(this);
         rule1HeaderPanel.add(rule1HeaderBtnPanel,BorderLayout.EAST); // btns
@@ -278,11 +282,14 @@ public class App extends JPanel implements ActionListener {
         rule2Panel.add(rule2TablePanel,gbcRule2);
 
         JPanel rule2HeaderDesPanel = new JPanel(new BorderLayout());
-       // rule2HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
+        rule2HeaderDesPanel.setBackground(new Color(255,255,240));
+        // rule2HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
         rule2HeaderDesPanel.add(new JLabel("  Rule 2 :- Verify and validate cell Data format"),BorderLayout.CENTER);
 
-        rule2HeaderPanel.add(rule2HeaderDesPanel,  BorderLayout.CENTER); // rule descripion
+        rule2HeaderPanel.add(rule2HeaderDesPanel,  BorderLayout.CENTER);
         JPanel rule2HeaderBtnPanel = new JPanel(new FlowLayout());
+        rule2HeaderBtnPanel.setBackground(new Color(255,255,240));
+
         rule2HeaderBtnPanel.add(new JButton(addRowAction2));
         edit2 = new JButton("Edit");
         rule2HeaderBtnPanel.add(edit2);
@@ -347,18 +354,18 @@ public class App extends JPanel implements ActionListener {
         //size
         editScrollPane.setPreferredSize(new Dimension(maxX / 2 - 100, maxY - 150));
 
-        editScrollPane.setBorder(
+     /*   editScrollPane.setBorder(
         BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
                 " DashBoard ", TitledBorder.CENTER, TitledBorder.TOP)
-        );
+        );*/
 
 
         JPanel fileUpload = new JPanel(new BorderLayout());
         JPanel fields = new JPanel(new BorderLayout());
         JPanel bottomBtnG = new JPanel(new BorderLayout());
 
-        //fileUpload.setBackground(new Color(255,255,255));
+        fileUpload.setBackground(new Color(255,255,240));
         fields.setBackground(new Color(255,255,255));
         bottomBtnG.setBackground(new Color(255,255,255));
 
@@ -378,6 +385,7 @@ public class App extends JPanel implements ActionListener {
 // bottom button
 
         JPanel jPanelBtn = new JPanel(new FlowLayout());
+        jPanelBtn.setBackground(new Color(255,255,240));
         downloadRule = new Button("Download Rule");
         jPanelBtn.add(downloadRule);
         downloadRule.setBackground(new java.awt.Color(103, 103, 103));
@@ -389,7 +397,12 @@ public class App extends JPanel implements ActionListener {
         uploadRule.setBackground(new java.awt.Color(103, 103, 103));
         uploadRule.setForeground(new java.awt.Color(245, 245, 245));
         uploadRule.addActionListener(this);
-        bottomBtnG.add(jPanelBtn,BorderLayout.CENTER);
+
+        reload  = new Button(" Re-load ");
+        reload.setBackground(new java.awt.Color(103, 103, 103));
+        reload.setForeground(new java.awt.Color(245, 245, 245));
+        reload.addActionListener(this);
+        jPanelBtn.add(reload);
 
         run = new Button(" <<< Run  >> ");
         jPanelBtn.add(run);
@@ -423,13 +436,19 @@ public class App extends JPanel implements ActionListener {
         uploadButton.setBackground(new java.awt.Color(103, 103, 103));
         uploadButton.setForeground(new java.awt.Color(245, 245, 245));
         uploadButton.addActionListener(this);
-        reload  = new Button(" reload ");
-        reload.setBackground(new java.awt.Color(103, 103, 103));
-        reload.setForeground(new java.awt.Color(245, 245, 245));
-        reload.addActionListener(this);
+
         jPanelFileUpload.add(uploadButton,BorderLayout.CENTER);
-        jPanelFileUpload.add(reload,BorderLayout.WEST);
+        //jPanelFileUpload.add(reload,BorderLayout.WEST);
+        jPanelFileUpload.setBackground(new Color(255,255,240));
+
+
+
         fileUpload.add(jPanelFileUpload, BorderLayout.EAST);
+
+
+        bottomBtnG.add(jPanelBtn,BorderLayout.CENTER);
+
+
 
 
 

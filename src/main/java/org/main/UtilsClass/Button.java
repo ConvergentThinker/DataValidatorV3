@@ -56,6 +56,11 @@ public class Button extends JButton {
         rippleEffect.setRippleColor(new Color(220, 220, 220));
     }
 
+
+
+
+
+
     @Override
     protected void paintComponent(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs.create();

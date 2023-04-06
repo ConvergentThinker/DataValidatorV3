@@ -59,8 +59,8 @@ public class TableDark extends JTable {
         @Override
         public Component getTableCellRendererComponent(JTable jtable, Object o, boolean bln, boolean bln1, int i, int i1) {
             Component com = super.getTableCellRendererComponent(jtable, o, bln, bln1, i, i1);
-            com.setBackground(new Color(30,144,255));
-            com.setForeground(new Color(255,255,255));
+            com.setBackground(new Color(230,230,250));
+            //com.setForeground(new Color(255,255,255));
             com.setFont(com.getFont().deriveFont(Font.BOLD, 12));
 
 
