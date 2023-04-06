@@ -10,12 +10,15 @@ import org.main.engine.ReaderEngine;
 import org.main.filechooser.ImageFileView;
 import org.main.filechooser.ImageFilter;
 import org.main.filechooser.ImagePreview;
+import org.main.jTable.CustomRenderer;
 import org.main.jTable.Rule1.Rule1Model;
 import org.main.jTable.Rule1.Rule1TableModel;
 import org.main.jTable.Rule1.Rule1FieldsWindow;
 import org.main.jTable.Rule2.Rule2FieldsWindow;
 import org.main.jTable.Rule2.Rule2Model;
 import org.main.jTable.Rule2.Rule2TableModel;
+import org.main.jTable.ScrollBarCustom;
+import org.main.jTable.TableDark;
 import org.main.loadRuleFC.RuleFileView;
 import org.main.loadRuleFC.RuleFilter;
 import org.main.loadRuleFC.RulePreview;
@@ -64,9 +67,10 @@ public class App extends JPanel implements ActionListener {
     // Table1 creation variables
     JButton remove1;
     JButton edit1;
+    private javax.swing.JScrollPane jScrollPane1;
     private Rule1TableModel tableModel = new Rule1TableModel();
   //  private JTable table = new JTable(tableModel);
-    private JTable table = new JTable(tableModel){
+    private TableDark table = new TableDark(tableModel){
       public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend)
       {
           //Always toggle on single selection
@@ -77,10 +81,11 @@ public class App extends JPanel implements ActionListener {
     private AddRowAction addRowAction = new AddRowAction("Add +", KeyEvent.VK_A);
 
     // Table2  creation variables
+    private javax.swing.JScrollPane jScrollPane2;
     JButton remove2;
     JButton edit2;
     private Rule2TableModel tableModel2 = new Rule2TableModel();
-    private JTable table2 = new JTable(tableModel2){
+    private TableDark table2 = new TableDark(tableModel2){
         public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend)
         {
             //Always toggle on single selection
@@ -100,6 +105,26 @@ public class App extends JPanel implements ActionListener {
 
 
     public App() {
+        //
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table.fixTable(jScrollPane1);
+        jScrollPane1.setViewportView(table);
+
+        //Set your own renderer.  You'll have to set this for Number and Boolean too if you're using those
+        CustomRenderer cr = new CustomRenderer(table.getDefaultRenderer(Object.class), Color.darkGray, Color.darkGray, Color.darkGray, Color.darkGray);
+        table.setDefaultRenderer(Object.class, cr);
+
+
+        jScrollPane2 = new javax.swing.JScrollPane();
+        table2.fixTable(jScrollPane2);
+        jScrollPane2.setViewportView(table2);
+
+        //Set your own renderer.  You'll have to set this for Number and Boolean too if you're using those
+        CustomRenderer cr2 = new CustomRenderer(table2.getDefaultRenderer(Object.class), Color.darkGray, Color.darkGray, Color.darkGray, Color.darkGray);
+        table2.setDefaultRenderer(Object.class, cr2);
+
+        //
+
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         maxX = screenSize.width;
@@ -142,7 +167,17 @@ public class App extends JPanel implements ActionListener {
         JPanel rightSideHeaderPanel = new JPanel();
         rightJpanel.add(rightSideHeaderPanel,BorderLayout.PAGE_START);
         JScrollPane ruleScrollPane = new JScrollPane(rightJpanel);
+
+        ruleScrollPane.setVerticalScrollBar(new ScrollBarCustom());
+
+
         ruleScrollPane.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
+
+
+
+
+
+
         rightJpanel.setBorder(
                 BorderFactory.createTitledBorder(
                         BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
@@ -256,7 +291,7 @@ public class App extends JPanel implements ActionListener {
 
 // ============================== Rule 3  ====================
 
-        //Rule2 Table
+     /*   //Rule2 Table
         gbc.gridx = 0;
         gbc.gridy = 2;
         JPanel rule3Panel = new JPanel(new BorderLayout());
@@ -290,7 +325,7 @@ public class App extends JPanel implements ActionListener {
         rule3HeaderPanel.add(rule3HeaderBtnPanel,BorderLayout.EAST); // btns
 
         // Table creation starts - rule3TablePanel
-        rule3TablePanel.add(new JScrollPane(table3));
+        rule3TablePanel.add(new JScrollPane(table3));*/
 
 
         //----------------------
@@ -302,8 +337,6 @@ public class App extends JPanel implements ActionListener {
         leftJPanel = new JPanel(new BorderLayout());
 
         JScrollPane editScrollPane = new JScrollPane(leftJPanel);
-
-        //editScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         //size
         editScrollPane.setPreferredSize(new Dimension(maxX / 2 - 100, maxY - 150));
 
@@ -556,7 +589,6 @@ public class App extends JPanel implements ActionListener {
 
         frame.getRootPane().putClientProperty("JRootPane.titleBarBackground", new Color(23,180,252));
         frame.getRootPane().putClientProperty("JRootPane.titleBarForeground", Color.YELLOW);
-        frame.getRootPane().putClientProperty( "apple.awt.fullscreenable", true );
 
 
         //Add content to the window.
@@ -600,7 +632,9 @@ public class App extends JPanel implements ActionListener {
 
             public void run() {
 
-                IntelliJTheme.setup(App.class.getResourceAsStream("/DarkPurple.theme.json"));
+               // IntelliJTheme.setup(App.class.getResourceAsStream("DarkPurpleTheme.jar/DarkPurple.theme.json"));
+            FlatLightLaf.setup();
+
 
                 createAndShowGUI();
             }
