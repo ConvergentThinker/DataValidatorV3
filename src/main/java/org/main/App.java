@@ -1,5 +1,8 @@
 package org.main;
 
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.IntelliJTheme;
+import com.formdev.flatlaf.util.SystemInfo;
 import org.main.UtilsClass.SoundUtils;
 import org.main.datavalidator.Rule1ValidatorEngine;
 import org.main.datavalidator.Rule2ValidatorEngine;
@@ -143,8 +146,7 @@ public class App extends JPanel implements ActionListener {
         rightJpanel.setBorder(
                 BorderFactory.createTitledBorder(
                         BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
-                        " Available Rules ", TitledBorder.CENTER, TitledBorder.TOP,
-                        fontTitle, Color.blue)
+                        " Available Rules ", TitledBorder.CENTER, TitledBorder.TOP)
         );
 
         //todo:- need to re-design this full table layout for better usability
@@ -308,8 +310,7 @@ public class App extends JPanel implements ActionListener {
         editScrollPane.setBorder(
         BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
-                " DashBoard ", TitledBorder.CENTER, TitledBorder.TOP,
-                fontTitle, Color.blue)
+                " DashBoard ", TitledBorder.CENTER, TitledBorder.TOP)
         );
 
 
@@ -550,7 +551,13 @@ public class App extends JPanel implements ActionListener {
     private static void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame(" Data Validator ");
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        frame.getRootPane().putClientProperty("JRootPane.titleBarBackground", new Color(23,180,252));
+        frame.getRootPane().putClientProperty("JRootPane.titleBarForeground", Color.YELLOW);
+        frame.getRootPane().putClientProperty( "apple.awt.fullscreenable", true );
+
 
         //Add content to the window.
         frame.add(new App());
@@ -562,29 +569,39 @@ public class App extends JPanel implements ActionListener {
 
     public static void main(String[] args) {
 
-        /* Use an appropriate Look and Feel */
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-            //UIManager.put("Table.gridColor", new ColorUIResource(Color.blue));
+        if( SystemInfo.isMacOS ) {
+            // enable screen menu bar
+            // (moves menu bar from JFrame window to top of screen)
+            System.setProperty( "apple.laf.useScreenMenuBar", "true" );
 
-           // UIManager.put("Label.font", fontTitle);
+            // application name used in screen menu bar
+            // (in first menu after the "apple" menu)
+            System.setProperty( "apple.awt.application.name", "My Application" );
 
-        } catch (UnsupportedLookAndFeelException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            // appearance of window title bars
+            // possible values:
+            //   - "system": use current macOS appearance (light or dark)
+            //   - "NSAppearanceNameAqua": use light appearance
+            //   - "NSAppearanceNameDarkAqua": use dark appearance
+            // (must be set on main thread and before AWT/Swing is initialized;
+            //  setting it on AWT thread does not work)
+            System.setProperty( "apple.awt.application.appearance", "system" );
         }
-        /* Turn off metal's use bold fonts */
-        UIManager.put("swing.boldMetal", Boolean.FALSE);
+
+
+        // set global level font for Jlable only
+        //UIManager.put("Label.font", fontTitle);
+
+
         UIManager.put("FileChooser.readOnly", Boolean.TRUE);
         //Schedule a job for the event dispatch thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
             public void run() {
+
+                IntelliJTheme.setup(App.class.getResourceAsStream("/DarkPurple.theme.json"));
+
                 createAndShowGUI();
             }
         });
