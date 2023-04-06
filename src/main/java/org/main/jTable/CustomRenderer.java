@@ -16,10 +16,10 @@ public class CustomRenderer implements TableCellRenderer{
         //It looks funky to have a different color on each side - but this is what you asked
         //You can comment out borders if you want too. (example try commenting out top and left borders)
         b = BorderFactory.createCompoundBorder();
-        b = BorderFactory.createCompoundBorder(b, BorderFactory.createMatteBorder(1,0,0,0,top));
+        b = BorderFactory.createCompoundBorder(b, BorderFactory.createMatteBorder(0,0,0,0,top));
         b = BorderFactory.createCompoundBorder(b, BorderFactory.createMatteBorder(0,0,0,0,left));
-        b = BorderFactory.createCompoundBorder(b, BorderFactory.createMatteBorder(0,0,0,0,bottom));
-        b = BorderFactory.createCompoundBorder(b, BorderFactory.createMatteBorder(0,0,0,1,right));
+        b = BorderFactory.createCompoundBorder(b, BorderFactory.createMatteBorder(0,0,1,0,bottom));
+        b = BorderFactory.createCompoundBorder(b, BorderFactory.createMatteBorder(0,0,0,0,right));
     }
 
     @Override

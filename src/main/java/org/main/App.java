@@ -135,16 +135,17 @@ public class App extends JPanel implements ActionListener {
 
         add(new JPanel() {
             {
-                String headerText = String.join("\n"
-                        , "\n"
-                        ,
+                String headerText = String.join(
                         "\n"
                         , ""
 
                 );
 
                 add(new JLabel(headerText));
+                setBackground(new Color(255,255,240));
+
             }
+
         }, BorderLayout.PAGE_START);
 
 
@@ -167,21 +168,23 @@ public class App extends JPanel implements ActionListener {
 
         // ---------------------- right side
         rightJpanel = new JPanel(new BorderLayout());
-        //rightJpanel.setBackground(new Color(255,255,255));
+
 
         JPanel rightSideHeaderPanel = new JPanel();
+        rightSideHeaderPanel.setBackground(new Color(255,255,240));
         rightJpanel.add(rightSideHeaderPanel,BorderLayout.PAGE_START);
+        rightJpanel.setBackground(new Color(255,255,240));
+
         JScrollPane ruleScrollPane = new JScrollPane(rightJpanel);
-        //ruleScrollPane.setBackground(new Color(255,255,255));
         ruleScrollPane.setVerticalScrollBar(new ScrollBarCustom());
         ruleScrollPane.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
 
 
-        rightJpanel.setBorder(
+      /*  rightJpanel.setBorder(
                 BorderFactory.createTitledBorder(
                         BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
                         " Available Rules ", TitledBorder.CENTER, TitledBorder.TOP)
-        );
+        );*/
 
         //todo:- need to re-design this full table layout for better usability
 
@@ -190,7 +193,7 @@ public class App extends JPanel implements ActionListener {
         GridBagLayout layout = new GridBagLayout();
 
         JPanel rightSideParentTalePanel = new JPanel(layout);
-        rightSideParentTalePanel.setBackground(new Color(255,255,255));
+        rightSideParentTalePanel.setBackground(new Color(255,255,240));
         JScrollPane ruleScroll = new JScrollPane(rightSideParentTalePanel);
         ruleScroll.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -202,7 +205,7 @@ public class App extends JPanel implements ActionListener {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.weightx = 1;
 
-        gbc.insets = new Insets(10,10,30,10);
+        gbc.insets = new Insets(0,10,30,10);
 
         // ============================== Rule 1 starts ====================
         gbc.gridx = 0;
@@ -235,26 +238,32 @@ public class App extends JPanel implements ActionListener {
         rule1HeaderDesPanel.add(new JLabel("  Rule 1 :- Find and print empty Cells in particular Column"),BorderLayout.CENTER);
         rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER);
         rule1HeaderDesPanel.setBackground(new Color(255,255,240));
-        rule1HeaderDesPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
+        rule1HeaderPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
 
 
         JPanel rule1HeaderBtnPanel = new JPanel(new FlowLayout());
-        rule1HeaderBtnPanel.setBackground(new Color(103, 103, 103));
+        rule1HeaderBtnPanel.setBackground(new Color(255,255,240));
 
 
         add1 = new Button("Add");
+        add1.setBackground(new java.awt.Color(103, 103, 103));
+        add1.setForeground(new java.awt.Color(255, 255, 255));
         rule1HeaderBtnPanel.add(add1);
         add1.addActionListener(this);
         edit1 = new Button("Edit");
+        edit1.setBackground(new java.awt.Color(103, 103, 103));
+        edit1.setForeground(new java.awt.Color(255, 255, 255));
         rule1HeaderBtnPanel.add(edit1);
         edit1.addActionListener(this);
         remove1 = new Button("Remove");
+        remove1.setBackground(new java.awt.Color(103, 103, 103));
+        remove1.setForeground(new java.awt.Color(255, 255, 255));
         rule1HeaderBtnPanel.add(remove1);
         remove1.addActionListener(this);
         rule1HeaderPanel.add(rule1HeaderBtnPanel,BorderLayout.EAST); // btns
 
         // Table creation starts - rule1TablePanel
-        rule1TablePanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        rule1TablePanel.setBorder(BorderFactory.createLineBorder(new java.awt.Color(103, 103, 103)));
         JScrollPane scrollPane = new JScrollPane(table);
         rule1TablePanel.add(scrollPane);
 
@@ -289,25 +298,30 @@ public class App extends JPanel implements ActionListener {
         rule2HeaderDesPanel.setBackground(new Color(255,255,240));
         // rule2HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
         rule2HeaderDesPanel.add(new JLabel("  Rule 2 :- Verify and validate cell Data format"),BorderLayout.CENTER);
-
-        rule2HeaderDesPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
+        rule2HeaderPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
 
 
         rule2HeaderPanel.add(rule2HeaderDesPanel,  BorderLayout.CENTER);
         JPanel rule2HeaderBtnPanel = new JPanel(new FlowLayout());
-        rule2HeaderBtnPanel.setBackground(new Color(103, 103, 103));
+        rule2HeaderBtnPanel.setBackground(new Color(255,255,240));
 
         add2 = new Button("Add");
+        add2.setBackground(new java.awt.Color(103, 103, 103));
+        add2.setForeground(new java.awt.Color(255, 255, 255));
         rule2HeaderBtnPanel.add(add2);
         add2.addActionListener(this);
         edit2 = new Button("Edit");
+        edit2.setBackground(new java.awt.Color(103, 103, 103));
+        edit2.setForeground(new java.awt.Color(255, 255, 255));
         rule2HeaderBtnPanel.add(edit2);
         edit2.addActionListener(this);
         remove2 = new Button("Remove");
+        remove2.setBackground(new java.awt.Color(103, 103, 103));
+        remove2.setForeground(new java.awt.Color(255, 255, 255));
         rule2HeaderBtnPanel.add(remove2);
         remove2.addActionListener(this);
         rule2HeaderPanel.add(rule2HeaderBtnPanel,BorderLayout.EAST); // btns
-        rule2TablePanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        rule2TablePanel.setBorder(BorderFactory.createLineBorder(new java.awt.Color(103, 103, 103)));
         // Table creation starts - rule2TablePanel
         rule2TablePanel.add(new JScrollPane(table2));
 
@@ -389,8 +403,12 @@ public class App extends JPanel implements ActionListener {
 
 
         fileUpload.setBorder(createTitleBorder("Upload Excel:(only .xlsx file)"));
+       // bottomBtnG.setBorder(BorderFactory.createMatteBorder(1, 0, 0,0 , new Color(103, 103, 103)));
+
+
+
         fields.setBorder(createTitleBorder("Console Output :-"));
-        //bottomBtnG.setBorder(createTitleBorder("Action Buttons "));
+
 
 // bottom button
 
@@ -399,25 +417,25 @@ public class App extends JPanel implements ActionListener {
         downloadRule = new Button("Download Rule");
         jPanelBtn.add(downloadRule);
         downloadRule.setBackground(new java.awt.Color(103, 103, 103));
-        downloadRule.setForeground(new java.awt.Color(245, 245, 245));
+        downloadRule.setForeground(new java.awt.Color(255, 255, 255));
         downloadRule.addActionListener(this);
 
         uploadRule = new Button("Upload Rule");
         jPanelBtn.add(uploadRule);
         uploadRule.setBackground(new java.awt.Color(103, 103, 103));
-        uploadRule.setForeground(new java.awt.Color(245, 245, 245));
+        uploadRule.setForeground(new java.awt.Color(255, 255, 255));
         uploadRule.addActionListener(this);
 
         reload  = new Button(" Re-load ");
         reload.setBackground(new java.awt.Color(103, 103, 103));
-        reload.setForeground(new java.awt.Color(245, 245, 245));
+        reload.setForeground(new java.awt.Color(255, 255, 255));
         reload.addActionListener(this);
         jPanelBtn.add(reload);
 
         run = new Button(" <<< Run  >> ");
         jPanelBtn.add(run);
         run.setBackground(new java.awt.Color(103, 103, 103));
-        run.setForeground(new java.awt.Color(245, 245, 245));
+        run.setForeground(new java.awt.Color(255, 255, 255));
         run.addActionListener(this);
 
         filePath = new TextField();
@@ -439,25 +457,19 @@ public class App extends JPanel implements ActionListener {
         Action selectAll = new SelectAll();
         menu.add(selectAll);
         filePath.setComponentPopupMenu(menu);
-        //
 
         JPanel jPanelFileUpload = new JPanel(new BorderLayout());
         uploadButton = new Button(" Select ");
         uploadButton.setBackground(new java.awt.Color(103, 103, 103));
-        uploadButton.setForeground(new java.awt.Color(245, 245, 245));
+        uploadButton.setForeground(new java.awt.Color(255, 255, 255));
         uploadButton.addActionListener(this);
 
         jPanelFileUpload.add(uploadButton,BorderLayout.CENTER);
-        //jPanelFileUpload.add(reload,BorderLayout.WEST);
         jPanelFileUpload.setBackground(new Color(255,255,240));
 
 
-
         fileUpload.add(jPanelFileUpload, BorderLayout.EAST);
-
-
         bottomBtnG.add(jPanelBtn,BorderLayout.CENTER);
-
 
 
 
@@ -486,17 +498,10 @@ public class App extends JPanel implements ActionListener {
 
     }*/
     public TitledBorder createTitleBorder(String title){
-        return    BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
-                title, TitledBorder.LEFT, TitledBorder.TOP
-                );
 
+        return   BorderFactory.createTitledBorder(BorderFactory
+                .createLineBorder(new java.awt.Color(103, 103, 103)), title);
     }
-
-  /*  public TitledBorder createBorder(){
-
-
-    }*/
 
 
 

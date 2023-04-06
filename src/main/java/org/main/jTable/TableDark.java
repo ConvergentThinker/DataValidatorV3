@@ -61,7 +61,7 @@ public class TableDark extends JTable {
             Component com = super.getTableCellRendererComponent(jtable, o, bln, bln1, i, i1);
             com.setBackground(new Color(230,230,250));
             //com.setForeground(new Color(255,255,255));
-            com.setFont(com.getFont().deriveFont(Font.BOLD, 12));
+            com.setFont(com.getFont().deriveFont(Font.PLAIN, 12));
 
 
             if (alignment.containsKey(i1)) {

@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class ModernScrollBarUI extends BasicScrollBarUI {
 
-    private final int THUMB_SIZE = 80;
+    private final int THUMB_SIZE = 180;
 
     @Override
     protected Dimension getMaximumThumbSize() {
