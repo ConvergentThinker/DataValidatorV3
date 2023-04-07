@@ -162,6 +162,7 @@ public class App extends JPanel implements ActionListener {
 
         }, BorderLayout.PAGE_START);
 
+     /*
 
         JPanel appBottomBar = new JPanel();
         appBottomBar.setPreferredSize(new Dimension(maxX, 100));
@@ -212,7 +213,7 @@ public class App extends JPanel implements ActionListener {
         panel3.add(label3, BorderLayout.CENTER);
         panel3.add(labelURL3, BorderLayout.WEST);
         ImageLoader.loadImage(label3,data.get(2).getPath(),true);
-
+*/
     /*    JLabel label4 = new JLabel();
         JPanel labelURL4 = new JPanel();
         JLabelLink hyperLink4 = new JLabelLink(labelURL4,data.get(3).getUrl());

@@ -2,7 +2,6 @@ package org.main.UtilsClass;
 
 
 import org.main.UtilsClass.shadow.ShadowRenderer;
-import org.main.UtilsClass.shadow.util.RippleEffect;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -34,18 +33,21 @@ public class Button extends JButton {
     }
 
     public void setRippleColor(Color color) {
-        rippleEffect.setRippleColor(color);
+
     }
 
     public Color getRippleColor() {
-        return rippleEffect.getRippleColor();
+
+        return null;
+
     }
 
-    private int round = 10;
-    private Color shadowColor = new Color(170, 170, 170);
+    private int round = 30;
+    //private Color shadowColor = new Color(170, 170, 170);
+    private Color shadowColor = new Color(25,25,112);
     private BufferedImage imageShadow;
     private final Insets shadowSize = new Insets(2, 5, 8, 5);
-    private final RippleEffect rippleEffect = new RippleEffect(this);
+
 
     public Button(String name) {
         super.setText(name);
@@ -53,7 +55,7 @@ public class Button extends JButton {
         setContentAreaFilled(false);
         setBackground(new Color(255, 255, 255));
         setForeground(new Color(80, 80, 80));
-        rippleEffect.setRippleColor(new Color(220, 220, 220));
+
     }
 
 
@@ -75,7 +77,7 @@ public class Button extends JButton {
         g2.setColor(getBackground());
         Area area = new Area(new RoundRectangle2D.Double(x, y, width, height, round, round));
         g2.fill(area);
-        rippleEffect.reder(grphcs, area);
+        //rippleEffect.reder(grphcs, area);
         g2.dispose();
         super.paintComponent(grphcs);
     }

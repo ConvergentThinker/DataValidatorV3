@@ -104,8 +104,8 @@ public class Rule1FieldsWindow implements ItemListener {
         //Lay out the panel.
         SpringUtilities.makeCompactGrid(mainPanel,
                 6, 2, //rows, cols
-                10, 6,        //initX, initY
-                10, 20);       //xPad, yPad
+                20, 10,        //initX, initY
+                40, 10);       //xPad, yPad
 
 
     }
