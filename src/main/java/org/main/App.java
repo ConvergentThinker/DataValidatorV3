@@ -38,6 +38,8 @@ import javax.swing.text.TextAction;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
@@ -164,26 +166,25 @@ public class App extends JPanel implements ActionListener {
         JPanel appBottomBar = new JPanel();
         appBottomBar.setPreferredSize(new Dimension(maxX, 100));
 
-        appBottomBar.setBackground(new java.awt.Color(103, 103, 103));
+        appBottomBar.setBackground(new java.awt.Color(255,255,240));
         add(appBottomBar, BorderLayout.PAGE_END);
-        GridLayout gridLayout = new GridLayout(1, 4, 10, 10);
+        GridLayout gridLayout = new GridLayout(1, 3, 1, 1);
         gridLayout.preferredLayoutSize(appBottomBar);
         appBottomBar.setLayout(gridLayout);
 
         JPanel panel1 = new JPanel();
         JPanel panel2 = new JPanel();
         JPanel panel3 = new JPanel();
-        JPanel panel4 = new JPanel();
+        //JPanel panel4 = new JPanel();
 
         appBottomBar.add(new JScrollPane(panel1));
         appBottomBar.add(new JScrollPane(panel2));
         appBottomBar.add(new JScrollPane(panel3));
-        appBottomBar.add(new JScrollPane(panel4));
+        //appBottomBar.add(new JScrollPane(panel4));
 
 
         HttpClient client = new HttpClient();
         List<CloudImageModel> data =   client.usingHTTPClientGET("https://sheets.googleapis.com/v4/spreadsheets/1C2tp5m_HaJWRkk1Fc6cGJgr7lFeHHD_zj4_nCGn07yY/values/Sheet1!A1:D5?key=AIzaSyCm0iM9CZjxUGy7TUbz_JsK2F89dKRy8fA");
-
 
         JLabel label = new JLabel();
         JPanel labelURL = new JPanel();
@@ -191,7 +192,8 @@ public class App extends JPanel implements ActionListener {
         label.setSize(new Dimension(maxX/4 - 20, 80));
         panel1.add(label, BorderLayout.CENTER);
         panel1.add(labelURL, BorderLayout.WEST);
-        ImageLoader.loadImageToJLabel(label,data.get(0).getPath(),false);
+        //ImageLoader.loadImageToJLabel(label,data.get(0).getPath(),false);
+
 
 
         JLabel label2 = new JLabel();
@@ -200,7 +202,8 @@ public class App extends JPanel implements ActionListener {
         label2.setSize(new Dimension(maxX/4 - 20, 80));
         panel2.add(label2, BorderLayout.CENTER);
         panel2.add(labelURL2, BorderLayout.WEST);
-        ImageLoader.loadImageToJLabel(label2,data.get(1).getPath(),false);
+        ImageLoader.loadImage(label2,data.get(1).getPath(),true);
+
 
         JLabel label3 = new JLabel();
         JPanel labelURL3 = new JPanel();
@@ -208,16 +211,16 @@ public class App extends JPanel implements ActionListener {
         label3.setSize(new Dimension(maxX/4 - 20, 80));
         panel3.add(label3, BorderLayout.CENTER);
         panel3.add(labelURL3, BorderLayout.WEST);
-        ImageLoader.loadImageToJLabel(label3,data.get(2).getPath(),false);
+        ImageLoader.loadImage(label3,data.get(2).getPath(),true);
 
-        JLabel label4 = new JLabel();
+    /*    JLabel label4 = new JLabel();
         JPanel labelURL4 = new JPanel();
         JLabelLink hyperLink4 = new JLabelLink(labelURL4,data.get(3).getUrl());
         label4.setSize(new Dimension(maxX/4 - 20, 80));
         panel4.add(label4, BorderLayout.CENTER);
         panel4.add(labelURL4, BorderLayout.WEST);
-        ImageLoader.loadImageToJLabel(label4,data.get(3).getPath(),false);
-
+        ImageLoader.loadImage(label4,data.get(3).getPath(),false);
+*/
 
 
 

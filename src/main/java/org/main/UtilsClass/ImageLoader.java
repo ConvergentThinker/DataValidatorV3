@@ -1,7 +1,11 @@
 package org.main.UtilsClass;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class ImageLoader {
 
@@ -130,6 +134,86 @@ public class ImageLoader {
                     + "Supplied File Path:  \"" + imagePath + "\"" + ls);
         }
     }
+
+    public static void loadImage(JLabel jlabel, String imagePath, boolean... autoSetImageToLabelSize) {
+        String ls = System.lineSeparator();
+        boolean autoSize = false;
+        if (autoSetImageToLabelSize.length > 0) {
+            autoSize = autoSetImageToLabelSize[0];
+        }
+        javax.swing.ImageIcon image;
+
+        try {
+            if (imagePath.toLowerCase().startsWith("http") || imagePath.toLowerCase().startsWith("https") ) {
+
+                Image imageJ = null;
+                URL url = null;
+                try {
+                    url = new URL(imagePath);
+                    imageJ = ImageIO.read(url);
+                } catch (MalformedURLException ex) {
+                    System.out.println("Malformed URL");
+                } catch (IOException iox) {
+                    System.out.println("Can not load file");
+                }
+
+                image = new javax.swing.ImageIcon(imageJ);
+
+                jlabel.setIcon(image);
+
+
+
+            }
+            else if (imagePath.startsWith("/") || imagePath.startsWith("\\")) {
+                Class currentClass = new Object() {
+                }.getClass().getEnclosingClass();
+                try {
+                    image = new javax.swing.ImageIcon(currentClass.getClass().getResource(imagePath));
+                }
+                catch (NullPointerException npe) {
+                    System.err.println("loadImageToJLabel() Method Error! Can not "
+                            + "locate the Resource Path or the resource file!" + ls + "Ensure "
+                            + "that your resources are properly located." + ls
+                            + "Supplied Resource Path:  \"" + imagePath + "\"" + ls);
+                    return;
+                }
+            }
+            else {
+                java.io.File f = new java.io.File(imagePath);
+                if (!f.exists()) {
+                    System.err.println("loadImageToJLabel() Method Error! Can not "
+                            + "locate the image file specified!" + ls + "Ensure "
+                            + "that your Image file exists within the local file system path provided!" + ls
+                            + "Supplied File Path:  \"" + imagePath + "\"" + ls);
+                    return;
+                }
+                image = new javax.swing.ImageIcon(new java.net.URL("file:" + imagePath));
+            }
+
+            if (autoSize) {
+                Image img = image.getImage();
+                Image resizedImage = img.getScaledInstance(jlabel.getWidth(), jlabel.getHeight(), java.awt.Image.SCALE_SMOOTH);
+                jlabel.setIcon(new ImageIcon(resizedImage));
+            }
+            else {
+                jlabel.setIcon(image);
+            }
+            jlabel.validate();
+        }
+        catch (java.net.MalformedURLException ex) {
+            System.err.println("loadImageToJLabel() Method Error! Improper Image file link supplied!" + ls
+                    + "Supplied Link:  \"" + imagePath + "\"" + ls);
+
+        }
+        catch (java.io.IOException ex) {
+            System.err.println("loadImageToJLabel() Method Error! Can not access Image File!" + ls
+                    + "Supplied File Path:  \"" + imagePath + "\"" + ls);
+        }
+    }
+
+
+
+
 
 
 
