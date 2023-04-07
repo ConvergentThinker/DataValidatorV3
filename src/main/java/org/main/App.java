@@ -2,8 +2,8 @@ package org.main;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.util.SystemInfo;
+import org.main.UtilsClass.*;
 import org.main.UtilsClass.Button;
-import org.main.UtilsClass.SoundUtils;
 import org.main.UtilsClass.TextField;
 import org.main.datavalidator.Rule1ValidatorEngine;
 import org.main.datavalidator.Rule2ValidatorEngine;
@@ -146,6 +146,7 @@ public class App extends JPanel implements ActionListener {
             {
                 String headerText = String.join(
                         "\n"
+                        ,"By SAKTHIVEL IYAPPAN "
                         , ""
 
                 );
@@ -158,22 +159,43 @@ public class App extends JPanel implements ActionListener {
         }, BorderLayout.PAGE_START);
 
 
+        JPanel appBottomBar = new JPanel();
+        appBottomBar.setPreferredSize(new Dimension(maxX, 100));
 
-        add(new JPanel() {
-            {
-                String headerText = String.join("\n"
-                        , "\n"
-                        , "By SAKTHIVEL IYAPPAN "
-                        ,
-                        "\n"
-                        , ""
+        appBottomBar.setBackground(new java.awt.Color(103, 103, 103));
+        add(appBottomBar, BorderLayout.PAGE_END);
+        GridLayout gridLayout = new GridLayout(1, 4, 10, 10);
+        gridLayout.preferredLayoutSize(appBottomBar);
+        appBottomBar.setLayout(gridLayout);
 
-                );
+        JPanel panel1 = new JPanel();
+        JPanel panel2 = new JPanel();
+        JPanel panel3 = new JPanel();
+        JPanel panel4 = new JPanel();
 
-                add(new JLabel(headerText));
-                setBackground(themeColor);
-            }
-        }, BorderLayout.PAGE_END);
+        appBottomBar.add(new JScrollPane(panel1));
+        appBottomBar.add(new JScrollPane(panel2));
+        appBottomBar.add(new JScrollPane(panel3));
+        appBottomBar.add(new JScrollPane(panel4));
+
+
+        JLabel label = new JLabel();
+        JPanel labelURL = new JPanel();
+        JLabelLink hyperLink = new JLabelLink(labelURL,"https://stackoverflow.com/");
+        label.setSize(new Dimension(maxX/4 - 20, 80));
+        panel1.add(label, BorderLayout.CENTER);
+        panel1.add(labelURL, BorderLayout.WEST);
+        ImageLoader.loadImageToJLabel(label,"https://firebasestorage.googleapis.com/v0/b/pavi-bridal-71aad.appspot.com/o/Ads%2FAd3.PNG?alt=media&token=c34b8d41-35e1-49cc-82ae-305adb196fac",false);
+
+
+
+
+
+
+
+
+
+
 
 
         // ---------------------- right side
