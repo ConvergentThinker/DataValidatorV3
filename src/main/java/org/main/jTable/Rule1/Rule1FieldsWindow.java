@@ -1,5 +1,6 @@
 package org.main.jTable.Rule1;
 
+import org.main.UtilsClass.ComboBox;
 import org.main.UtilsClass.SpringUtilities;
 
 import javax.swing.*;
@@ -104,8 +105,8 @@ public class Rule1FieldsWindow implements ItemListener {
         //Lay out the panel.
         SpringUtilities.makeCompactGrid(mainPanel,
                 6, 2, //rows, cols
-                20, 10,        //initX, initY
-                40, 10);       //xPad, yPad
+                10, 5,        //initX, initY
+                70, 10);       //xPad, yPad
 
 
     }
@@ -115,6 +116,7 @@ public class Rule1FieldsWindow implements ItemListener {
 
 
     public JPanel getMainPanel(Map<String, Map<String, Map<Integer, String>>> workbook) {
+
         this.workbook = workbook;
         sheetDrp.setModel(new DefaultComboBoxModel(convert(workbook.keySet())));
         sheetDrp.setSelectedIndex(-1);

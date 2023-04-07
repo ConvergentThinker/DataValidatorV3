@@ -41,9 +41,10 @@ public class SoundUtils {
 
     public static void main(String[] args) throws LineUnavailableException {
 
-        tone(500,200, 1.0);
+        System.out.println("1");
+        tone(500,100, 0.3);
 
-
+        System.out.println("2");
 
     }
 

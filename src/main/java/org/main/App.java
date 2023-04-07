@@ -47,7 +47,7 @@ import java.util.concurrent.*;
 public class App extends JPanel implements ActionListener {
 
     int hz = 500;
-    int msec = 200;
+    int msec = 100;
     double vol = 0.3;
     JPanel rightJpanel;
     JPanel leftJPanel;
@@ -62,6 +62,30 @@ public class App extends JPanel implements ActionListener {
     Button uploadRule;
     Button run;
     JTextArea output;
+    // Editor variables
+    private static String[] fontOptions = {"Serif", "Agency FB", "Arial", "Calibri", "Cambrian", "Century Gothic", "Comic Sans MS", "Courier New", "Forte", "Garamond", "Monospaced", "Segoe UI", "Times New Roman", "Trebuchet MS", "Serif"};
+    private static String[] sizeOptions = {"8", "10", "12", "14", "16", "18", "20", "22", "24", "26", "28"};
+    ImageIcon fontIcon = new ImageIcon("res/FontIcon.png");
+    Button changeFont = new Button("ChangeFont");
+
+    JLabel fontLabelText = new JLabel("Font: ");
+    JLabel fontSizeLabel = new JLabel("Size: ");
+
+    ComboBox  fontName = new ComboBox(fontOptions);
+    ComboBox  fontSize = new ComboBox(sizeOptions);
+    JToolBar tool = new JToolBar(){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setColor(new java.awt.Color(255,255,240));
+            g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
+        }
+    };
+
+
+
+    // --------
     public static Font fontTitle = new Font("Comic Sans Ms", Font.BOLD, 12);
 
    // Color themeColor = new java.awt.Color(255,255,240);
@@ -109,10 +133,6 @@ public class App extends JPanel implements ActionListener {
 
     private Rule1TableModel tableModel3 = new Rule1TableModel();
     private JTable table3 = new JTable(tableModel3);
-
-    private AddRowAction3 addRowAction3 = new AddRowAction3("Add +", KeyEvent.VK_A);
-
-
 
     public App() throws IOException, ParseException {
 
@@ -455,10 +475,33 @@ public class App extends JPanel implements ActionListener {
         fileUpload.setBackground(new java.awt.Color(255, 255, 240));
         fields.setBackground(themeColor);
         bottomBtnG.setBackground(themeColor);
-
+      // Editor
         output  = new JTextArea();
         output.setBackground(new java.awt.Color(255, 255, 240));
         fields.add(new JScrollPane(output),BorderLayout.CENTER);
+        fields.setBorder(createTitleBorder("Console Output :-"));
+
+//
+        changeFont.addActionListener(this);
+        changeFont.setToolTipText("Change the Font");
+        changeFont.setBackground(new java.awt.Color(103, 103, 103));
+        changeFont.setForeground(new java.awt.Color(255, 255, 255));
+        fontLabelText.setToolTipText("Set the kind of Font");
+        fontSizeLabel.setToolTipText("Set the size of the Font");
+
+        tool.add(fontLabelText);
+        tool.add(fontName);
+        tool.addSeparator();
+        tool.add(fontSizeLabel);
+        tool.add(fontSize);
+        tool.addSeparator();
+        tool.add(changeFont);
+        tool.setBackground(themeColor);
+
+
+
+        fields.add(tool,BorderLayout.PAGE_START);
+        // ---
 
         leftJPanel.add(fileUpload,BorderLayout.PAGE_START);
         leftJPanel.add(fields,BorderLayout.CENTER);
@@ -466,7 +509,6 @@ public class App extends JPanel implements ActionListener {
 
         fileUpload.setBorder(createTitleBorder("Upload Excel:(only .xlsx file)"));
 
-        fields.setBorder(createTitleBorder("Console Output :-"));
 
 
 // bottom button
@@ -557,10 +599,11 @@ public class App extends JPanel implements ActionListener {
 
     }*/
     public TitledBorder createTitleBorder(String title){
-
         return   BorderFactory.createTitledBorder(BorderFactory
                 .createLineBorder(new java.awt.Color(103, 103, 103)), title);
     }
+
+
 
 
 
@@ -596,40 +639,6 @@ public class App extends JPanel implements ActionListener {
         dialog.setVisible(true);
     }
 
-
-
-
-    class AddRowAction3 extends AbstractAction {
-        private Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
-
-        public AddRowAction3(String name, int mnemonic) {
-            super(name);
-            putValue(MNEMONIC_KEY, mnemonic);
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                SoundUtils.tone(hz,msec, vol);
-            } catch (LineUnavailableException ex) {
-                throw new RuntimeException(ex);
-            }
-            if(inputExcelData != null){
-                int reply = JOptionPane.showConfirmDialog(table2,
-                        newRowPanel.getMainPanel(inputExcelData),
-                        "Rule 3 fields ",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE);
-                if (reply == JOptionPane.OK_OPTION) {
-                    Rule1Model item = newRowPanel.getSelectedItem();
-                    tableModel3.addRow(item);
-                }
-            }else{
-                setWarningAlert("Please Upload Input excel file.");
-            }
-
-        }
-    }
 
     /**
      * Create the GUI and show it.  For thread safety,
@@ -1244,6 +1253,17 @@ public class App extends JPanel implements ActionListener {
             } else {
                 setWarningAlert("Please Upload Input excel file.");
             }
+
+        } else if (e.getSource() == changeFont) {
+
+            String fontNameSet;
+            String fontSizeSetTemp;
+            int fontSizeSet;
+            fontNameSet = (String) fontName.getSelectedItem();
+            fontSizeSetTemp = (String) fontSize.getSelectedItem();
+            fontSizeSet = Integer.parseInt(fontSizeSetTemp);
+            System.out.println(fontNameSet + fontSizeSet);
+            output.setFont(new Font(fontNameSet, Font.PLAIN, fontSizeSet));
 
         }
 
