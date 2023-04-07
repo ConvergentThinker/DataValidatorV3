@@ -41,8 +41,8 @@ public class TextField extends JTextField {
     public TextField() {
         setUI(new TextUI());
         setOpaque(false);
-        setForeground(new Color(80, 80, 80));
-        setSelectedTextColor(new Color(255, 255, 255));
+        //setForeground(new Color(80, 80, 80));
+        setSelectedTextColor(new Color(0,0,0));
         setSelectionColor(new Color(133, 209, 255));
         setBorder(new EmptyBorder(10, 12, 15, 12));
         setBackground(new Color(255, 255, 255));

@@ -21,6 +21,9 @@ public class TableDark extends JTable {
         setDefaultRenderer(Object.class, cell);
         setRowHeight(30);
         setModel(tableModel);
+        setOpaque(true);
+        setBackground(new Color(255,255,240));
+
     }
 
     public void setColumnAlignment(int column, int align) {
@@ -44,7 +47,7 @@ public class TableDark extends JTable {
         JPanel panel = new JPanel();
         panel.setBackground(new Color(30, 30, 30));
         scroll.setCorner(JScrollPane.UPPER_RIGHT_CORNER, panel);
-        scroll.getViewport().setBackground(new Color(30, 30, 30));
+        scroll.getViewport().setBackground(new Color(255,255,255));
         scroll.setBorder(BorderFactory.createLineBorder(new Color(33,37,41), 5));
     }
 
@@ -59,8 +62,10 @@ public class TableDark extends JTable {
         @Override
         public Component getTableCellRendererComponent(JTable jtable, Object o, boolean bln, boolean bln1, int i, int i1) {
             Component com = super.getTableCellRendererComponent(jtable, o, bln, bln1, i, i1);
-            com.setBackground(new Color(230,230,250));
-            //com.setForeground(new Color(255,255,255));
+
+            com.setBackground(new Color(103, 103, 103));
+            com.setForeground(new Color(255,255,255));
+
             com.setFont(com.getFont().deriveFont(Font.PLAIN, 12));
 
 
@@ -94,11 +99,10 @@ public class TableDark extends JTable {
                 if (row % 2 == 0) {
                     com.setBackground(new Color(255,255,255));
                 } else {
-                    com.setBackground(new Color(230, 230, 230));
+                    com.setBackground(new Color(255,255,255)); // alternate row color
                 }
             }
 
-           // com.setForeground(new Color(200, 200, 200));
 
             setBorder(new EmptyBorder(0, 5, 0, 5));
             if (alignment.containsKey(column)) {

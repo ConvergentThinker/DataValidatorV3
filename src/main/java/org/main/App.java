@@ -106,6 +106,7 @@ public class App extends JPanel implements ActionListener {
     public App() {
 
 
+
         //
         jScrollPane1 = new javax.swing.JScrollPane();
         table.fixTable(jScrollPane1);
@@ -587,10 +588,9 @@ public class App extends JPanel implements ActionListener {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        frame.getRootPane().putClientProperty("JRootPane.titleBarBackground", new Color(23,180,252));
-        frame.getRootPane().putClientProperty("JRootPane.titleBarForeground", Color.YELLOW);
-
-        frame.setBackground(new Color(255,25,255));
+        //frame.getRootPane().putClientProperty("JRootPane.titleBarBackground", new Color(23,180,252));
+        //frame.getRootPane().putClientProperty("JRootPane.titleBarForeground", Color.YELLOW);
+       // frame.setBackground(new Color(255,25,255));
 
         //Add content to the window.
         frame.add(new App());
