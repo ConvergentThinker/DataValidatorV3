@@ -59,6 +59,13 @@ public class App extends JPanel implements ActionListener {
     Button run;
     JTextArea output;
     public static Font fontTitle = new Font("Comic Sans Ms", Font.BOLD, 12);
+
+   // Color themeColor = new java.awt.Color(255,255,240);
+    Color themeColor = new java.awt.Color(255,255,255);
+
+
+
+
     // Engine variables
     Map<String, Map<String, Map<Integer, String>>> inputExcelData;
     final ReaderEngine readerEngine = new ReaderEngine();
@@ -144,7 +151,7 @@ public class App extends JPanel implements ActionListener {
                 );
 
                 add(new JLabel(headerText));
-                setBackground(new Color(255,255,240));
+                setBackground(themeColor);
 
             }
 
@@ -164,7 +171,7 @@ public class App extends JPanel implements ActionListener {
                 );
 
                 add(new JLabel(headerText));
-                setBackground(new Color(255,255,240));
+                setBackground(themeColor);
             }
         }, BorderLayout.PAGE_END);
 
@@ -174,9 +181,9 @@ public class App extends JPanel implements ActionListener {
 
 
         JPanel rightSideHeaderPanel = new JPanel();
-        rightSideHeaderPanel.setBackground(new Color(255,255,240));
+        rightSideHeaderPanel.setBackground(themeColor);
         rightJpanel.add(rightSideHeaderPanel,BorderLayout.PAGE_START);
-        rightJpanel.setBackground(new Color(255,255,240));
+        rightJpanel.setBackground(themeColor);
 
         JScrollPane ruleScrollPane = new JScrollPane(rightJpanel);
         ruleScrollPane.setVerticalScrollBar(new ScrollBarCustom());
@@ -196,7 +203,7 @@ public class App extends JPanel implements ActionListener {
         GridBagLayout layout = new GridBagLayout();
 
         JPanel rightSideParentTalePanel = new JPanel(layout);
-        rightSideParentTalePanel.setBackground(new Color(255,255,240));
+        rightSideParentTalePanel.setBackground(themeColor);
 
     /*    JScrollPane ruleScroll = new JScrollPane(rightSideParentTalePanel);
         ruleScroll.setVerticalScrollBarPolicy(
@@ -393,24 +400,19 @@ public class App extends JPanel implements ActionListener {
         JPanel fields = new JPanel(new BorderLayout());
         JPanel bottomBtnG = new JPanel(new BorderLayout());
 
-        fileUpload.setBackground(new Color(255,255,240));
-        fields.setBackground(new Color(255,255,240));
-        bottomBtnG.setBackground(new Color(255,255,255));
+        fileUpload.setBackground(new java.awt.Color(255, 255, 240));
+        fields.setBackground(themeColor);
+        bottomBtnG.setBackground(themeColor);
 
         output  = new JTextArea();
-        output.setBackground(new Color(255,255,240));
+        output.setBackground(new java.awt.Color(255, 255, 240));
         fields.add(new JScrollPane(output),BorderLayout.CENTER);
 
         leftJPanel.add(fileUpload,BorderLayout.PAGE_START);
         leftJPanel.add(fields,BorderLayout.CENTER);
-        //leftJPanel.add(bottomBtnG,BorderLayout.PAGE_END);
         fileUpload.add(bottomBtnG,BorderLayout.PAGE_END);
 
-
         fileUpload.setBorder(createTitleBorder("Upload Excel:(only .xlsx file)"));
-       // bottomBtnG.setBorder(BorderFactory.createMatteBorder(1, 0, 0,0 , new Color(103, 103, 103)));
-
-
 
         fields.setBorder(createTitleBorder("Console Output :-"));
 
@@ -418,7 +420,7 @@ public class App extends JPanel implements ActionListener {
 // bottom button
 
         JPanel jPanelBtn = new JPanel(new FlowLayout());
-        jPanelBtn.setBackground(new Color(255,255,240));
+        jPanelBtn.setBackground(new java.awt.Color(255, 255, 240));
         downloadRule = new Button("Download Rule .");
         jPanelBtn.add(downloadRule);
         downloadRule.setBackground(new java.awt.Color(103, 103, 103));
@@ -470,7 +472,7 @@ public class App extends JPanel implements ActionListener {
         uploadButton.addActionListener(this);
 
         jPanelFileUpload.add(uploadButton,BorderLayout.CENTER);
-        jPanelFileUpload.setBackground(new Color(255,255,240));
+        jPanelFileUpload.setBackground(themeColor);
 
 
         fileUpload.add(jPanelFileUpload, BorderLayout.EAST);
