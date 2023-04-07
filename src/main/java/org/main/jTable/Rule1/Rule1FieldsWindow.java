@@ -2,13 +2,14 @@ package org.main.jTable.Rule1;
 
 import org.main.UtilsClass.ComboBox;
 import org.main.UtilsClass.SpringUtilities;
+import org.main.UtilsClass.TextField;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.plaf.basic.ComboPopup;
-import java.awt.*;
+
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Map;
@@ -17,12 +18,12 @@ import java.util.Set;
 public class Rule1FieldsWindow implements ItemListener {
 
     private JPanel mainPanel = new JPanel();
-    JComboBox toRunDrp;
-    JComboBox sheetDrp;
-    JComboBox targetColumnDrp;
-    JComboBox noOfRowsToRunDrp;
-    JTextField textFieldFrom;
-    JTextField textFieldTo;
+    ComboBox toRunDrp;
+    ComboBox sheetDrp;
+    ComboBox targetColumnDrp;
+    ComboBox noOfRowsToRunDrp;
+    TextField textFieldFrom;
+    TextField textFieldTo;
     JLabel l5;
     JLabel l6;
     Map<String, Map<String, Map<Integer, String>>> workbook;
@@ -38,7 +39,7 @@ public class Rule1FieldsWindow implements ItemListener {
         String[] toRun = {"Yes", "No"};
         JLabel l = new JLabel(COL_NAMES[0], JLabel.TRAILING);
         mainPanel.add(l);
-        toRunDrp = new JComboBox(toRun);
+        toRunDrp = new ComboBox(toRun);
         toRunDrp.setEditable(false);
         l.setLabelFor(toRunDrp);
         mainPanel.add(toRunDrp);
@@ -46,7 +47,7 @@ public class Rule1FieldsWindow implements ItemListener {
         mainPanel.add(l2);
 
         String[] sheets = {};
-        sheetDrp = new JComboBox(sheets);
+        sheetDrp = new ComboBox(sheets);
         sheetDrp.setEditable(false);
         sheetDrp.addItemListener(this);
         l2.setLabelFor(sheetDrp);
@@ -54,7 +55,7 @@ public class Rule1FieldsWindow implements ItemListener {
 
         JLabel l3 = new JLabel(COL_NAMES[5], JLabel.TRAILING);
         mainPanel.add(l3);
-        targetColumnDrp = new JComboBox();
+        targetColumnDrp = new ComboBox();
         targetColumnDrp.setEditable(false);
         l2.setLabelFor(targetColumnDrp);
         mainPanel.add(targetColumnDrp);
@@ -62,7 +63,7 @@ public class Rule1FieldsWindow implements ItemListener {
         JLabel l4 = new JLabel(COL_NAMES[2], JLabel.TRAILING);
         mainPanel.add(l4);
         String[] noOfRowsToRun = {"All Rows", "Custom"};
-        noOfRowsToRunDrp = new JComboBox(noOfRowsToRun);
+        noOfRowsToRunDrp = new ComboBox(noOfRowsToRun);
         noOfRowsToRunDrp.setEditable(false);
         noOfRowsToRunDrp.addItemListener(new ItemListener() {
             @Override
@@ -88,7 +89,7 @@ public class Rule1FieldsWindow implements ItemListener {
 
          l5 = new JLabel(COL_NAMES[3], JLabel.TRAILING);
         mainPanel.add(l5);
-        textFieldFrom = new JTextField(10);
+        textFieldFrom = new TextField();
         l5.setLabelFor(textFieldFrom);
         textFieldFrom.setVisible(false);
         l5.setVisible(false);
@@ -96,7 +97,7 @@ public class Rule1FieldsWindow implements ItemListener {
 
          l6 = new JLabel(COL_NAMES[4], JLabel.TRAILING);
         mainPanel.add(l6);
-        textFieldTo = new JTextField(10);
+        textFieldTo = new TextField();
         l6.setLabelFor(textFieldTo);
         textFieldTo.setVisible(false);
         l6.setVisible(false);

@@ -51,16 +51,28 @@ public class ComboBox extends JComboBox {
         });*/
 
 
-
-
-
-
-        setBorder(new EmptyBorder(10, 12, 12, 12));
-
-
-
+        setBorder(new EmptyBorder(5, 12, 10, 12));
 
     }
+    public ComboBox() {
+        setUI(new TextUI());
+        setOpaque(false);
+
+
+     /*   setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public void paint(Graphics g) {
+                setBackground(new Color(255, 255, 255));
+                 setForeground(new Color(80, 80, 80));
+                super.paint(g);
+            }
+        });*/
+
+
+        setBorder(new EmptyBorder(5, 12, 10, 12));
+
+    }
+
 
 
     private class TextUI extends BasicComboBoxUI {

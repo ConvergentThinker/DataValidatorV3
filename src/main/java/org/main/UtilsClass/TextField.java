@@ -33,7 +33,7 @@ public class TextField extends JTextField {
         repaint();
     }
 
-    private int round = 10;
+    private int round = 30;
     private Color shadowColor = new Color(170, 170, 170);
     private BufferedImage imageShadow;
     private final Insets shadowSize = new Insets(2, 5, 8, 5);
@@ -47,6 +47,11 @@ public class TextField extends JTextField {
         setBorder(new EmptyBorder(10, 12, 15, 12));
         setBackground(new Color(255, 255, 255));
     }
+
+
+
+
+
 
     @Override
     protected void paintComponent(Graphics grphcs) {
