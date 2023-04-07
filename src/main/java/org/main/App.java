@@ -2,6 +2,7 @@ package org.main;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.util.SystemInfo;
+import org.json.simple.parser.ParseException;
 import org.main.UtilsClass.*;
 import org.main.UtilsClass.Button;
 import org.main.UtilsClass.TextField;
@@ -23,6 +24,7 @@ import org.main.jTable.TableDark;
 import org.main.loadRuleFC.RuleFileView;
 import org.main.loadRuleFC.RuleFilter;
 import org.main.loadRuleFC.RulePreview;
+import org.main.model.CloudImageModel;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
@@ -110,7 +112,7 @@ public class App extends JPanel implements ActionListener {
 
 
 
-    public App() {
+    public App() throws IOException, ParseException {
 
 
 
@@ -179,18 +181,42 @@ public class App extends JPanel implements ActionListener {
         appBottomBar.add(new JScrollPane(panel4));
 
 
+        HttpClient client = new HttpClient();
+        List<CloudImageModel> data =   client.usingHTTPClientGET("https://sheets.googleapis.com/v4/spreadsheets/1C2tp5m_HaJWRkk1Fc6cGJgr7lFeHHD_zj4_nCGn07yY/values/Sheet1!A1:D5?key=AIzaSyCm0iM9CZjxUGy7TUbz_JsK2F89dKRy8fA");
+
+
         JLabel label = new JLabel();
         JPanel labelURL = new JPanel();
-        JLabelLink hyperLink = new JLabelLink(labelURL,"https://stackoverflow.com/");
+        JLabelLink hyperLink = new JLabelLink(labelURL,data.get(0).getUrl());
         label.setSize(new Dimension(maxX/4 - 20, 80));
         panel1.add(label, BorderLayout.CENTER);
         panel1.add(labelURL, BorderLayout.WEST);
-        ImageLoader.loadImageToJLabel(label,"https://firebasestorage.googleapis.com/v0/b/pavi-bridal-71aad.appspot.com/o/Ads%2FAd3.PNG?alt=media&token=c34b8d41-35e1-49cc-82ae-305adb196fac",false);
+        ImageLoader.loadImageToJLabel(label,data.get(0).getPath(),false);
 
 
+        JLabel label2 = new JLabel();
+        JPanel labelURL2 = new JPanel();
+        JLabelLink hyperLink2 = new JLabelLink(labelURL2,data.get(1).getUrl());
+        label2.setSize(new Dimension(maxX/4 - 20, 80));
+        panel2.add(label2, BorderLayout.CENTER);
+        panel2.add(labelURL2, BorderLayout.WEST);
+        ImageLoader.loadImageToJLabel(label2,data.get(1).getPath(),false);
 
+        JLabel label3 = new JLabel();
+        JPanel labelURL3 = new JPanel();
+        JLabelLink hyperLink3 = new JLabelLink(labelURL3,data.get(2).getUrl());
+        label3.setSize(new Dimension(maxX/4 - 20, 80));
+        panel3.add(label3, BorderLayout.CENTER);
+        panel3.add(labelURL3, BorderLayout.WEST);
+        ImageLoader.loadImageToJLabel(label3,data.get(2).getPath(),false);
 
-
+        JLabel label4 = new JLabel();
+        JPanel labelURL4 = new JPanel();
+        JLabelLink hyperLink4 = new JLabelLink(labelURL4,data.get(3).getUrl());
+        label4.setSize(new Dimension(maxX/4 - 20, 80));
+        panel4.add(label4, BorderLayout.CENTER);
+        panel4.add(labelURL4, BorderLayout.WEST);
+        ImageLoader.loadImageToJLabel(label4,data.get(3).getPath(),false);
 
 
 
@@ -606,7 +632,7 @@ public class App extends JPanel implements ActionListener {
      * this method should be invoked from the
      * event dispatch thread.
      */
-    private static void createAndShowGUI() {
+    private static void createAndShowGUI() throws IOException, ParseException {
         //Create and set up the window.
         JFrame frame = new JFrame(" Data Validator ");
 
@@ -661,7 +687,13 @@ public class App extends JPanel implements ActionListener {
             FlatLightLaf.setup();
 
 
-                createAndShowGUI();
+                try {
+                    createAndShowGUI();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }
@@ -1089,7 +1121,14 @@ public class App extends JPanel implements ActionListener {
 
 
                 int noOfThreads = 2;
-                final App runner = new App();
+                final App runner;
+                try {
+                    runner = new App();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ParseException ex) {
+                    throw new RuntimeException(ex);
+                }
                 ExecutorService executorService = Executors.newFixedThreadPool(noOfThreads);
                 Set<Callable<String>> callables = new HashSet<>();
 
