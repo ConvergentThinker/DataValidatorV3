@@ -6,6 +6,8 @@ import org.json.simple.parser.ParseException;
 import org.main.UtilsClass.*;
 import org.main.UtilsClass.Button;
 import org.main.UtilsClass.TextField;
+import org.main.UtilsClass.checkBox.CheckListItem;
+import org.main.UtilsClass.checkBox.CheckListRenderer;
 import org.main.datavalidator.Rule1ValidatorEngine;
 import org.main.datavalidator.Rule2ValidatorEngine;
 import org.main.engine.ReaderEngine;
@@ -90,8 +92,14 @@ public class App extends JPanel implements ActionListener {
 
    // Color themeColor = new java.awt.Color(255,255,240);
     Color themeColor = new java.awt.Color(255,255,255);
+    JList listRules = new JList(new CheckListItem[] {
+            new CheckListItem("Rule 1: - We would like to know how to create JList of CheckBox."),
+            new CheckListItem("Rule 2: - We would like to know how to create JList of CheckBox."),
+            new CheckListItem("Rule 3: - We would like to know how to create JList of CheckBox."),
+            new CheckListItem("Rule 4: - We would like to know how to create JList of CheckBox."),
+    });
 
-
+    HashMap<Integer,String> selectedRules = new HashMap<>();
 
 
     // Engine variables
@@ -170,7 +178,6 @@ public class App extends JPanel implements ActionListener {
             {
                 String headerText = String.join(
                         "\n"
-                        ,"By SAKTHIVEL IYAPPAN "
                         , ""
 
                 );
@@ -250,32 +257,47 @@ public class App extends JPanel implements ActionListener {
 
         // ---------------------- right side
         rightJpanel = new JPanel(new BorderLayout());
-
+        rightJpanel.setBackground(themeColor);
+        rightJpanel.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
 
         JPanel rightSideHeaderPanel = new JPanel();
         rightSideHeaderPanel.setBackground(themeColor);
         rightJpanel.add(rightSideHeaderPanel,BorderLayout.PAGE_START);
-        rightJpanel.setBackground(themeColor);
 
-        JScrollPane ruleScrollPane = new JScrollPane(rightJpanel);
-        ruleScrollPane.setVerticalScrollBar(new ScrollBarCustom());
-        ruleScrollPane.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
+        JPanel fields = new JPanel(new BorderLayout());
+        fields.setBackground(themeColor);
+        fields.setBorder(createTitleBorder("Console Output :-"));
 
+        // Editor
+        output  = new JTextArea();
+        output.setBackground(new java.awt.Color(255, 255, 240));
+        changeFont.addActionListener(this);
+        changeFont.setToolTipText("Change the Font");
+        changeFont.setBackground(new java.awt.Color(103, 103, 103));
+        changeFont.setForeground(new java.awt.Color(255, 255, 255));
+        fontLabelText.setToolTipText("Set the kind of Font");
+        fontSizeLabel.setToolTipText("Set the size of the Font");
+        tool.add(fontLabelText);
+        tool.add(fontName);
+        tool.addSeparator();
+        tool.add(fontSizeLabel);
+        tool.add(fontSize);
+        tool.addSeparator();
+        tool.add(changeFont);
+        tool.setBackground(themeColor);
 
-      /*  rightJpanel.setBorder(
-                BorderFactory.createTitledBorder(
-                        BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
-                        " Available Rules ", TitledBorder.CENTER, TitledBorder.TOP)
-        );*/
+        fields.add(tool,BorderLayout.PAGE_START);
+        fields.add(new JScrollPane(output),BorderLayout.CENTER);
 
-        //todo:- need to re-design this full table layout for better usability
+        rightJpanel.add(fields, BorderLayout.CENTER);
 
+       // ---------------------------
 
 //  layout right side parent container
-        GridBagLayout layout = new GridBagLayout();
+      //  GridBagLayout layout = new GridBagLayout();
 
-        JPanel rightSideParentTalePanel = new JPanel(layout);
-        rightSideParentTalePanel.setBackground(themeColor);
+      //  JPanel rightSideParentTalePanel = new JPanel(layout);
+      //  rightSideParentTalePanel.setBackground(themeColor);
 
     /*    JScrollPane ruleScroll = new JScrollPane(rightSideParentTalePanel);
         ruleScroll.setVerticalScrollBarPolicy(
@@ -284,6 +306,9 @@ public class App extends JPanel implements ActionListener {
 */
 
 
+
+
+/*
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -409,110 +434,35 @@ public class App extends JPanel implements ActionListener {
         // Table creation starts - rule2TablePanel
         rule2TablePanel.add(new JScrollPane(table2));
 
-// ============================== Rule 3  ====================
-
-     /*   //Rule2 Table
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        JPanel rule3Panel = new JPanel(new BorderLayout());
-        rightSideParentTalePanel.add(rule3Panel, gbc);
-
-//  add element to rule3Panel
-        GridBagLayout gridBagLayoutRule3 = new GridBagLayout();
-        rule3Panel.setLayout(gridBagLayoutRule3);
-        GridBagConstraints gbcRule3 = new GridBagConstraints();
-        gbcRule3.fill = GridBagConstraints.HORIZONTAL;
-        gbcRule3.gridwidth = GridBagConstraints.REMAINDER;
-        gbcRule3.weightx = 1;
-
-        gbcRule3.gridx = 0;
-        gbcRule3.gridy = 0;
-        JPanel rule3HeaderPanel = new JPanel(new BorderLayout());
-        rule3Panel.add(rule3HeaderPanel,gbcRule3);
-
-        gbcRule3.gridx = 0;
-        gbcRule3.gridy = 1;
-        JPanel rule3TablePanel = new JPanel(new BorderLayout());
-        rule3Panel.add(rule3TablePanel,gbcRule3);
-
-        JPanel rule3HeaderDesPanel = new JPanel(new BorderLayout());
-        rule3HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
-        rule3HeaderDesPanel.add(new JLabel("explain rule "),BorderLayout.CENTER);
-        rule3HeaderPanel.add(rule3HeaderDesPanel,  BorderLayout.CENTER); // rule descripion
-        JPanel rule3HeaderBtnPanel = new JPanel(new FlowLayout());
-        rule3HeaderBtnPanel.add(new JButton(addRowAction3));
-        rule3HeaderBtnPanel.add(new JButton("Remove"));
-        rule3HeaderPanel.add(rule3HeaderBtnPanel,BorderLayout.EAST); // btns
-
-        // Table creation starts - rule3TablePanel
-        rule3TablePanel.add(new JScrollPane(table3));*/
-
-
         //----------------------
         rightJpanel.add(rightSideParentTalePanel,BorderLayout.CENTER);
 
+        */
 
 
-        // leftJPanel
+
+        //  leftJPanel --------------
         leftJPanel = new JPanel(new BorderLayout());
         leftJPanel.setBackground(new Color(255,255,255));
-
         JScrollPane editScrollPane = new JScrollPane(leftJPanel);
-        //size
         editScrollPane.setPreferredSize(new Dimension(maxX / 2 - 100, maxY - 150));
-
-     /*   editScrollPane.setBorder(
+        editScrollPane.setBorder(
         BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
+                BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),
                 " DashBoard ", TitledBorder.CENTER, TitledBorder.TOP)
-        );*/
+        );
 
 
         JPanel fileUpload = new JPanel(new BorderLayout());
-        JPanel fields = new JPanel(new BorderLayout());
         JPanel bottomBtnG = new JPanel(new BorderLayout());
-
         fileUpload.setBackground(new java.awt.Color(255, 255, 240));
-        fields.setBackground(themeColor);
         bottomBtnG.setBackground(themeColor);
-      // Editor
-        output  = new JTextArea();
-        output.setBackground(new java.awt.Color(255, 255, 240));
-        fields.add(new JScrollPane(output),BorderLayout.CENTER);
-        fields.setBorder(createTitleBorder("Console Output :-"));
-
-//
-        changeFont.addActionListener(this);
-        changeFont.setToolTipText("Change the Font");
-        changeFont.setBackground(new java.awt.Color(103, 103, 103));
-        changeFont.setForeground(new java.awt.Color(255, 255, 255));
-        fontLabelText.setToolTipText("Set the kind of Font");
-        fontSizeLabel.setToolTipText("Set the size of the Font");
-
-        tool.add(fontLabelText);
-        tool.add(fontName);
-        tool.addSeparator();
-        tool.add(fontSizeLabel);
-        tool.add(fontSize);
-        tool.addSeparator();
-        tool.add(changeFont);
-        tool.setBackground(themeColor);
-
-
-
-        fields.add(tool,BorderLayout.PAGE_START);
-        // ---
-
         leftJPanel.add(fileUpload,BorderLayout.PAGE_START);
-        leftJPanel.add(fields,BorderLayout.CENTER);
-        fileUpload.add(bottomBtnG,BorderLayout.PAGE_END);
 
+        fileUpload.add(bottomBtnG,BorderLayout.PAGE_END);
         fileUpload.setBorder(createTitleBorder("Upload Excel:(only .xlsx file)"));
 
-
-
 // bottom button
-
         JPanel jPanelBtn = new JPanel(new FlowLayout());
         jPanelBtn.setBackground(new java.awt.Color(255, 255, 240));
         downloadRule = new Button("Download Rule .");
@@ -558,27 +508,84 @@ public class App extends JPanel implements ActionListener {
         Action selectAll = new SelectAll();
         menu.add(selectAll);
         filePath.setComponentPopupMenu(menu);
-
         JPanel jPanelFileUpload = new JPanel(new BorderLayout());
         uploadButton = new Button(" Select ");
         uploadButton.setBackground(new java.awt.Color(103, 103, 103));
         uploadButton.setForeground(new java.awt.Color(255, 255, 255));
         uploadButton.addActionListener(this);
-
         jPanelFileUpload.add(uploadButton,BorderLayout.CENTER);
         jPanelFileUpload.setBackground(themeColor);
-
-
         fileUpload.add(jPanelFileUpload, BorderLayout.EAST);
-        bottomBtnG.add(jPanelBtn,BorderLayout.CENTER);
+        bottomBtnG.add(jPanelBtn,BorderLayout.CENTER); // buttons
+
+        // Rule Table Layout
+
+        JPanel RuleTableParent = new JPanel(new BorderLayout());
+        leftJPanel.add(RuleTableParent,BorderLayout.CENTER);
+        RuleTableParent.setBackground(themeColor);
+
+        JPanel ruleListParent = new JPanel(new BorderLayout());
+        JPanel tableParent = new JPanel(new BorderLayout());
+
+        RuleTableParent.add(ruleListParent,BorderLayout.PAGE_START);
+        RuleTableParent.add(tableParent,BorderLayout.CENTER);
+        ruleListParent.setBackground(themeColor);
+        tableParent.setBackground(themeColor);
+
+        // list the rules ruleListParent
+
+        JPanel listDes = new JPanel(new BorderLayout());
+        JPanel listLayout = new JPanel(new BorderLayout());
+        ruleListParent.add(listDes,BorderLayout.PAGE_START);
+        ruleListParent.add(listLayout,BorderLayout.CENTER);
+
+        JTextArea desLable = new JTextArea("Description Panel");
+        listDes.add(desLable,BorderLayout.CENTER);
+        desLable.setEnabled(false);
+
+        // listLayout
+        listRules.setCellRenderer(new CheckListRenderer());
+        //listRules.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listRules.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        listRules.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent event) {
+                JList list = (JList) event.getSource();
+                int index = list.locationToIndex(event.getPoint());// Get index of item
+                // clicked
+                CheckListItem item = (CheckListItem) list.getModel()
+                        .getElementAt(index);
+                item.setSelected(!item.isSelected()); // Toggle selected state
+                list.repaint(list.getCellBounds(index, index));// Repaint cell
+
+                if(item.isSelected()){
+                   selectedRules.put(index,item.toString());
+                }else{
+                    selectedRules.remove(index);
+                }
+            }
+        });
+        listLayout.add(listRules,BorderLayout.CENTER);
+
+        // RuleTableParent
+
+
+
+
+
+
+
+
+
 
 
 
 
         // -------------------------------------
+
         //main
         JSplitPane splitPaneMain = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                editScrollPane, ruleScrollPane
+                editScrollPane, rightJpanel
         );
         add(splitPaneMain, BorderLayout.CENTER);
 
@@ -1112,6 +1119,16 @@ public class App extends JPanel implements ActionListener {
             } catch (LineUnavailableException ex) {
                 throw new RuntimeException(ex);
             }
+
+            System.out.println("==================");
+
+
+            System.out.println(selectedRules.toString());
+
+
+
+            System.out.println("==================");
+
 
 
             boolean run = false;
