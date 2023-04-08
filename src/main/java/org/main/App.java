@@ -32,6 +32,7 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.DefaultEditorKit;
@@ -267,13 +268,14 @@ public class App extends JPanel implements ActionListener {
 
         JPanel fields = new JPanel(new BorderLayout());
         fields.setBackground(themeColor);
-        rightJpanel.setBorder(
+
+     /*   rightJpanel.setBorder(
                 BorderFactory.createTitledBorder(
-                        BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),
+                        BorderFactory.createEtchedBorder(EtchedBorder.RAISED),
                         "-: Console Output :- ", TitledBorder.CENTER, TitledBorder.TOP)
         );
-
-
+*/
+        rightJpanel.setBorder(createTitleBorder(" Console Output :- "));
 
 
         // Editor
@@ -306,11 +308,11 @@ public class App extends JPanel implements ActionListener {
         leftJPanel.setBackground(new Color(255,255,255));
         JScrollPane editScrollPane = new JScrollPane(leftJPanel);
         editScrollPane.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
-        editScrollPane.setBorder(
+      /*  editScrollPane.setBorder(
         BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),
                 " DashBoard ", TitledBorder.CENTER, TitledBorder.TOP)
-        );
+        );*/
 
 
         JPanel fileUpload = new JPanel(new BorderLayout());
@@ -408,12 +410,16 @@ public class App extends JPanel implements ActionListener {
         bg.add(column);
 
         JPanel bgPanel = new JPanel();
-        bgPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        GridLayout gridLayoutRadio = new GridLayout(1, 0, 0, 0);
+        bgPanel.setLayout(gridLayoutRadio);
+        bgPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
         bgPanel.add(row);
         bgPanel.add(column);
 
-        bgPanel.setBackground(new java.awt.Color(255,255,240));
 
+
+
+        bgPanel.setBackground(new java.awt.Color(255,255,240));
         radioBtnLoadPanel.add(bgPanel,BorderLayout.CENTER);
 
 
