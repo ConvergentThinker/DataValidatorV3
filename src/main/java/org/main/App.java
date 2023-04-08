@@ -3,6 +3,9 @@ package org.main;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.util.SystemInfo;
 import org.json.simple.parser.ParseException;
+import org.main.TextFileFC.TextFileView;
+import org.main.TextFileFC.TextFilter;
+import org.main.TextFileFC.TextPreview;
 import org.main.UtilsClass.*;
 import org.main.UtilsClass.Button;
 import org.main.UtilsClass.TextField;
@@ -58,6 +61,7 @@ public class App extends JPanel implements ActionListener {
     private int maxY;
     private JFileChooser fc;
     private JFileChooser fcLoadRule;
+    private JFileChooser fcDownloadOutput;
     private TextField filePath;
     Button uploadButton;
     Button reload;
@@ -71,6 +75,7 @@ public class App extends JPanel implements ActionListener {
     private static String[] sizeOptions = {"8", "10", "12", "14", "16", "18", "20", "22", "24", "26", "28"};
     ImageIcon fontIcon = new ImageIcon("res/FontIcon.png");
     Button changeFont = new Button("ChangeFont");
+    Button download = new Button("Download");
 
     JLabel fontLabelText = new JLabel("Font: ");
     JLabel fontSizeLabel = new JLabel("Size: ");
@@ -285,6 +290,10 @@ public class App extends JPanel implements ActionListener {
         changeFont.setToolTipText("Change the Font");
         changeFont.setBackground(new java.awt.Color(103, 103, 103));
         changeFont.setForeground(new java.awt.Color(255, 255, 255));
+        download.addActionListener(this);
+        download.setToolTipText("Download output as text file");
+        download.setBackground(new java.awt.Color(103, 103, 103));
+        download.setForeground(new java.awt.Color(255, 255, 255));
         fontLabelText.setToolTipText("Set the kind of Font");
         fontSizeLabel.setToolTipText("Set the size of the Font");
         tool.add(fontLabelText);
@@ -294,6 +303,8 @@ public class App extends JPanel implements ActionListener {
         tool.add(fontSize);
         tool.addSeparator();
         tool.add(changeFont);
+        tool.addSeparator();
+        tool.add(download);
         tool.setBackground(themeColor);
 
         fields.add(tool,BorderLayout.PAGE_START);
@@ -1048,13 +1059,72 @@ public class App extends JPanel implements ActionListener {
                 output.setText("");
                 output.setText("Rules file downloaded at: "+ path);
                 setInfoAlert("Rules file downloaded at: "+ path);
+
+            }
+        } else if (e.getSource() == download) {
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
             }
 
+            String data = output.getText();
+
+            System.out.println("data "+ data);
+
+            //Set up the file chooser.
+            if (fcDownloadOutput == null) {
+                fcDownloadOutput = new JFileChooser();
+                //show hidden files if false then make it true to disable
+                fcDownloadOutput.setFileHidingEnabled(false);
+                //Add a custom file filter and disable the default
+                //(Accept All) file filter.
+                fcDownloadOutput.addChoosableFileFilter(new TextFilter());
+                fcDownloadOutput.setAcceptAllFileFilterUsed(false);
+                //Add custom icons for file types.
+                fcDownloadOutput.setFileView(new TextFileView());
+                //Add the preview pane.
+                fcDownloadOutput.setAccessory(new TextPreview(fcDownloadOutput));
+            }
+            //Show it.
+            int returnVal = fcDownloadOutput.showDialog(App.this,
+                    "Attach");
+            //Process the results.
+            File file = fcDownloadOutput.getSelectedFile();
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                //output.setText(file.getAbsolutePath());
+            } else {
+                //output.setText("Attachment cancelled by user.");
+            }
+            output.setCaretPosition(output.getDocument().getLength());
+            //Reset the file chooser for the next time it's shown.
+            fcDownloadOutput.setSelectedFile(null);
+
+            String path = CreateFile(file.getAbsolutePath()+".txt");
+
+            try {
+                FileWriter writer = new FileWriter(path);
+
+                int size = data.split("\n").length;
+
+                for (int i = 0; i < size; i++) {
+
+                    String str = data.split("\n")[i];
+
+                    writer.write(str);
+                    if (i < size - 1)
+                        writer.write("\n");
+                }
 
 
-        }
+                writer.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            setInfoAlert(" file downloaded at: "+ path);
 
-        else if (e.getSource() == uploadRule) {
+
+        } else if (e.getSource() == uploadRule) {
             try {
                 SoundUtils.tone(hz,msec, vol);
             } catch (LineUnavailableException ex) {
