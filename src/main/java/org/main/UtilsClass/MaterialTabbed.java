@@ -67,6 +67,7 @@ public class MaterialTabbed extends JTabbedPane {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setColor(new Color(3, 15, 216));
 
+
             if (currentRectangle == null || !animator.isRunning()) {
                 if (isSelected) {
                     currentRectangle = new Rectangle(x, y, w, h);
