@@ -460,6 +460,7 @@ public class App extends JPanel implements ActionListener {
 
         JPanel ruleListParent = new JPanel(new BorderLayout());
         JPanel tableParent = new JPanel(new BorderLayout());
+        tableParent.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red));
 
         RuleTableParent.add(ruleListParent,BorderLayout.PAGE_START);
         RuleTableParent.add(tableParent,BorderLayout.CENTER);
@@ -469,13 +470,22 @@ public class App extends JPanel implements ActionListener {
         // list the rules ruleListParent
 
         JPanel listDes = new JPanel(new BorderLayout());
+        JPanel listDes2 = new JPanel(new BorderLayout());
+        JTextArea desLable2 = new JTextArea("");
+        desLable2.setEnabled(false);
+        listDes2.add(desLable2);
+        desLable2.setBackground(new java.awt.Color(255,255,240));
         JPanel listLayout = new JPanel(new BorderLayout());
         ruleListParent.add(listDes,BorderLayout.PAGE_START);
+        ruleListParent.add(listDes2,BorderLayout.PAGE_END);
         ruleListParent.add(listLayout,BorderLayout.CENTER);
 
-        JTextArea desLable = new JTextArea("Description Panel");
+        JTextArea desLable = new JTextArea("");
         listDes.add(desLable,BorderLayout.CENTER);
         desLable.setEnabled(false);
+        desLable.setBackground(new java.awt.Color(255,255,240));
+
+
 
         // listLayout
         listRules.setCellRenderer(new CheckListRenderer());
@@ -499,14 +509,16 @@ public class App extends JPanel implements ActionListener {
             }
         });
         listLayout.add(listRules,BorderLayout.CENTER);
+        listLayout.setBackground(new java.awt.Color(255,255,240));
+
+
 
         // tableParent
-        //tableParent.setBackground(new java.awt.Color(255, 25, 255));
 
         // Table 1 ---------
 
         JPanel rule1Panel = new JPanel();
-        rule1Panel.setBorder(BorderFactory.createMatteBorder(5, 0, 5, 0, Color.red));
+        //rule1Panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.red));
         //  add element to rule1Panel
         GridBagLayout gridBagLayoutRule1 = new GridBagLayout();
         rule1Panel.setLayout(gridBagLayoutRule1);
@@ -551,11 +563,12 @@ public class App extends JPanel implements ActionListener {
         JScrollPane scrollPane = new JScrollPane(table);
         rule1TablePanel.add(scrollPane);
         materialTabbed1.addTab("Rule 1 ", rule1Panel);
+        materialTabbed1.setBackgroundAt(0,themeColor);
 // Table 2 ---------
 
         JPanel rule2Panel = new JPanel(new BorderLayout());
         // rule2Panel.setBorder(new EmptyBorder(20, 20, 20, 20));
-        rule2Panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.red));
+        //rule2Panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.red));
        //  add element to rule2Panel
         GridBagLayout gridBagLayoutRule2 = new GridBagLayout();
         rule2Panel.setLayout(gridBagLayoutRule2);

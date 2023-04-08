@@ -65,7 +65,8 @@ public class MaterialTabbed extends JTabbedPane {
         protected void paintTabBorder(Graphics grphcs, int tabPlacement, int tabIndex, int x, int y, int w, int h, boolean isSelected) {
             Graphics2D g2 = (Graphics2D) grphcs.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(new Color(3, 155, 216));
+            g2.setColor(new Color(3, 15, 216));
+
             if (currentRectangle == null || !animator.isRunning()) {
                 if (isSelected) {
                     currentRectangle = new Rectangle(x, y, w, h);
