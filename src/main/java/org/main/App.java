@@ -100,7 +100,7 @@ public class App extends JPanel implements ActionListener {
     });
 
     HashMap<Integer,String> selectedRules = new HashMap<>();
-
+    private MaterialTabbed materialTabbed1 = new MaterialTabbed();
 
     // Engine variables
     Map<String, Map<String, Map<Integer, String>>> inputExcelData;
@@ -258,7 +258,7 @@ public class App extends JPanel implements ActionListener {
         // ---------------------- right side
         rightJpanel = new JPanel(new BorderLayout());
         rightJpanel.setBackground(themeColor);
-        rightJpanel.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
+        rightJpanel.setPreferredSize(new Dimension(maxX / 2 - 100, maxY - 150));
 
         JPanel rightSideHeaderPanel = new JPanel();
         rightSideHeaderPanel.setBackground(themeColor);
@@ -309,72 +309,6 @@ public class App extends JPanel implements ActionListener {
 
 
 /*
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.weightx = 1;
-
-        gbc.insets = new Insets(0,10,30,10);
-
-        // ============================== Rule 1 starts ====================
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        JPanel rule1Panel = new JPanel();
-        rightSideParentTalePanel.add(rule1Panel, gbc);
-
-        rule1Panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.red));
-
-        //  add element to rule1Panel
-        GridBagLayout gridBagLayoutRule1 = new GridBagLayout();
-        rule1Panel.setLayout(gridBagLayoutRule1);
-        GridBagConstraints gbcRule1 = new GridBagConstraints();
-        gbcRule1.fill = GridBagConstraints.HORIZONTAL;
-        gbcRule1.gridwidth = GridBagConstraints.REMAINDER;
-        gbcRule1.weightx = 1;
-
-        gbcRule1.gridx = 0;
-        gbcRule1.gridy = 0;
-        JPanel rule1HeaderPanel = new JPanel(new BorderLayout());
-        rule1Panel.add(rule1HeaderPanel,gbcRule1);
-
-        gbcRule1.gridx = 0;
-        gbcRule1.gridy = 1;
-        JPanel rule1TablePanel = new JPanel(new BorderLayout());
-        rule1Panel.add(rule1TablePanel,gbcRule1);
-
-        JPanel rule1HeaderDesPanel = new JPanel(new BorderLayout());
-        //rule1HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
-        rule1HeaderDesPanel.add(new JLabel("  Rule 1 :- Find and print empty Cells in particular Column"),BorderLayout.CENTER);
-        rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER);
-        rule1HeaderDesPanel.setBackground(new Color(255,255,240));
-        rule1HeaderPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
-
-
-        JPanel rule1HeaderBtnPanel = new JPanel(new FlowLayout());
-        rule1HeaderBtnPanel.setBackground(new Color(255,255,240));
-
-
-        add1 = new Button("Add");
-        add1.setBackground(new java.awt.Color(103, 103, 103));
-        add1.setForeground(new java.awt.Color(255, 255, 255));
-        rule1HeaderBtnPanel.add(add1);
-        add1.addActionListener(this);
-        edit1 = new Button("Edit");
-        edit1.setBackground(new java.awt.Color(103, 103, 103));
-        edit1.setForeground(new java.awt.Color(255, 255, 255));
-        rule1HeaderBtnPanel.add(edit1);
-        edit1.addActionListener(this);
-        remove1 = new Button("Remove");
-        remove1.setBackground(new java.awt.Color(103, 103, 103));
-        remove1.setForeground(new java.awt.Color(255, 255, 255));
-        rule1HeaderBtnPanel.add(remove1);
-        remove1.addActionListener(this);
-        rule1HeaderPanel.add(rule1HeaderBtnPanel,BorderLayout.EAST); // btns
-
-        // Table creation starts - rule1TablePanel
-        rule1TablePanel.setBorder(BorderFactory.createLineBorder(new java.awt.Color(103, 103, 103)));
-        JScrollPane scrollPane = new JScrollPane(table);
-        rule1TablePanel.add(scrollPane);
 
 
 // ============================== Rule 2  ====================
@@ -445,7 +379,7 @@ public class App extends JPanel implements ActionListener {
         leftJPanel = new JPanel(new BorderLayout());
         leftJPanel.setBackground(new Color(255,255,255));
         JScrollPane editScrollPane = new JScrollPane(leftJPanel);
-        editScrollPane.setPreferredSize(new Dimension(maxX / 2 - 100, maxY - 150));
+        editScrollPane.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
         editScrollPane.setBorder(
         BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),
@@ -545,7 +479,6 @@ public class App extends JPanel implements ActionListener {
 
         // listLayout
         listRules.setCellRenderer(new CheckListRenderer());
-        //listRules.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listRules.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         listRules.addMouseListener(new MouseAdapter() {
             @Override
@@ -567,13 +500,131 @@ public class App extends JPanel implements ActionListener {
         });
         listLayout.add(listRules,BorderLayout.CENTER);
 
-        // RuleTableParent
+        // tableParent
+        //tableParent.setBackground(new java.awt.Color(255, 25, 255));
+
+        // Table 1 ---------
+
+        JPanel rule1Panel = new JPanel();
+        rule1Panel.setBorder(BorderFactory.createMatteBorder(5, 0, 5, 0, Color.red));
+        //  add element to rule1Panel
+        GridBagLayout gridBagLayoutRule1 = new GridBagLayout();
+        rule1Panel.setLayout(gridBagLayoutRule1);
+        GridBagConstraints gbcRule1 = new GridBagConstraints();
+        gbcRule1.fill = GridBagConstraints.HORIZONTAL;
+        gbcRule1.gridwidth = GridBagConstraints.REMAINDER;
+        gbcRule1.weightx = 1;
+        gbcRule1.gridx = 0;
+        gbcRule1.gridy = 0;
+        JPanel rule1HeaderPanel = new JPanel(new BorderLayout());
+        rule1Panel.add(rule1HeaderPanel,gbcRule1);
+        gbcRule1.gridx = 0;
+        gbcRule1.gridy = 1;
+        JPanel rule1TablePanel = new JPanel(new BorderLayout());
+        rule1Panel.add(rule1TablePanel,gbcRule1);
+        JPanel rule1HeaderDesPanel = new JPanel(new BorderLayout());
+        //rule1HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
+        rule1HeaderDesPanel.add(new JLabel("  Rule 1 :- Find and print empty Cells in particular Column"),BorderLayout.CENTER);
+        rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER);
+        rule1HeaderDesPanel.setBackground(new Color(255,255,240));
+        rule1HeaderPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
+        JPanel rule1HeaderBtnPanel = new JPanel(new FlowLayout());
+        rule1HeaderBtnPanel.setBackground(new Color(255,255,240));
+        add1 = new Button("Add");
+        add1.setBackground(new java.awt.Color(103, 103, 103));
+        add1.setForeground(new java.awt.Color(255, 255, 255));
+        rule1HeaderBtnPanel.add(add1);
+        add1.addActionListener(this);
+        edit1 = new Button("Edit");
+        edit1.setBackground(new java.awt.Color(103, 103, 103));
+        edit1.setForeground(new java.awt.Color(255, 255, 255));
+        rule1HeaderBtnPanel.add(edit1);
+        edit1.addActionListener(this);
+        remove1 = new Button("Remove");
+        remove1.setBackground(new java.awt.Color(103, 103, 103));
+        remove1.setForeground(new java.awt.Color(255, 255, 255));
+        rule1HeaderBtnPanel.add(remove1);
+        remove1.addActionListener(this);
+        rule1HeaderPanel.add(rule1HeaderBtnPanel,BorderLayout.EAST); // btns
+        // Table creation starts - rule1TablePanel
+        rule1TablePanel.setBorder(BorderFactory.createLineBorder(new java.awt.Color(103, 103, 103)));
+        JScrollPane scrollPane = new JScrollPane(table);
+        rule1TablePanel.add(scrollPane);
+        materialTabbed1.addTab("Rule 1 ", rule1Panel);
+// Table 2 ---------
+
+        JPanel rule2Panel = new JPanel(new BorderLayout());
+        // rule2Panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        rule2Panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.red));
+       //  add element to rule2Panel
+        GridBagLayout gridBagLayoutRule2 = new GridBagLayout();
+        rule2Panel.setLayout(gridBagLayoutRule2);
+        GridBagConstraints gbcRule2 = new GridBagConstraints();
+        gbcRule2.fill = GridBagConstraints.HORIZONTAL;
+        gbcRule2.gridwidth = GridBagConstraints.REMAINDER;
+        gbcRule2.weightx = 1;
+        gbcRule2.gridx = 0;
+        gbcRule2.gridy = 0;
+        JPanel rule2HeaderPanel = new JPanel(new BorderLayout());
+        rule2Panel.add(rule2HeaderPanel,gbcRule2);
+        gbcRule2.gridx = 0;
+        gbcRule2.gridy = 1;
+        JPanel rule2TablePanel = new JPanel(new BorderLayout());
+        rule2Panel.add(rule2TablePanel,gbcRule2);
+        JPanel rule2HeaderDesPanel = new JPanel(new BorderLayout());
+        rule2HeaderDesPanel.setBackground(new Color(255,255,240));
+        // rule2HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
+        rule2HeaderDesPanel.add(new JLabel("  Rule 2 :- Verify and validate cell Data format"),BorderLayout.CENTER);
+        rule2HeaderPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
+        rule2HeaderPanel.add(rule2HeaderDesPanel,  BorderLayout.CENTER);
+        JPanel rule2HeaderBtnPanel = new JPanel(new FlowLayout());
+        rule2HeaderBtnPanel.setBackground(new Color(255,255,240));
+        add2 = new Button("Add");
+        add2.setBackground(new java.awt.Color(103, 103, 103));
+        add2.setForeground(new java.awt.Color(255, 255, 255));
+        rule2HeaderBtnPanel.add(add2);
+        add2.addActionListener(this);
+        edit2 = new Button("Edit");
+        edit2.setBackground(new java.awt.Color(103, 103, 103));
+        edit2.setForeground(new java.awt.Color(255, 255, 255));
+        rule2HeaderBtnPanel.add(edit2);
+        edit2.addActionListener(this);
+        remove2 = new Button("Remove");
+        remove2.setBackground(new java.awt.Color(103, 103, 103));
+        remove2.setForeground(new java.awt.Color(255, 255, 255));
+        rule2HeaderBtnPanel.add(remove2);
+        remove2.addActionListener(this);
+        rule2HeaderPanel.add(rule2HeaderBtnPanel,BorderLayout.EAST);
+        rule2TablePanel.setBorder(BorderFactory.createLineBorder(new java.awt.Color(103, 103, 103)));
+        // Table creation starts - rule2TablePanel
+        rule2TablePanel.add(new JScrollPane(table2));
+        materialTabbed1.addTab("Rule 2 ", rule2Panel);
 
 
 
 
 
 
+
+
+
+        // size of tab pane
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(tableParent);
+        tableParent.setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, 0)
+                                .addComponent(materialTabbed1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(0, 0, 0))
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, 0)
+                                .addComponent(materialTabbed1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(0, 0, 0))
+        );
 
 
 
