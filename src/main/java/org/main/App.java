@@ -60,6 +60,7 @@ public class App extends JPanel implements ActionListener {
     private TextField filePath;
     Button uploadButton;
     Button reload;
+    Button loadData;
     Button downloadRule;
     Button uploadRule;
     Button run;
@@ -266,7 +267,14 @@ public class App extends JPanel implements ActionListener {
 
         JPanel fields = new JPanel(new BorderLayout());
         fields.setBackground(themeColor);
-        fields.setBorder(createTitleBorder("Console Output :-"));
+        rightJpanel.setBorder(
+                BorderFactory.createTitledBorder(
+                        BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),
+                        "-: Console Output :- ", TitledBorder.CENTER, TitledBorder.TOP)
+        );
+
+
+
 
         // Editor
         output  = new JTextArea();
@@ -291,91 +299,9 @@ public class App extends JPanel implements ActionListener {
 
         rightJpanel.add(fields, BorderLayout.CENTER);
 
-       // ---------------------------
-
-//  layout right side parent container
-      //  GridBagLayout layout = new GridBagLayout();
-
-      //  JPanel rightSideParentTalePanel = new JPanel(layout);
-      //  rightSideParentTalePanel.setBackground(themeColor);
-
-    /*    JScrollPane ruleScroll = new JScrollPane(rightSideParentTalePanel);
-        ruleScroll.setVerticalScrollBarPolicy(
-                JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        ruleScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-*/
-
-
-
-
-/*
-
-
-// ============================== Rule 2  ====================
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        JPanel rule2Panel = new JPanel(new BorderLayout());
-        rightSideParentTalePanel.add(rule2Panel, gbc);
-       // rule2Panel.setBorder(new EmptyBorder(20, 20, 20, 20));
-        rule2Panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.red));
-//  add element to rule2Panel
-        GridBagLayout gridBagLayoutRule2 = new GridBagLayout();
-        rule2Panel.setLayout(gridBagLayoutRule2);
-        GridBagConstraints gbcRule2 = new GridBagConstraints();
-        gbcRule2.fill = GridBagConstraints.HORIZONTAL;
-        gbcRule2.gridwidth = GridBagConstraints.REMAINDER;
-        gbcRule2.weightx = 1;
-
-        gbcRule2.gridx = 0;
-        gbcRule2.gridy = 0;
-        JPanel rule2HeaderPanel = new JPanel(new BorderLayout());
-        rule2Panel.add(rule2HeaderPanel,gbcRule2);
-
-        gbcRule2.gridx = 0;
-        gbcRule2.gridy = 1;
-        JPanel rule2TablePanel = new JPanel(new BorderLayout());
-        rule2Panel.add(rule2TablePanel,gbcRule2);
-
-        JPanel rule2HeaderDesPanel = new JPanel(new BorderLayout());
-        rule2HeaderDesPanel.setBackground(new Color(255,255,240));
-        // rule2HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
-        rule2HeaderDesPanel.add(new JLabel("  Rule 2 :- Verify and validate cell Data format"),BorderLayout.CENTER);
-        rule2HeaderPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
-
-
-        rule2HeaderPanel.add(rule2HeaderDesPanel,  BorderLayout.CENTER);
-        JPanel rule2HeaderBtnPanel = new JPanel(new FlowLayout());
-        rule2HeaderBtnPanel.setBackground(new Color(255,255,240));
-
-        add2 = new Button("Add");
-        add2.setBackground(new java.awt.Color(103, 103, 103));
-        add2.setForeground(new java.awt.Color(255, 255, 255));
-        rule2HeaderBtnPanel.add(add2);
-        add2.addActionListener(this);
-        edit2 = new Button("Edit");
-        edit2.setBackground(new java.awt.Color(103, 103, 103));
-        edit2.setForeground(new java.awt.Color(255, 255, 255));
-        rule2HeaderBtnPanel.add(edit2);
-        edit2.addActionListener(this);
-        remove2 = new Button("Remove");
-        remove2.setBackground(new java.awt.Color(103, 103, 103));
-        remove2.setForeground(new java.awt.Color(255, 255, 255));
-        rule2HeaderBtnPanel.add(remove2);
-        remove2.addActionListener(this);
-        rule2HeaderPanel.add(rule2HeaderBtnPanel,BorderLayout.EAST); // btns
-        rule2TablePanel.setBorder(BorderFactory.createLineBorder(new java.awt.Color(103, 103, 103)));
-        // Table creation starts - rule2TablePanel
-        rule2TablePanel.add(new JScrollPane(table2));
-
-        //----------------------
-        rightJpanel.add(rightSideParentTalePanel,BorderLayout.CENTER);
-
-        */
-
-
 
         //  leftJPanel --------------
+
         leftJPanel = new JPanel(new BorderLayout());
         leftJPanel.setBackground(new Color(255,255,255));
         JScrollPane editScrollPane = new JScrollPane(leftJPanel);
@@ -447,8 +373,50 @@ public class App extends JPanel implements ActionListener {
         uploadButton.setBackground(new java.awt.Color(103, 103, 103));
         uploadButton.setForeground(new java.awt.Color(255, 255, 255));
         uploadButton.addActionListener(this);
-        jPanelFileUpload.add(uploadButton,BorderLayout.CENTER);
+        jPanelFileUpload.add(uploadButton,BorderLayout.WEST);
         jPanelFileUpload.setBackground(themeColor);
+
+        JPanel radioBtnLoadPanel = new JPanel(new BorderLayout());
+        radioBtnLoadPanel.setBackground(themeColor);
+        jPanelFileUpload.add(radioBtnLoadPanel,BorderLayout.CENTER);
+        // radioBtnLoadPanel
+        loadData =  new Button("Load");
+        loadData.setBackground(new java.awt.Color(103, 103, 103));
+        loadData.setForeground(new java.awt.Color(255, 255, 255));
+        loadData.addActionListener(this);
+        radioBtnLoadPanel.add(loadData,BorderLayout.EAST);
+
+        JRadioButton row = new JRadioButton("Row?");
+        JRadioButton column = new JRadioButton("Column?");
+        row.setSelected(true);
+        row.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (row.isSelected()) {
+
+                }
+            }
+        });
+        column.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (column.isSelected()) {
+
+                }
+            }
+        });
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(row);
+        bg.add(column);
+
+        JPanel bgPanel = new JPanel();
+        bgPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        bgPanel.add(row);
+        bgPanel.add(column);
+
+        bgPanel.setBackground(new java.awt.Color(255,255,240));
+
+        radioBtnLoadPanel.add(bgPanel,BorderLayout.CENTER);
+
+
         fileUpload.add(jPanelFileUpload, BorderLayout.EAST);
         bottomBtnG.add(jPanelBtn,BorderLayout.CENTER); // buttons
 
