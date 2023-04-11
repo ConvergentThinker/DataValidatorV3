@@ -29,12 +29,39 @@ public class Rule2FieldsWindow implements ItemListener {
     Map<String, Map<String, Map<String, String>>> workbook;
 
     @SuppressWarnings("serial")
-    public Rule2FieldsWindow() {
+    public Rule2FieldsWindow(String headerDirection) {
 
         mainPanel.setLayout(new SpringLayout());
 
-        String[] COL_NAMES = {"Validate?:", "Sheet:", "All rows/Custom]:", "Row From:", "Row To:", "Target Column:","Format"};
-        int numPairs = COL_NAMES.length;
+        //String[] COL_NAMES = {"Validate?:", "Sheet:", "All rows/Custom]:", "Row From:", "Row To:", "Target Column:","Format"};
+
+
+        String[] COL_NAMES;
+
+        if (headerDirection.equals("Column")) {
+
+            COL_NAMES = new String[7];
+            COL_NAMES[0] = "Validate?";
+            COL_NAMES[1] =  "Sheet";
+            COL_NAMES[2] = "Target Header";
+            COL_NAMES[3] = "Format";
+            COL_NAMES[4] = "Run[All rows/Custom]";
+            COL_NAMES[5] = "Column No: From";
+            COL_NAMES[6] = "Column No: To";
+
+        } else {
+
+            COL_NAMES = new String[7];
+            COL_NAMES[0] = "Validate?";
+            COL_NAMES[1] =  "Sheet";
+            COL_NAMES[2] = "Target Header";
+            COL_NAMES[3] = "Format";
+            COL_NAMES[4] = "Run[All rows/Custom]";
+            COL_NAMES[4] = "Row No: From";
+            COL_NAMES[5] = "Row No: To";
+
+
+        }
 
         // 1
         String[] toRun = { "Yes","No" };
@@ -53,14 +80,14 @@ public class Rule2FieldsWindow implements ItemListener {
         l2.setLabelFor(sheetDrp);
         mainPanel.add(sheetDrp);
 
-        JLabel l3 = new JLabel(COL_NAMES[5], JLabel.TRAILING);
+        JLabel l3 = new JLabel(COL_NAMES[2], JLabel.TRAILING);
         mainPanel.add(l3);
         targetColumnDrp = new ComboBox();
         targetColumnDrp.setEditable(false);
         l2.setLabelFor(targetColumnDrp);
         mainPanel.add(targetColumnDrp);
 
-        JLabel l7 = new JLabel(COL_NAMES[6], JLabel.TRAILING);
+        JLabel l7 = new JLabel(COL_NAMES[3], JLabel.TRAILING);
         mainPanel.add(l7);
         String[] formatsArr = {"Number","Text",
                 "D/MM/YY","DD/MM/YYYY","D/M/YY","DD/MM/YY","DD/M/YYYY","DD.M.YYYY","DD-M-YYYY","DD/M/YY",
@@ -72,7 +99,7 @@ public class Rule2FieldsWindow implements ItemListener {
         l7.setLabelFor(formats);
         mainPanel.add(formats);
 
-        JLabel l4 = new JLabel(COL_NAMES[2], JLabel.TRAILING);
+        JLabel l4 = new JLabel(COL_NAMES[4], JLabel.TRAILING);
         mainPanel.add(l4);
         String[] noOfRowsToRun = {"All Rows","Custom"};
         noOfRowsToRunDrp = new ComboBox(noOfRowsToRun);
@@ -99,7 +126,7 @@ public class Rule2FieldsWindow implements ItemListener {
         l4.setLabelFor(noOfRowsToRunDrp);
         mainPanel.add(noOfRowsToRunDrp);
 
-        l5 = new JLabel(COL_NAMES[3], JLabel.TRAILING);
+        l5 = new JLabel(COL_NAMES[5], JLabel.TRAILING);
         mainPanel.add(l5);
         textFieldFrom = new TextField();
         textFieldFrom.setVisible(false);
@@ -107,7 +134,7 @@ public class Rule2FieldsWindow implements ItemListener {
         l5.setLabelFor(textFieldFrom);
         mainPanel.add(textFieldFrom);
 
-        l6 = new JLabel(COL_NAMES[4], JLabel.TRAILING);
+        l6 = new JLabel(COL_NAMES[6], JLabel.TRAILING);
         mainPanel.add(l6);
         textFieldTo = new TextField();
         textFieldTo.setVisible(false);

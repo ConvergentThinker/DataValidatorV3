@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Rule1TableModel extends AbstractTableModel {
-    private static final String[] COL_NAMES = {"Validate?", "Sheet","Target Column", "Run[All rows/Custom]", "Row No: From", "Row No: To" };
+    private static final String[] COL_NAMES = {"Validate?", "Sheet","Target Header", "Run[All rows/Custom]", "Row No: From", "Row No: To" };
 
 
     private static final long serialVersionUID = 1L;

@@ -66,7 +66,7 @@ public class App extends JPanel implements ActionListener {
     Button uploadRule;
     Button run;
     JTextArea output;
-    String headerDirection = "Row";
+    private String headerDirection = "Row";
 
     // Editor variables
     private static String[] sizeOptions = {"8", "10", "12", "14", "16", "18", "20", "22", "24", "26", "28"};
@@ -94,7 +94,7 @@ public class App extends JPanel implements ActionListener {
    // Color themeColor = new java.awt.Color(255,255,240);
     Color themeColor = new java.awt.Color(255,255,255);
     JList listRules = new JList(new CheckListItem[] {
-            new CheckListItem("Rule 1 :- Find and empty Cells"),
+            new CheckListItem("Rule 1 :- Find empty Cells"),
             new CheckListItem("Rule 2 :- Verify and validate cell Data format"),
             new CheckListItem("Rule 3: - We would like to know how to create JList of CheckBox."),
             new CheckListItem("Rule 4: - We would like to know how to create JList of CheckBox."),
@@ -104,7 +104,7 @@ public class App extends JPanel implements ActionListener {
     private MaterialTabbed materialTabbed1 = new MaterialTabbed();
 
     // Engine variables
-    Map<String, Map<String, Map<String, String>>> inputExcelData;
+    Map<String, Map<String, Map<String, String>>> inputExcelData = null;
     final ReaderEngine readerEngine = new ReaderEngine();
 
     // Table1 creation variables
@@ -136,11 +136,6 @@ public class App extends JPanel implements ActionListener {
         }
     };
 
-
-// Table3  creation variables
-
-    private Rule1TableModel tableModel3 = new Rule1TableModel();
-    private JTable table3 = new JTable(tableModel3);
 
     public App() throws IOException, ParseException {
 
@@ -514,7 +509,7 @@ public class App extends JPanel implements ActionListener {
 
         JPanel rule1HeaderDesPanel = new JPanel(new BorderLayout());
         //rule1HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
-        rule1HeaderDesPanel.add(new JLabel("  Rule 1 :- Find and empty Cells"),BorderLayout.CENTER);
+        rule1HeaderDesPanel.add(new JLabel("  Rule 1 :- Find empty Cells"),BorderLayout.CENTER);
         rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER);
         rule1HeaderDesPanel.setBackground(new Color(255,255,240));
         rule1HeaderPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
@@ -794,22 +789,58 @@ public class App extends JPanel implements ActionListener {
                 throw new RuntimeException(ex);
             }
 
-            // Read input excel file
-            try {
-                inputExcelData = readerEngine.readCompleteExcelUpdated(filePath.getText().trim(),headerDirection);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+            if(filePath.getText().trim().length() > 0){
+                // Read input excel file
+                try {
+                    inputExcelData = readerEngine.readCompleteExcelUpdated(filePath.getText().trim(),headerDirection);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                System.out.println("inputExcelData  "+ inputExcelData);
+
+                if(inputExcelData.size() == 0){
+                    output.setText("");
+                    output.setText(readerEngine.getException());
+                }else{
+                    output.setText("");
+                    output.setText("Input data source loaded ");
+                }
+
+                String[] COL_NAMES;
+                if (headerDirection.equals("Column")) {
+                    COL_NAMES = new String[]{"Validate?", "Sheet", "Target Header", "Run[All rows/Custom]", "Column No: From", "Column No: To"};
+                    for (int i = 0; i < COL_NAMES.length; i++) {
+                        table.getColumnModel().getColumn(i).setHeaderValue(COL_NAMES[i]);
+                        table2.getColumnModel().getColumn(i).setHeaderValue(COL_NAMES[i]);
+                    }
+                } else {
+                    COL_NAMES = new String[]{"Validate?", "Sheet", "Target Header", "Run[All rows/Custom]", "Row No: From", "Row No: To"};
+                    for (int i = 0; i < COL_NAMES.length; i++) {
+                        table.getColumnModel().getColumn(i).setHeaderValue(COL_NAMES[i]);
+                        table2.getColumnModel().getColumn(i).setHeaderValue(COL_NAMES[i]);
+                    }
+                }
+                table.getTableHeader().repaint();
+                if (headerDirection.equals("Column")) {
+                    COL_NAMES = new String[]{"Validate?", "Sheet", "Target Header", "Format", "Run[All rows/Custom]", "Column No: From", "Column No: To",};;
+                    for (int i = 0; i < COL_NAMES.length; i++) {
+                        table2.getColumnModel().getColumn(i).setHeaderValue(COL_NAMES[i]);
+                    }
+                } else {
+                    COL_NAMES = new String[]{"Validate?", "Sheet", "Target Header", "Format", "Run[All rows/Custom]", "Row No: From", "Row No: To",};
+                    for (int i = 0; i < COL_NAMES.length; i++) {
+                        table2.getColumnModel().getColumn(i).setHeaderValue(COL_NAMES[i]);
+                    }
+                }
+                table2.getTableHeader().repaint();
+
+            }
+            else {
+                setWarningAlert("Please Upload Input excel file and click on Load button");
             }
 
-            System.out.println("inputExcelData  "+ inputExcelData);
 
-            if(inputExcelData.size() == 0){
-                output.setText("");
-                output.setText(readerEngine.getException());
-            }else{
-                output.setText("");
-                output.setText("Input data source loaded ");
-            }
 
         }
         // reload button
@@ -897,9 +928,9 @@ public class App extends JPanel implements ActionListener {
                 throw new RuntimeException(ex);
             }
 
-            if(inputExcelData != null){
+            if(inputExcelData != null && inputExcelData.size() != 0){
 
-                Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
+                Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow(headerDirection);
 
                 int row = table.getSelectedRow();
 
@@ -941,9 +972,9 @@ public class App extends JPanel implements ActionListener {
                 throw new RuntimeException(ex);
             }
 
-            if(inputExcelData != null){
+            if(inputExcelData != null&& inputExcelData.size() != 0){
 
-                Rule2FieldsWindow newRowPanel = new Rule2FieldsWindow();
+                Rule2FieldsWindow newRowPanel = new Rule2FieldsWindow(headerDirection);
                 int row = table2.getSelectedRow();
                 System.out.println("row "+ row);
                 if(row == -1){
@@ -1296,8 +1327,11 @@ public class App extends JPanel implements ActionListener {
                             System.out.println("===============INFO===============");
                             for (String arr : infoArr) {
                                 String[] item = arr.split(",");
-                                System.out.println("For " + item[0] + ",in sheet: " + item[1] + " , Row No:" + item[2] + " in column " + item[3] + " >>> INFO: " + item[4]);
-                                reportList.add("For " + item[0] + ",in sheet " + item[1] + " , Row No:" + item[2] + " in column " + item[3] + " >>> INFO: " + item[4]);
+                                if(headerDirection.equals("Column")){
+                                    reportList.add("For " + item[0] + ",in sheet " + item[1] + " , Column No:" + item[2] + " for Header  " + item[3] + " >>> INFO: " + item[4]);
+                                }else{
+                                    reportList.add("For " + item[0] + ",in sheet " + item[1] + " , Row No:" + item[2] + " for Header  " + item[3] + " >>> INFO: " + item[4]);
+                                }
                             }
                             System.out.println("===================================");
                         } else {
@@ -1324,7 +1358,7 @@ public class App extends JPanel implements ActionListener {
 
         } else if (e.getSource() == add1) {
 
-            Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow();
+            Rule1FieldsWindow newRowPanel = new Rule1FieldsWindow(headerDirection);
 
             try {
                 SoundUtils.tone(hz,msec, vol);
@@ -1332,7 +1366,7 @@ public class App extends JPanel implements ActionListener {
                 throw new RuntimeException(ex);
             }
 
-            if(inputExcelData != null){
+            if(inputExcelData != null && inputExcelData.size() != 0){
                 int reply = JOptionPane.showConfirmDialog(table,
                         newRowPanel.getMainPanel(inputExcelData),
                         "Rule 1 fields ",
@@ -1343,12 +1377,14 @@ public class App extends JPanel implements ActionListener {
                     tableModel.addRow(item);
                 }
             }else{
-                setWarningAlert("Please Upload Input excel file.");
+                setWarningAlert("Please Upload Input excel file and click on Load button");
             }
+
+
 
         } else if (e.getSource() == add2) {
 
-            Rule2FieldsWindow newRowPanel = new Rule2FieldsWindow();
+            Rule2FieldsWindow newRowPanel = new Rule2FieldsWindow(headerDirection);
 
             try {
                 SoundUtils.tone(hz,msec, vol);
@@ -1356,7 +1392,7 @@ public class App extends JPanel implements ActionListener {
                 throw new RuntimeException(ex);
             }
 
-            if (inputExcelData != null) {
+            if (inputExcelData != null&& inputExcelData.size() != 0) {
 
                 int reply = JOptionPane.showConfirmDialog(table2,
                         newRowPanel.getMainPanel(inputExcelData),
@@ -1368,7 +1404,7 @@ public class App extends JPanel implements ActionListener {
                     tableModel2.addRow(item);
                 }
             } else {
-                setWarningAlert("Please Upload Input excel file.");
+                setWarningAlert("Please Upload Input excel file and click on Load button");
             }
 
         } else if (e.getSource() == changeFont) {
