@@ -67,7 +67,7 @@ public class App extends JPanel implements ActionListener {
     Button run;
     JTextArea output;
     private String headerDirection = "Row";
-
+    TextField indexOfHead;
     // Editor variables
     private static String[] sizeOptions = {"8", "10", "12", "14", "16", "18", "20", "22", "24", "26", "28"};
     Button changeFont = new Button("ChangeFont");
@@ -381,17 +381,14 @@ public class App extends JPanel implements ActionListener {
         uploadButton.addActionListener(this);
         jPanelFileUpload.add(uploadButton,BorderLayout.WEST);
         jPanelFileUpload.setBackground(themeColor);
-
         JPanel radioBtnLoadPanel = new JPanel(new BorderLayout());
         radioBtnLoadPanel.setBackground(themeColor);
-        jPanelFileUpload.add(radioBtnLoadPanel,BorderLayout.CENTER);
-        // radioBtnLoadPanel
+        jPanelBtn.add(radioBtnLoadPanel);
         loadData =  new Button("Load");
         loadData.setBackground(new java.awt.Color(103, 103, 103));
         loadData.setForeground(new java.awt.Color(255, 255, 255));
         loadData.addActionListener(this);
-        radioBtnLoadPanel.add(loadData,BorderLayout.EAST);
-
+        indexOfHead = new TextField();
         JRadioButton row = new JRadioButton("Row?");
         JRadioButton column = new JRadioButton("Column?");
         row.setSelected(true);
@@ -412,26 +409,22 @@ public class App extends JPanel implements ActionListener {
         ButtonGroup bg = new ButtonGroup();
         bg.add(row);
         bg.add(column);
-
         JPanel bgPanel = new JPanel();
         GridLayout gridLayoutRadio = new GridLayout(1, 0, 0, 0);
         bgPanel.setLayout(gridLayoutRadio);
-        bgPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
+        bgPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
         bgPanel.add(row);
         bgPanel.add(column);
-
-
-
-
+        bgPanel.add(indexOfHead);
+        bgPanel.add(loadData);
         bgPanel.setBackground(new java.awt.Color(255,255,240));
-        radioBtnLoadPanel.add(bgPanel,BorderLayout.CENTER);
+        jPanelBtn.add(bgPanel);
 
 
         fileUpload.add(jPanelFileUpload, BorderLayout.EAST);
         bottomBtnG.add(jPanelBtn,BorderLayout.CENTER); // buttons
 
         // Rule Table Layout
-
         JPanel RuleTableParent = new JPanel(new BorderLayout());
         leftJPanel.add(RuleTableParent,BorderLayout.CENTER);
         RuleTableParent.setBackground(themeColor);
@@ -447,7 +440,6 @@ public class App extends JPanel implements ActionListener {
         //ruleListParent.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.red));
 
         // list the rules ruleListParent
-
         JPanel listDes = new JPanel(new BorderLayout());
         JPanel listDes2 = new JPanel(new BorderLayout());
         JTextArea desLable2 = new JTextArea("");
