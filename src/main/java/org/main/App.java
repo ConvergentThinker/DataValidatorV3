@@ -509,7 +509,7 @@ public class App extends JPanel implements ActionListener {
 
         JPanel rule1HeaderDesPanel = new JPanel(new BorderLayout());
         //rule1HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
-        rule1HeaderDesPanel.add(new JLabel("  Rule 1 :- Find empty Cells"),BorderLayout.CENTER);
+        rule1HeaderDesPanel.add(new JLabel("  Find empty Cells"),BorderLayout.CENTER);
         rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER);
         rule1HeaderDesPanel.setBackground(new Color(255,255,240));
         rule1HeaderPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
@@ -549,7 +549,7 @@ public class App extends JPanel implements ActionListener {
         JPanel rule2HeaderDesPanel = new JPanel(new BorderLayout());
         rule2HeaderDesPanel.setBackground(new Color(255,255,240));
         // rule2HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
-        rule2HeaderDesPanel.add(new JLabel("  Rule 2 :- Verify and validate cell Data format"),BorderLayout.CENTER);
+        rule2HeaderDesPanel.add(new JLabel("  Verify and validate cell Data format"),BorderLayout.CENTER);
         rule2HeaderPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
         rule2HeaderPanel.add(rule2HeaderDesPanel,  BorderLayout.CENTER);
         JPanel rule2HeaderBtnPanel = new JPanel(new FlowLayout());
