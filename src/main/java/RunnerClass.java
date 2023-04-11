@@ -12,7 +12,7 @@ public class RunnerClass {
 
 
         final ReaderEngine readerEngine = new ReaderEngine();
-        Map<String, Map<String, Map<Integer, String>>> inputExcelData = readerEngine.readCompleteExcel("/Users/innovative/Desktop/TestDataSheet.xlsx");
+        Map<String, Map<String, Map<String, String>>> inputExcelData = readerEngine.readCompleteExcel("/Users/innovative/Desktop/TestDataSheet.xlsx");
 
         System.out.println("inputExcelData "+ inputExcelData);
 
@@ -20,7 +20,7 @@ public class RunnerClass {
 
 
 
-        Map<String, Map<Integer, String>> mapOfHeaders = inputExcelData.get("Sheet1");
+        Map<String, Map<String, String>> mapOfHeaders = inputExcelData.get("Sheet1");
 
         System.out.println("mapOfHeaders keys "+ mapOfHeaders.keySet());
 

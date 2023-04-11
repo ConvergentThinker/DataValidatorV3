@@ -47,7 +47,7 @@ public class Rule2ValidatorEngine {
 
 
 
-    public void validateRule2(Map<String, Map<String, Map<Integer, String>>> inputExcelData, List<Rule2Model> rule2ModelList ) {
+    public void validateRule2(Map<String, Map<String, Map<String, String>>> inputExcelData, List<Rule2Model> rule2ModelList ) {
 
          lstRule2 = rule2ModelList;
 
@@ -63,9 +63,9 @@ public class Rule2ValidatorEngine {
                     case "All Rows":
                         System.out.println("ALL");
 
-                        Map<Integer, String> map = getSpecificColumnAllValues(inputExcelData, rule.getSheet(), rule.getTargetHeader().trim());
+                        Map<String, String> map = getSpecificColumnAllValues(inputExcelData, rule.getSheet(), rule.getTargetHeader().trim());
 
-                        for (Map.Entry<Integer, String> entry : map.entrySet()) {
+                        for (Map.Entry<String, String> entry : map.entrySet()) {
                             System.out.println(entry.getKey() + " : " + entry.getValue());
                             String cellData = entry.getValue().trim();
                             System.out.println("cellData "+ cellData);
@@ -81,11 +81,11 @@ public class Rule2ValidatorEngine {
                                  boolean result = cellData.matches(namePattern);
 
                                 if(dataLength==0){
-                                    errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
+                                    errors.add(new ErrorModel("Rule2",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
                                 }else{
 
                                     if(!result){
-                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Cell value is not a Text format"));
+                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Cell value is not a Text format"));
                                     }
 
                                 }
@@ -97,11 +97,11 @@ public class Rule2ValidatorEngine {
                                 boolean result = cellData.matches(namePattern);
 
                                 if(dataLength==0){
-                                    errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
+                                    errors.add(new ErrorModel("Rule2",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
                                 }else{
 
                                     if(!result){
-                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Cell value is not a Number format"));
+                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Cell value is not a Number format"));
                                     }
 
                                 }
@@ -112,10 +112,10 @@ public class Rule2ValidatorEngine {
 
 
                                 if(dataLength==0){
-                                    errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
+                                    errors.add(new ErrorModel("Rule2",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
                                 }else{
                                     if(isValidDate(cellData) == false){
-                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+" but Actual : "+ cellData));
+                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Expected Date format is: "+ format+" but Actual : "+ cellData));
                                     }
                                 }
                             }
@@ -127,16 +127,15 @@ public class Rule2ValidatorEngine {
                     case "Custom":
                         System.out.println("CUSTOM");
 
-                        Map<Integer, String> mapCustom = getSpecificColumnAllValues(inputExcelData, rule.getSheet(), rule.getTargetHeader().trim());
+                        Map<String, String> mapCustom = getSpecificColumnAllValues(inputExcelData, rule.getSheet(), rule.getTargetHeader().trim());
 
                         boolean isToEnd = false;
-
-                        for (Map.Entry<Integer, String> entry : mapCustom.entrySet()) {
+                        for (Map.Entry<String, String> entry : mapCustom.entrySet()) {
 
                             int fromNo = Integer.parseInt(rule.getFromRow());
                             int toNo = Integer.parseInt(rule.getToRow());
 
-                            if(entry.getKey() >= fromNo ){
+                            if(Integer.parseInt(entry.getKey().split("#")[1]) >= fromNo ){
                                 System.out.println(entry.getKey() + " : " + entry.getValue());
                                 String cellData = entry.getValue().trim();
                                 System.out.println("cellData "+ cellData);
@@ -151,11 +150,11 @@ public class Rule2ValidatorEngine {
                                     boolean result = cellData.matches(namePattern);
 
                                     if(dataLength==0){
-                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
+                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
                                     }else{
 
                                         if(!result){
-                                            errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Cell value is not a Text format"));
+                                            errors.add(new ErrorModel("Rule2",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Cell value is not a Text format"));
                                         }
 
                                     }
@@ -167,11 +166,11 @@ public class Rule2ValidatorEngine {
                                     boolean result = cellData.matches(namePattern);
 
                                     if(dataLength==0){
-                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
+                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Expected Date format is: "+ format+ " but Actual is Empty Cell"));
                                     }else{
 
                                         if(!result){
-                                            errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Cell value is not a Number format"));
+                                            errors.add(new ErrorModel("Rule2",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Cell value is not a Number format"));
                                         }
 
                                     }
@@ -180,17 +179,17 @@ public class Rule2ValidatorEngine {
                                     System.out.println("isValidDate(cellData) "+ isValidDate(cellData));
 
                                     if(dataLength==0){
-                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+" but Actual is Empty Cell"));
+                                        errors.add(new ErrorModel("Rule2",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Expected Date format is: "+ format+" but Actual is Empty Cell"));
                                     }else{
                                         if(isValidDate(cellData) == false){
-                                            errors.add(new ErrorModel("Rule2",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Expected Date format is: "+ format+" but Actual : "+ cellData));
+                                            errors.add(new ErrorModel("Rule2",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Expected Date format is: "+ format+" but Actual : "+ cellData));
                                         }
                                     }
                                 }
 
                                 // end
 
-                                if(entry.getKey() == toNo){
+                                if(Integer.parseInt(entry.getKey().split("#")[1]) == toNo){
                                     isToEnd = true;
                                     break;
                                 }
@@ -231,9 +230,9 @@ public class Rule2ValidatorEngine {
     }
 
 
-    public Map<Integer, String> getSpecificColumnAllValues(Map<String, Map<String, Map<Integer, String>>> fullExcel,String sheetName,String headerName) {
-        Map<String, Map<Integer, String>> mapOfHeaders = fullExcel.get(sheetName);
-        Map<Integer, String> map = mapOfHeaders.get(headerName);
+    public Map<String, String> getSpecificColumnAllValues(Map<String, Map<String, Map<String, String>>> fullExcel,String sheetName,String headerName) {
+        Map<String, Map<String, String>> mapOfHeaders = fullExcel.get(sheetName);
+        Map<String, String> map = mapOfHeaders.get(headerName);
         return map;
     }
 

@@ -51,7 +51,7 @@ public class Rule1ValidatorEngine {
 
     // Rule4: Define Mandatory Columns.
     //Ex: Columns dob,name,nric.. values are should not be empty. must fill.
-    public void validateRule4(Map<String, Map<String, Map<Integer, String>>> inputExcelData, List<Rule1Model> rule1ModelList ) {
+    public void validateRule4(Map<String, Map<String, Map<String, String>>> inputExcelData, List<Rule1Model> rule1ModelList ) {
 
         lstRule1 = rule1ModelList;
 
@@ -71,14 +71,14 @@ public class Rule1ValidatorEngine {
                     case "All Rows":
                         System.out.println("ALL");
 
-                        Map<Integer, String> map = getSpecificColumnAllValues(inputExcelData, rule.getSheet(), rule.getTargetHeader().trim());
+                        Map<String, String> map = getSpecificColumnAllValues(inputExcelData, rule.getSheet(), rule.getTargetHeader().trim());
 
-                        for (Map.Entry<Integer, String> entry : map.entrySet()) {
+                        for (Map.Entry<String, String> entry : map.entrySet()) {
                             System.out.println(entry.getKey() + " : " + entry.getValue());
                             int dataLength = entry.getValue().trim().length();
 
                             if(dataLength==0){
-                                errors.add(new ErrorModel("Rule1",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Cell value is Empty."));
+                                errors.add(new ErrorModel("Rule1",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Cell value is Empty."));
                             }
                         }
                         break;
@@ -86,24 +86,24 @@ public class Rule1ValidatorEngine {
                     case "Custom":
                         System.out.println("CUSTOM");
 
-                        Map<Integer, String> mapCustom = getSpecificColumnAllValues(inputExcelData, rule.getSheet(), rule.getTargetHeader().trim());
+                        Map<String, String> mapCustom = getSpecificColumnAllValues(inputExcelData, rule.getSheet(), rule.getTargetHeader().trim());
 
                         boolean isToEnd = false;
 
-                        for (Map.Entry<Integer, String> entry : mapCustom.entrySet()) {
+                        for (Map.Entry<String, String> entry : mapCustom.entrySet()) {
 
                             int fromNo = Integer.parseInt(rule.getFromRow());
                             int toNo = Integer.parseInt(rule.getToRow());
 
-                                if(entry.getKey() >= fromNo ){
+                                if(Integer.parseInt(entry.getKey().split("#")[1]) >= fromNo ){
                                     System.out.println(entry.getKey() + " : " + entry.getValue());
                                     int dataLength = entry.getValue().trim().length();
 
                                     if(dataLength==0){
 
-                                        errors.add(new ErrorModel("Rule1",rule.getSheet(),entry.getKey(),rule.getTargetHeader(),"Cell value is Empty."));
+                                        errors.add(new ErrorModel("Rule1",rule.getSheet(),Integer.parseInt(entry.getKey().split("#")[1]),rule.getTargetHeader(),"Cell value is Empty."));
                                     }
-                                    if(entry.getKey() == toNo){
+                                    if(Integer.parseInt(entry.getKey().split("#")[1]) == toNo){
                                         isToEnd = true;
                                         break;
                                     }
@@ -129,9 +129,9 @@ public class Rule1ValidatorEngine {
     }
 
 
-    public Map<Integer, String> getSpecificColumnAllValues(Map<String, Map<String, Map<Integer, String>>> fullExcel,String sheetName,String headerName) {
-        Map<String, Map<Integer, String>> mapOfHeaders = fullExcel.get(sheetName);
-        Map<Integer, String> map = mapOfHeaders.get(headerName);
+    public Map<String, String> getSpecificColumnAllValues(Map<String, Map<String, Map<String, String>>> fullExcel,String sheetName,String headerName) {
+        Map<String, Map<String, String>> mapOfHeaders = fullExcel.get(sheetName);
+        Map<String, String> map = mapOfHeaders.get(headerName);
         return map;
     }
 

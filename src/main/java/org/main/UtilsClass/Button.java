@@ -44,9 +44,9 @@ public class Button extends JButton {
 
     private int round = 30;
     //private Color shadowColor = new Color(170, 170, 170);
-    private Color shadowColor = new Color(25,25,112);
+    private Color shadowColor = new Color(255,255,255);
     private BufferedImage imageShadow;
-    private final Insets shadowSize = new Insets(2, 5, 8, 5);
+    private final Insets shadowSize = new Insets(0, 5, 5, 5);
 
 
     public Button(String name) {

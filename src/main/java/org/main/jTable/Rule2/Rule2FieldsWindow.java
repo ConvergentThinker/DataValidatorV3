@@ -26,7 +26,7 @@ public class Rule2FieldsWindow implements ItemListener {
 
     JLabel l5;
     JLabel l6;
-    Map<String, Map<String, Map<Integer, String>>> workbook;
+    Map<String, Map<String, Map<String, String>>> workbook;
 
     @SuppressWarnings("serial")
     public Rule2FieldsWindow() {
@@ -125,7 +125,7 @@ public class Rule2FieldsWindow implements ItemListener {
     }
 
 
-    public JPanel getMainPanel(Map<String, Map<String, Map<Integer, String>>> workbook) {
+    public JPanel getMainPanel(Map<String, Map<String, Map<String, String>>> workbook) {
 
         this.workbook = workbook;
         sheetDrp.setModel(new DefaultComboBoxModel(convert(workbook.keySet())));
@@ -164,7 +164,7 @@ public class Rule2FieldsWindow implements ItemListener {
 
     }
 
-    public void pushDataIntoForm(Rule2Model model,Map<String, Map<String, Map<Integer, String>>> workbook){
+    public void pushDataIntoForm(Rule2Model model,Map<String, Map<String, Map<String, String>>> workbook){
         this.workbook = workbook;
         sheetDrp.setModel(new DefaultComboBoxModel(convert(workbook.keySet())));
         toRunDrp.setSelectedItem(model.getIsToRun());

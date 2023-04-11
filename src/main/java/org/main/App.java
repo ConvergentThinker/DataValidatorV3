@@ -24,19 +24,15 @@ import org.main.jTable.Rule1.Rule1FieldsWindow;
 import org.main.jTable.Rule2.Rule2FieldsWindow;
 import org.main.jTable.Rule2.Rule2Model;
 import org.main.jTable.Rule2.Rule2TableModel;
-import org.main.jTable.ScrollBarCustom;
 import org.main.jTable.TableDark;
 import org.main.loadRuleFC.RuleFileView;
 import org.main.loadRuleFC.RuleFilter;
 import org.main.loadRuleFC.RulePreview;
-import org.main.model.CloudImageModel;
 
-import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
@@ -44,11 +40,11 @@ import javax.swing.text.TextAction;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
+
+import static org.main.UtilsClass.FondClass.fontOptions;
 
 public class App extends JPanel implements ActionListener {
 
@@ -70,18 +66,18 @@ public class App extends JPanel implements ActionListener {
     Button uploadRule;
     Button run;
     JTextArea output;
+    String headerDirection = "Row";
+
     // Editor variables
-    private static String[] fontOptions = {"Serif", "Agency FB", "Arial", "Calibri", "Cambrian", "Century Gothic", "Comic Sans MS", "Courier New", "Forte", "Garamond", "Monospaced", "Segoe UI", "Times New Roman", "Trebuchet MS", "Serif"};
     private static String[] sizeOptions = {"8", "10", "12", "14", "16", "18", "20", "22", "24", "26", "28"};
-    ImageIcon fontIcon = new ImageIcon("res/FontIcon.png");
     Button changeFont = new Button("ChangeFont");
     Button download = new Button("Download");
-
     JLabel fontLabelText = new JLabel("Font: ");
     JLabel fontSizeLabel = new JLabel("Size: ");
 
     ComboBox  fontName = new ComboBox(fontOptions);
     ComboBox  fontSize = new ComboBox(sizeOptions);
+
     JToolBar tool = new JToolBar(){
         @Override
         protected void paintComponent(Graphics g) {
@@ -91,8 +87,6 @@ public class App extends JPanel implements ActionListener {
             g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
         }
     };
-
-
 
     // --------
     public static Font fontTitle = new Font("Comic Sans Ms", Font.BOLD, 12);
@@ -110,9 +104,8 @@ public class App extends JPanel implements ActionListener {
     private MaterialTabbed materialTabbed1 = new MaterialTabbed();
 
     // Engine variables
-    Map<String, Map<String, Map<Integer, String>>> inputExcelData;
+    Map<String, Map<String, Map<String, String>>> inputExcelData;
     final ReaderEngine readerEngine = new ReaderEngine();
-
 
     // Table1 creation variables
     Button add1;
@@ -410,14 +403,14 @@ public class App extends JPanel implements ActionListener {
         row.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (row.isSelected()) {
-
+                    headerDirection = "Row";
                 }
             }
         });
         column.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (column.isSelected()) {
-
+                    headerDirection = "Column";
                 }
             }
         });
@@ -537,7 +530,7 @@ public class App extends JPanel implements ActionListener {
         edit1.setForeground(new java.awt.Color(255, 255, 255));
         rule1HeaderBtnPanel.add(edit1);
         edit1.addActionListener(this);
-        remove1 = new Button("Remove");
+        remove1 = new Button("Delete");
         remove1.setBackground(new java.awt.Color(103, 103, 103));
         remove1.setForeground(new java.awt.Color(255, 255, 255));
         rule1HeaderBtnPanel.add(remove1);
@@ -576,7 +569,7 @@ public class App extends JPanel implements ActionListener {
         edit2.setForeground(new java.awt.Color(255, 255, 255));
         rule2HeaderBtnPanel.add(edit2);
         edit2.addActionListener(this);
-        remove2 = new Button("Remove");
+        remove2 = new Button("Delete");
         remove2.setBackground(new java.awt.Color(103, 103, 103));
         remove2.setForeground(new java.awt.Color(255, 255, 255));
         rule2HeaderBtnPanel.add(remove2);
@@ -586,13 +579,6 @@ public class App extends JPanel implements ActionListener {
         // Table creation starts - rule2TablePanel
         rule2TablePanel.add(new JScrollPane(table2));
         materialTabbed1.addTab("Rule 2 ", rule2Panel);
-
-
-
-
-
-
-
 
 
         // size of tab pane
@@ -791,6 +777,7 @@ public class App extends JPanel implements ActionListener {
             output.setText("");
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 filePath.setText(file.getAbsolutePath());
+                output.setText("Uploaded!");
             } else {
                 output.setText("Attachment cancelled by user.");
             }
@@ -799,8 +786,20 @@ public class App extends JPanel implements ActionListener {
             //Reset the file chooser for the next time it's shown.
             fc.setSelectedFile(null);
 
+        } else if (e.getSource() == loadData) {
+
+            try {
+                SoundUtils.tone(hz,msec, vol);
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
+
             // Read input excel file
-            inputExcelData = readerEngine.readCompleteExcel(file.getAbsolutePath());
+            try {
+                inputExcelData = readerEngine.readCompleteExcelUpdated(filePath.getText().trim(),headerDirection);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
 
             System.out.println("inputExcelData  "+ inputExcelData);
 
@@ -824,7 +823,11 @@ public class App extends JPanel implements ActionListener {
             if(inputExcelData != null){
 
                 // Read input excel file
-                inputExcelData = readerEngine.readCompleteExcel(filePath.getText().trim());
+                try {
+                    inputExcelData = readerEngine.readCompleteExcel(filePath.getText().trim());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 System.out.println("inputExcelData reloaded "+ inputExcelData);
 
                 if(inputExcelData.size() == 0){
@@ -1402,7 +1405,7 @@ public class App extends JPanel implements ActionListener {
 
 
 
-    public String executeRule(String value, Map<String, Map<String, Map<Integer, String>>> inputExcelData,List<Object> masterList) {
+    public String executeRule(String value, Map<String, Map<String, Map<String, String>>> inputExcelData,List<Object> masterList) {
 
         String getErrorListSTR = "";
 
