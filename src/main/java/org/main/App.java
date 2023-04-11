@@ -94,8 +94,8 @@ public class App extends JPanel implements ActionListener {
    // Color themeColor = new java.awt.Color(255,255,240);
     Color themeColor = new java.awt.Color(255,255,255);
     JList listRules = new JList(new CheckListItem[] {
-            new CheckListItem("Rule 1: - We would like to know how to create JList of CheckBox."),
-            new CheckListItem("Rule 2: - We would like to know how to create JList of CheckBox."),
+            new CheckListItem("Rule 1 :- Find and empty Cells"),
+            new CheckListItem("Rule 2 :- Verify and validate cell Data format"),
             new CheckListItem("Rule 3: - We would like to know how to create JList of CheckBox."),
             new CheckListItem("Rule 4: - We would like to know how to create JList of CheckBox."),
     });
@@ -514,7 +514,7 @@ public class App extends JPanel implements ActionListener {
 
         JPanel rule1HeaderDesPanel = new JPanel(new BorderLayout());
         //rule1HeaderDesPanel.add(new JLabel("Hi"),BorderLayout.PAGE_START);
-        rule1HeaderDesPanel.add(new JLabel("  Rule 1 :- Find and print empty Cells in particular Column"),BorderLayout.CENTER);
+        rule1HeaderDesPanel.add(new JLabel("  Rule 1 :- Find and empty Cells"),BorderLayout.CENTER);
         rule1HeaderPanel.add(rule1HeaderDesPanel,  BorderLayout.CENTER);
         rule1HeaderDesPanel.setBackground(new Color(255,255,240));
         rule1HeaderPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(103, 103, 103)));
