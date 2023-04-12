@@ -767,6 +767,7 @@ public class App extends JPanel implements ActionListener {
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 filePath.setText(file.getAbsolutePath());
                 output.setText("Uploaded!");
+                setInfoAlert("Pick Row? or Column? and click on Load button");
             } else {
                 output.setText("Attachment cancelled by user.");
             }
@@ -834,6 +835,7 @@ public class App extends JPanel implements ActionListener {
                 setWarningAlert("Please Upload Input excel file and click on Load button");
             }
 
+            setInfoAlert("Now choose from available Rules(checkBox) and start adding entries in Tables");
 
 
         }
@@ -1245,37 +1247,37 @@ public class App extends JPanel implements ActionListener {
                 throw new RuntimeException(ex);
             }
 
-            System.out.println("==================");
-
-
-            System.out.println(selectedRules.toString());
-
-
-
-            System.out.println("==================");
-
-
+            String[] rulesArr = new String[selectedRules.size()];
+            for(String value: selectedRules.values()) {
+                if(value.contains("Rule 1")){
+                    rulesArr[0] = "R1";
+                }else if(value.contains("Rule 2")){
+                    rulesArr[1] = "R2";
+                }
+            }
 
             boolean run = false;
-
-            if (tableModel.getRule1ModelArrayList().size() > 0) {
-                run = true;
-            } else if (tableModel2.getRule2ModelArrayList().size() > 0) {
-                run = true;
-            } else {
-                setWarningAlert("Please add at least one rule");
+            if(selectedRules.size()>0) {
+                if (tableModel.getRule1ModelArrayList().size() > 0) {
+                    run = true;
+                } else if (tableModel2.getRule2ModelArrayList().size() > 0) {
+                    run = true;
+                } else {
+                    setWarningAlert("Please add at least one rule in Table");
+                }
+            }
+            else{
+                run = false;
+                setWarningAlert("Please select at lease one Rule Checkbox to Run!");
             }
 
             if(run) {
-
-                String[] rulesArr = {"R1", "R2"};
 
                 List<Object> masterList = new ArrayList<>();
                 masterList.add(0, tableModel.getRule1ModelArrayList());
                 masterList.add(1, tableModel2.getRule2ModelArrayList());
 
-
-                int noOfThreads = 2;
+                int noOfThreads = rulesArr.length;
                 final App runner;
                 try {
                     runner = new App();
@@ -1345,6 +1347,11 @@ public class App extends JPanel implements ActionListener {
                 executorService.shutdown();
 
                 setInfoAlert("Rules validation completed!");
+
+            }else{
+
+
+
 
             }
 
