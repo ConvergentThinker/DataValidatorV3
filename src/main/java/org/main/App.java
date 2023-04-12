@@ -347,10 +347,10 @@ public class App extends JPanel implements ActionListener {
         reload.setBackground(new java.awt.Color(103, 103, 103));
         reload.setForeground(new java.awt.Color(255, 255, 255));
         reload.addActionListener(this);
-        jPanelBtn.add(reload);
+        //jPanelBtn.add(reload);
 
-        run = new Button("    Run        .");
-        jPanelBtn.add(run);
+        run = new Button("  Run      .");
+        //jPanelBtn.add(run);
         run.setBackground(new java.awt.Color(103, 103, 103));
         run.setForeground(new java.awt.Color(255, 255, 255));
         run.addActionListener(this);
@@ -384,11 +384,13 @@ public class App extends JPanel implements ActionListener {
         JPanel radioBtnLoadPanel = new JPanel(new BorderLayout());
         radioBtnLoadPanel.setBackground(themeColor);
         jPanelBtn.add(radioBtnLoadPanel);
-        loadData =  new Button("Load");
+        loadData =  new Button(" Load   .");
         loadData.setBackground(new java.awt.Color(103, 103, 103));
         loadData.setForeground(new java.awt.Color(255, 255, 255));
         loadData.addActionListener(this);
         indexOfHead = new TextField();
+        //indexOfHead.setText("1");
+        indexOfHead.setHorizontalAlignment(JTextField.CENTER);
         JRadioButton row = new JRadioButton("Row?");
         JRadioButton column = new JRadioButton("Column?");
         row.setSelected(true);
@@ -415,11 +417,11 @@ public class App extends JPanel implements ActionListener {
         bgPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
         bgPanel.add(row);
         bgPanel.add(column);
-        bgPanel.add(indexOfHead);
+        //bgPanel.add(indexOfHead);
         bgPanel.add(loadData);
         bgPanel.setBackground(new java.awt.Color(255,255,240));
         jPanelBtn.add(bgPanel);
-
+        jPanelBtn.add(run);
 
         fileUpload.add(jPanelFileUpload, BorderLayout.EAST);
         bottomBtnG.add(jPanelBtn,BorderLayout.CENTER); // buttons
