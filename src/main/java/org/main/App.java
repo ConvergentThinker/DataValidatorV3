@@ -611,17 +611,13 @@ public class App extends JPanel implements ActionListener {
 
         // -------------------------------------
 
-        //main
-        JSplitPane splitPaneMain = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                leftJPanel, rightJpanel
-        );
-
-        add(splitPaneMain, BorderLayout.CENTER);
-
-
-
-
-
+        JPanel mainSplitPane = new JPanel();
+        GridLayout gridMainSplit = new GridLayout(1, 0, 0, 0);
+        mainSplitPane.setLayout(gridMainSplit);
+        mainSplitPane.setBorder(new EmptyBorder(0, 5, 5, 5));
+        mainSplitPane.add(leftJPanel);
+        mainSplitPane.add(rightJpanel);
+        add(mainSplitPane, BorderLayout.CENTER);
 
 
 
