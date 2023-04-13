@@ -297,9 +297,10 @@ public class App extends JPanel implements ActionListener {
 
         fields.add(tool,BorderLayout.PAGE_START);
 
-        JScrollPane outputScroll = new JScrollPane(output);
-        outputScroll.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(103, 103, 103)));
-        fields.add(outputScroll,BorderLayout.CENTER);
+        //JScrollPane outputScroll = new JScrollPane(output);
+        output.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(103, 103, 103)));
+        output.setLineWrap(true);
+        fields.add(output,BorderLayout.CENTER);
         rightJpanel.add(fields, BorderLayout.CENTER);
 
 
@@ -353,6 +354,7 @@ public class App extends JPanel implements ActionListener {
         //jPanelBtn.add(run);
         run.setBackground(new java.awt.Color(103, 103, 103));
         run.setForeground(new java.awt.Color(255, 255, 255));
+        run.setEnabled(false);
         run.addActionListener(this);
 
         filePath = new TextField();
@@ -387,6 +389,7 @@ public class App extends JPanel implements ActionListener {
         loadData =  new Button(" Load   .");
         loadData.setBackground(new java.awt.Color(103, 103, 103));
         loadData.setForeground(new java.awt.Color(255, 255, 255));
+        loadData.setEnabled(false);
         loadData.addActionListener(this);
         indexOfHead = new TextField();
         //indexOfHead.setText("1");
@@ -466,6 +469,7 @@ public class App extends JPanel implements ActionListener {
         listRules.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent event) {
+
                 JList list = (JList) event.getSource();
                 int index = list.locationToIndex(event.getPoint());// Get index of item
                 // clicked
@@ -479,7 +483,16 @@ public class App extends JPanel implements ActionListener {
                 }else{
                     selectedRules.remove(index);
                 }
+
+                if(selectedRules.size()>0){
+                    run.setEnabled(true);
+                }else{
+                    run.setEnabled(false);
+                }
+
             }
+
+
         });
         listLayout.add(listRules,BorderLayout.CENTER);
         listLayout.setBackground(new java.awt.Color(255,255,240));
@@ -768,6 +781,7 @@ public class App extends JPanel implements ActionListener {
                 filePath.setText(file.getAbsolutePath());
                 output.setText("Uploaded!");
                 setInfoAlert("Pick Row? or Column? and click on Load button");
+                loadData.setEnabled(true);
             } else {
                 output.setText("Attachment cancelled by user.");
             }
@@ -1247,7 +1261,7 @@ public class App extends JPanel implements ActionListener {
                 throw new RuntimeException(ex);
             }
 
-            String[] rulesArr = new String[selectedRules.size()];
+            String[] rulesArr = new String[10];
             for(String value: selectedRules.values()) {
                 if(value.contains("Rule 1")){
                     rulesArr[0] = "R1";
