@@ -310,8 +310,13 @@ public class App extends JPanel implements ActionListener {
         leftJPanel.setBackground(new Color(255,255,255));
         leftJPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, new Color(103, 103, 103)));
 
-        JScrollPane editScrollPane = new JScrollPane(leftJPanel);
-        editScrollPane.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
+       // JScrollPane editScrollPane = new JScrollPane(leftJPanel);
+       // editScrollPane.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
+
+        leftJPanel.setPreferredSize(new Dimension(maxX / 2 , maxY - 150));
+
+
+
       /*  editScrollPane.setBorder(
         BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),
@@ -604,15 +609,13 @@ public class App extends JPanel implements ActionListener {
 
 
 
-
-
-
         // -------------------------------------
 
         //main
         JSplitPane splitPaneMain = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                editScrollPane, rightJpanel
+                leftJPanel, rightJpanel
         );
+
         add(splitPaneMain, BorderLayout.CENTER);
 
 
@@ -717,12 +720,6 @@ public class App extends JPanel implements ActionListener {
             System.setProperty( "apple.awt.application.appearance", "system" );
         }
 
-
-        // set global level font for Jlable only
-        //UIManager.put("Label.font", fontTitle);
-
-
-        UIManager.put("FileChooser.readOnly", Boolean.TRUE);
         //Schedule a job for the event dispatch thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -730,7 +727,7 @@ public class App extends JPanel implements ActionListener {
             public void run() {
 
                // IntelliJTheme.setup(App.class.getResourceAsStream("DarkPurpleTheme.jar/DarkPurple.theme.json"));
-            FlatLightLaf.setup();
+            //FlatLightLaf.setup();
 
 
                 try {
